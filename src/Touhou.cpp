@@ -79,7 +79,8 @@ void init() {
 				throw "SDL_Image Setting Failed";
 				return;
 			}
-
+			SDL_Surface* icon = IMG_Load("res/img/icon.png");
+        	SDL_SetWindowIcon(window, icon);
 		}
 	}
 }
