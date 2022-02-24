@@ -2,17 +2,23 @@
 
 Character::Character() {
 	current_frame = -1;
+	time_count = -1;
 	current_status = IDLE;
 	x = y = 0;
 
 	memset(frame_clip, 0, sizeof(frame_clip));
 }
 Character::~Character() {
-
+	for(int i = 0 ; i < TOTAL_ACTION ; i++)
+		player[i].Free();
 }
 void Character::Set(int number_frames_, int time_per_frame_){
 	number_frames = number_frames_;
 	time_per_frame = time_per_frame_;
+}
+void Character::SetPos(float x_, float y_){
+	x = x_;
+	y = y_;
 }
 void Character::Load(SDL_Renderer * screen, string character_name) {
 	string status[TOTAL_ACTION] = { "", "_left", "_right" };
@@ -37,14 +43,17 @@ void Character::Load(SDL_Renderer * screen, string character_name) {
 	}
 }
 void Character::Update() {
-	current_frame++;
-	current_frame %= number_frames;
+	time_count ++;
+	if(time_count % time_per_frame == 0) {
+		current_frame++;
+		current_frame %= number_frames;
+	}
 }
 void Character::Show(SDL_Renderer * screen) {
 
 	SDL_Texture* p_object = player[current_status].GetObject();
 	SDL_Rect rect = player[current_status].GetRect();
 
-	SDL_Rect renderquad = { rect.x, rect.y, rect.w / number_frames, rect.h };
-	SDL_RenderCopy(screen, p_object, frame_clip[current_status], &renderquad);
+	SDL_Rect renderquad = { int(x) , int(y) , rect.w / number_frames, rect.h };
+	SDL_RenderCopy(screen, p_object, &frame_clip[current_status][current_frame], &renderquad);
 }

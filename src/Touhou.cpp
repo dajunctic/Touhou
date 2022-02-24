@@ -88,6 +88,7 @@ void load() {
 //	cout << "Image Size: " << Test.GetRect().w << " " << Test.GetRect().h << endl;
 
 	Hakurei.Set(8 , 5);
+	Hakurei.SetPos(SCREEN_WIDTH / 2 - 16, SCREEN_HEIGHT - 200);
 	Hakurei.Load(screen, "hakurei");
 	
 }

@@ -16,14 +16,17 @@ public:
 	Character();
 	~Character();
 
-	void Load(SDL_Renderer * screen, string character_name);
 	void Set(int frame_count, int time_per_frame);
+	void SetPos(float x, float y);
+
+	void Load(SDL_Renderer * screen, string character_name);
 	void Update();
 	void Show(SDL_Renderer * screen);
 protected:
 	int current_frame;
 	int number_frames;
 	int time_per_frame;
+	int time_count;
 	int current_status;
 
 	float x, y;
