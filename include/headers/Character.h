@@ -48,7 +48,18 @@ protected:
 	SDL_Rect frame_clip[TOTAL_ACTION][MAX_FRAMES];
 
 	Object player[TOTAL_ACTION];
+
+	/* About yinyang circle arround character */
+	Object yinyang[3];
+	float yin_x;
+	float yin_y;
+
+	int current_yinyang = 0;
+	float yinyang_angle = 0;
+	float second_yin_x = 58;
+	float yinyang_speed = PI;
 };
+
 
 #endif // !CHARACTER
 

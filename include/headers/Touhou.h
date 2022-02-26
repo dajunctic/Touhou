@@ -13,6 +13,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
+const double PI = 3.1415926;
+
 static SDL_Window* window = NULL;
 static SDL_Renderer* screen = NULL;
 static SDL_Event* event = NULL;
