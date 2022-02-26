@@ -6,6 +6,9 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <queue>
+#include <stack>
+#include <set>
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -26,6 +29,13 @@ const int COLOR_KEY_B = 0;
 
 
 const int RENDER_DRAW_COLOR = 0xFF;
+
+enum KEY{
+    K_RIGHT,
+    K_LEFT,
+    K_DOWN,
+    K_UP
+};
 
 using namespace std;
 

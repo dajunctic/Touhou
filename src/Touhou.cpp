@@ -8,6 +8,10 @@ void close();
 void load();
 void display();
 
+void InputKeyboard(SDL_Event e);
+
+multiset<int> Key;
+
 Character Hakurei;
 Object Test;
 
@@ -34,6 +38,7 @@ int main(int argc, char* args[]) {
 		while (SDL_PollEvent(&e) != 0) {
 			if (e.type == SDL_QUIT)
 				quit = true;
+			InputKeyboard(e);
 		}
 		SDL_SetRenderDrawColor(screen, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR);
 		SDL_RenderClear(screen);
@@ -94,9 +99,6 @@ void load() {
 	
 }
 void close() {
-	/* Destroy Event Source*/
-	
-
 	/* Destroy window */
 	SDL_DestroyRenderer(screen);
 	SDL_DestroyWindow(window);
@@ -113,4 +115,63 @@ void display() {
 	Hakurei.Update();
 	Hakurei.Show(screen);
 
+}
+void InputKeyboard(SDL_Event e){
+	if(e.type == SDL_KEYDOWN){
+
+		switch (e.key.keysym.sym){
+		case SDLK_RIGHT:
+			Key.insert(K_RIGHT);
+			Hakurei.SetMove(true);
+			Hakurei.Move(1 , 0);
+			break;
+		case SDLK_LEFT:
+			Key.insert(K_LEFT);
+			Hakurei.SetMove(true);
+			Hakurei.Move(-1 , 0);
+			break;
+		case SDLK_UP:
+			Key.insert(K_UP);
+			Hakurei.SetMove(true);
+			Hakurei.Move(0 , -1);
+			break;
+		case SDLK_DOWN:
+			Key.insert(K_DOWN);
+			Hakurei.SetMove(true);
+			Hakurei.Move(0 , 1);
+			break;
+
+		
+		default:
+			break;
+		}
+		
+	} 
+	if(e.type == SDL_KEYUP){
+		switch (e.key.keysym.sym){
+		case SDLK_RIGHT:
+			Key.erase(K_RIGHT);
+			if (Key.empty())
+				Hakurei.SetMove(false);
+			break;
+		case SDLK_LEFT:
+			Key.erase(K_LEFT);
+			if (Key.empty())
+				Hakurei.SetMove(false);
+			break;
+		case SDLK_UP:
+			Key.erase(K_UP);
+			if (Key.empty())
+				Hakurei.SetMove(false);
+			break;
+		case SDLK_DOWN:
+			Key.erase(K_DOWN);
+			if (Key.empty())
+				Hakurei.SetMove(false);
+			break;
+
+		default:
+			break;
+		}
+	}
 }

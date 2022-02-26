@@ -6,6 +6,11 @@ Character::Character() {
 	current_status = IDLE;
 	x = y = 0;
 
+	move_speed = 2.5;
+	is_move = false;
+	is_key = false;
+	move_x = move_y = 0;
+
 	memset(frame_clip, 0, sizeof(frame_clip));
 }
 Character::~Character() {
@@ -43,6 +48,12 @@ void Character::Load(SDL_Renderer * screen, string character_name) {
 	}
 }
 void Character::Update() {
+	if(is_move) {
+		x += move_x * move_speed;
+		y += move_y * move_speed;
+	}
+
+
 	time_count ++;
 	if(time_count % time_per_frame == 0) {
 		current_frame++;
@@ -56,4 +67,8 @@ void Character::Show(SDL_Renderer * screen) {
 
 	SDL_Rect renderquad = { int(x) , int(y) , rect.w / number_frames, rect.h };
 	SDL_RenderCopy(screen, p_object, &frame_clip[current_status][current_frame], &renderquad);
+}
+void Character::Move(float move_x_, float move_y_){
+	move_x = move_x_;
+	move_y = move_y_;
 }
