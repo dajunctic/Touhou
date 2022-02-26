@@ -6,7 +6,7 @@ Character::Character() {
 	current_status = IDLE;
 	x = y = 0;
 
-	move_speed = 2.5;
+	move_speed = 2.6;
 	is_move = false;
 	is_key = false;
 	move_x = move_y = 0;
@@ -25,8 +25,12 @@ void Character::SetPos(float x_, float y_){
 	x = x_;
 	y = y_;
 }
+void Character::Move(){
+	move_x = move_vector[current_status].first;
+	move_y = move_vector[current_status].second;
+};
 void Character::Load(SDL_Renderer * screen, string character_name) {
-	string status[TOTAL_ACTION] = { "", "_left", "_right" };
+	string status[TOTAL_ACTION] = { "", "_left", "_right", "" , ""};
 	for(int i = 0 ; i < TOTAL_ACTION ; i++){
 		/* Load Sprite Sheet */
 		string path = "res/img/" + character_name + status[i] + ".png" ;
@@ -57,6 +61,14 @@ void Character::Update() {
 	time_count ++;
 	if(time_count % time_per_frame == 0) {
 		current_frame++;
+
+		if(current_status == LEFT or current_status == RIGHT){
+			if(current_frame >= number_frames / 2){
+				current_frame %= (number_frames / 2);
+				current_frame += number_frames / 2;
+			}
+		}
+		
 		current_frame %= number_frames;
 	}
 }
@@ -67,8 +79,4 @@ void Character::Show(SDL_Renderer * screen) {
 
 	SDL_Rect renderquad = { int(x) , int(y) , rect.w / number_frames, rect.h };
 	SDL_RenderCopy(screen, p_object, &frame_clip[current_status][current_frame], &renderquad);
-}
-void Character::Move(float move_x_, float move_y_){
-	move_x = move_x_;
-	move_y = move_y_;
 }

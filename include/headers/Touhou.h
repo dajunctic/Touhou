@@ -31,10 +31,10 @@ const int COLOR_KEY_B = 0;
 const int RENDER_DRAW_COLOR = 0xFF;
 
 enum KEY{
-    K_RIGHT,
     K_LEFT,
-    K_DOWN,
-    K_UP
+    K_RIGHT,
+    K_UP,
+    K_DOWN
 };
 
 using namespace std;

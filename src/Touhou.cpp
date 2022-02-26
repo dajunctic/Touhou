@@ -123,22 +123,30 @@ void InputKeyboard(SDL_Event e){
 		case SDLK_RIGHT:
 			Key.insert(K_RIGHT);
 			Hakurei.SetMove(true);
-			Hakurei.Move(1 , 0);
+			Hakurei.SetStatus(Hakurei.RIGHT);
+			Hakurei.Move();
+
+			
 			break;
 		case SDLK_LEFT:
 			Key.insert(K_LEFT);
 			Hakurei.SetMove(true);
-			Hakurei.Move(-1 , 0);
+			Hakurei.SetStatus(Hakurei.LEFT);
+			Hakurei.Move();
+
+			
 			break;
 		case SDLK_UP:
 			Key.insert(K_UP);
 			Hakurei.SetMove(true);
-			Hakurei.Move(0 , -1);
+			Hakurei.SetStatus(Hakurei.UP);
+			Hakurei.Move();
 			break;
 		case SDLK_DOWN:
 			Key.insert(K_DOWN);
 			Hakurei.SetMove(true);
-			Hakurei.Move(0 , 1);
+			Hakurei.SetStatus(Hakurei.DOWN);
+			Hakurei.Move();
 			break;
 
 		
@@ -151,27 +159,27 @@ void InputKeyboard(SDL_Event e){
 		switch (e.key.keysym.sym){
 		case SDLK_RIGHT:
 			Key.erase(K_RIGHT);
-			if (Key.empty())
-				Hakurei.SetMove(false);
 			break;
 		case SDLK_LEFT:
 			Key.erase(K_LEFT);
-			if (Key.empty())
-				Hakurei.SetMove(false);
 			break;
 		case SDLK_UP:
 			Key.erase(K_UP);
-			if (Key.empty())
-				Hakurei.SetMove(false);
 			break;
 		case SDLK_DOWN:
 			Key.erase(K_DOWN);
-			if (Key.empty())
-				Hakurei.SetMove(false);
 			break;
 
 		default:
 			break;
+		}
+		if (Key.empty()){
+			Hakurei.SetMove(false);
+			Hakurei.SetStatus(Hakurei.IDLE);
+		}
+		else{
+			Hakurei.SetStatus(*Key.begin() + 1);
+			Hakurei.Move();
 		}
 	}
 }

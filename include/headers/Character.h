@@ -10,8 +10,11 @@ public:
 		IDLE,
 		LEFT,
 		RIGHT,
+		UP,
+		DOWN,
 		TOTAL_ACTION
 	};
+	
 
 	Character();
 	~Character();
@@ -23,8 +26,9 @@ public:
 	void Update();
 	void Show(SDL_Renderer * screen);
 
-	void Move(float move_x, float move_y);
+	void Move();
 	void SetMove(bool truth) { is_move = truth;};
+	void SetStatus(int status_) { current_status = status_ ;};
 	void Keydown(bool truth) { is_key = truth;};
 	bool IsKeydown() { return is_key;};
 protected:
@@ -39,6 +43,7 @@ protected:
 	float move_x, move_y;
 
 	float x, y;
+	pair<int,int> move_vector[TOTAL_ACTION] = {{0, 0}, {-1 , 0}, {1 , 0}, {0 , -1}, {0 , 1} };
 
 	SDL_Rect frame_clip[TOTAL_ACTION][MAX_FRAMES];
 
