@@ -22,7 +22,7 @@ void Character::Set(int number_frames_, int time_per_frame_){
 	number_frames = number_frames_;
 	time_per_frame = time_per_frame_;
 }
-void Character::SetPos(float x_, float y_){
+void Character::SetPos(double x_, double y_){
 	x = x_;
 	y = y_;
 
@@ -60,6 +60,13 @@ void Character::Load(SDL_Renderer * screen, string character_name) {
 		string path = "res/img/yinyang_0" + to_string(i) + ".png";
 		yinyang[i].LoadImage(screen, path);
 	}
+
+	/* Load character bullet image */
+	for(int i = 0 ; i < 3 ; i++){
+		string path = "res/img/char_bullet_0";
+		path = path + to_string(i) + ".png";
+		char_bullet[i].LoadImage(screen, path);
+	}
 }
 void Character::Update() {
 	if(is_move) {
@@ -87,8 +94,34 @@ void Character::Update() {
 
 	/* Yinyang */
 	yinyang_angle += yinyang_speed;
+
+	/* Bullet */
+	if(is_shoot) AddBullet();
+
+	for(auto &[pos , id] : weapon) {
+		if(id == 0 or id == 1) pos.se -= 10;
+		if(id == 2){
+			pos.fi -= 6 * cos(60*PI/180);
+        	pos.se -= 6 * sin(60*PI/180);
+		}
+		if(id == 3){
+			pos.fi += 6 * cos(60*PI/180);
+        	pos.se -= 6 * sin(60*PI/180);
+		}
+	}
+	
 }
 void Character::Show(SDL_Renderer * screen) {
+
+	/* Bullet */
+	for(auto [pos, id] : weapon){
+		if(id == 3) id = 2;
+		char_bullet[id].SetRect(pos.fi, pos.se);	
+		char_bullet[id].Render(screen);
+	}
+
+
+	/* Main Character */
 
 	SDL_Texture* p_object = player[current_status].GetObject();
 	SDL_Rect rect = player[current_status].GetRect();
@@ -102,10 +135,41 @@ void Character::Show(SDL_Renderer * screen) {
 	SDL_Rect yinyang_renderquad = { int(yin_x), int(yin_y), yinyang_rect.w, yinyang_rect.h};
 	SDL_Point center = { yinyang_rect.w / 2, yinyang_rect.h / 2};
 
-//	SDL_RenderCopyEx( gRenderer, mTexture, clip, &renderQuad, angle, center, flip );
     SDL_RenderCopyEx( screen, yinyang_object, NULL, &yinyang_renderquad, yinyang_angle , &center, SDL_FLIP_NONE );
 
 	SDL_Rect yinyang_renderquad2 = { int(yin_x  + second_yin_x), int(yin_y), yinyang_rect.w, yinyang_rect.h};
 	SDL_RenderCopyEx( screen, yinyang_object, NULL, &yinyang_renderquad2, yinyang_angle , &center, SDL_FLIP_NONE );
 
+
+}
+
+void Character::AddBullet(){
+	
+	if(weapon.empty()){
+		weapon.push_back({{x + 13, y}, 0});
+		weapon.push_back({{x, y + 5}, 1});
+		weapon.push_back({{x + 30, y + 5}, 1});
+
+		weapon.push_back({{yin_x - 5 , yin_y}, 2});
+		weapon.push_back({{yin_x + second_yin_x - 10, yin_y}, 3});
+	}
+	else{
+		int y_ = weapon.back().fi.se;
+		if(y - y_ >= 50){
+			weapon.push_back({{x + 13, y}, 0});
+			weapon.push_back({{x, y + 5}, 1});
+			weapon.push_back({{x + 30, y + 5}, 1});
+		}
+		int it = weapon.size() - 1;
+		while(weapon[it].se != 2 and weapon[it].se != 3 and it > 0){
+			it--;
+		}
+		y_ = weapon[it].fi.se;
+		if(yin_y - y_ > 200){
+			weapon.push_back({{yin_x - 5 , yin_y}, 2});
+			weapon.push_back({{yin_x + second_yin_x - 10, yin_y}, 3});
+		}
+
+		
+	}
 }

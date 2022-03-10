@@ -3,20 +3,6 @@
 
 #include "Touhou.h"
 
-struct Vector {
-	float x, y;
-
-	Vector(float x, float y){
-		this->x = x;
-		this->y = y;
-	}
-
-	void Set(float x, float y){
-		this->x = x;
-		this->y = y;
-	}
-};
-
 class Object {
 public:
 	Object();

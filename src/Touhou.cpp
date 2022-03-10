@@ -1,57 +1,67 @@
 #include "Touhou.h"
 #include "GameObject.h"
 #include "Character.h"
+#include "Bullet.h"
 #include "ImpTimer.h"
 
+/*#########################################################*/
+					/* Declare Function */
 void init();
 void close();
 void load();
 void display();
-
-void InputKeyboard(SDL_Event e);
-
+void HandleInput(SDL_Event e);
 multiset<int> Key;
-
+/*#########################################################*/
+/*#########################################################*/
+					/* Game Variable */
+GameTime MainTime;
 Character Hakurei;
-Object Test;
 
-/* Main Process*/
+/*#########################################################*/
+/*#########################################################*/
+					/* Solve functions*/
 int main(int argc, char* args[]) {
 	ImpTimer fps_timer;
 
-	try {
-		init();
-		load();
-	} catch(const char* msg) {
-		cerr << msg << endl;
-		return 0;
-	} catch (string error) {
-		cerr << error << endl;
-		return 0;
-	}
+	init();
+	load();
 
 	bool quit = false;
 	SDL_Event e;
+
+	MainTime.Start();
 
 	while (!quit) {
 		fps_timer.start();
 		while (SDL_PollEvent(&e) != 0) {
 			if (e.type == SDL_QUIT)
 				quit = true;
-			InputKeyboard(e);
+			HandleInput(e);
 		}
 		SDL_SetRenderDrawColor(screen, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR);
 		SDL_RenderClear(screen);
 
+		/*#########################################################*/
+						/* Sovle Display Problem */
+		SDL_SetRenderDrawColor(screen, 0, 0, 0, 0);
+		SDL_Rect r = {0, 0 , 1280 , 720};
+    	SDL_RenderFillRect( screen, &r );
+
+		MainTime.Update();
+
 		display();
-		
+		/*#########################################################*/
 		SDL_RenderPresent(screen);
 
+		/*#########################################################*/
+				/* FPS Problem: Don't Edit or Fix */
 		int real_time = fps_timer.getTicks();
 		int time_each_frame = 1000 / FPS; // ms
 		int delay_time = time_each_frame - real_time;
 		if (delay_time >= 0)
 			SDL_Delay(delay_time);
+		/*#########################################################*/
 	}
 	close();
 	return 0;
@@ -59,7 +69,8 @@ int main(int argc, char* args[]) {
 void init() {
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-		throw "Can't SDL_Init"; return;
+		cout <<  "Can't Init SDL";
+		exit(0);
 	}
 	if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
 		throw "Warning: Linear texture filtering not enabled!" ;
@@ -89,15 +100,6 @@ void init() {
 		}
 	}
 }
-void load() {
-	Test.LoadImage(screen, "res/img/hakurei.png");
-//	cout << "Image Size: " << Test.GetRect().w << " " << Test.GetRect().h << endl;
-
-	Hakurei.Set(8 , 5);
-	Hakurei.SetPos(SCREEN_WIDTH / 2 - 16, SCREEN_HEIGHT - 200);
-	Hakurei.Load(screen, "hakurei");
-	
-}
 void close() {
 	/* Destroy window */
 	SDL_DestroyRenderer(screen);
@@ -109,14 +111,20 @@ void close() {
 	IMG_Quit();
 	SDL_Quit();
 }
+void load() {
+
+	/* Main Character */
+	Hakurei.Set(8 , 5);
+	Hakurei.SetPos(SCREEN_WIDTH / 2 - 16, SCREEN_HEIGHT - 200);
+	Hakurei.Load(screen, "hakurei");
+}
+
 void display() {
-//	Test.Render(screen);
-	
+
 	Hakurei.Update();
 	Hakurei.Show(screen);
-
 }
-void InputKeyboard(SDL_Event e){
+void HandleInput(SDL_Event e){
 	if(e.type == SDL_KEYDOWN){
 
 		switch (e.key.keysym.sym){
@@ -149,6 +157,9 @@ void InputKeyboard(SDL_Event e){
 			Hakurei.Move();
 			break;
 
+		case SDLK_z:
+			Hakurei.Shoot(true);
+			break;
 		
 		default:
 			break;
@@ -168,6 +179,10 @@ void InputKeyboard(SDL_Event e){
 			break;
 		case SDLK_DOWN:
 			Key.erase(K_DOWN);
+			break;
+
+		case SDLK_z:
+			Hakurei.Shoot(false);
 			break;
 
 		default:
