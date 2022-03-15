@@ -23,10 +23,6 @@ using namespace std;
 
 const double PI = 3.1415926;
 
-static SDL_Window* window = NULL;
-static SDL_Renderer* screen = NULL;
-static SDL_Event* event = NULL;
-
 const int FPS = 60; /* Frame per second*/
 
 const int SCREEN_WIDTH = 1280;
@@ -39,6 +35,7 @@ const int COLOR_KEY_B = 0;
 
 
 const int RENDER_DRAW_COLOR = 0xFF;
+
 
 struct TimeData{
     int sec; // second
