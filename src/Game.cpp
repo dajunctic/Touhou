@@ -1,6 +1,10 @@
 #include "Game.h"
 
+
 void Game::load(){
+    Test.SetPos(600 , 200);
+    Test.InitBullet();
+
     Hakurei.Set(8 , 5);
     Hakurei.SetPos(SCREEN_WIDTH / 2 - 16, SCREEN_HEIGHT - 200);
     Hakurei.Load(screen, "hakurei");
@@ -9,7 +13,15 @@ void Game::load(){
 void Game::display(){
     Hakurei.Update();
     Hakurei.Show(screen);
+
+    SDL_Rect r = { int(Test.GetPos().fi) , int(Test.GetPos().se) , 50, 50};
+    SDL_SetRenderDrawColor(screen, 255, 0 , 0, 0);
+    SDL_RenderFillRect(screen, &r);
+
+    Test.HandleBullet(screen);
+
 }
+
 
 void Game::HandleInput(SDL_Event e){
         if(e.type == SDL_KEYDOWN){

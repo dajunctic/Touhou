@@ -6,6 +6,7 @@
 #include "Character.h"
 #include "Bullet.h"
 #include "ImpTimer.h"
+#include "Enemy.h"
 
 class Game{
 
@@ -16,9 +17,10 @@ private:
 
 
     multiset<int> Key;
-
     GameTime MainTime;
-    Character Hakurei;  
+    Character Hakurei;
+    Enemy Test;
+     
 public:
 
     Game(){ 
