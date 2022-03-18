@@ -75,10 +75,29 @@ void Character::Load(SDL_Renderer * screen, string character_name) {
 	}
 }
 }
+
+bool Character::BorderCollision(){
+	SDL_Rect rect = player[current_status].GetRect();
+
+	SDL_Rect border;
+	border.x = x;
+	border.y = y;
+	border.w = rect.w / number_frames;
+	border.h = rect.h;
+
+	if(border.x < BOARD_X or border.x + border.w >= BOARD_LIMITED_X or border.y < BOARD_Y or border.y + border.h > BOARD_LIMITED_Y)
+		return true;
+	return false;
+}
 void Character::Update() {
 	if(is_move) {
 		x += move_x * move_speed;
 		y += move_y * move_speed;
+
+		if(BorderCollision()){
+			x -= move_x * move_speed;
+			y -= move_y * move_speed;
+		}
 
 		yin_x = x - 20;
 		yin_y = y + 10;
@@ -135,6 +154,15 @@ void Character::Show(SDL_Renderer * screen) {
 
 	SDL_Rect renderquad = { int(x) , int(y) , rect.w / number_frames, rect.h };
 	SDL_RenderCopy(screen, p_object, &frame_clip[current_status][current_frame], &renderquad);
+
+	SDL_Rect border;
+	border.x = x;
+	border.y = y;
+	border.w = rect.w / number_frames;
+	border.h = rect.h;
+
+//	SDL_SetRenderDrawColor(screen , 255, 0 , 0 , 0);
+	SDL_RenderDrawRect(screen , &border);
 	}
 	/*########################      Yinyang arround character            ####################################### */
 	{

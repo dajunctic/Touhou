@@ -15,9 +15,13 @@ private:
     SDL_Renderer* screen = NULL;
     SDL_Event* event = NULL;
 
-
     multiset<int> Key;
+
+
     GameTime MainTime;
+    Object GameBg;
+    SDL_Rect MainBoard = {BOARD_X, BOARD_Y, BOARD_LIMITED_X - BOARD_X , BOARD_LIMITED_Y - BOARD_Y };
+
     Character Hakurei;
     Enemy Test;
      
@@ -97,6 +101,7 @@ public:
             SDL_SetRenderDrawColor(screen, 0, 0, 0, 0);
             SDL_Rect r = {0, 0 , 1280 , 720};
             SDL_RenderFillRect( screen, &r );
+            SDL_SetRenderDrawBlendMode(screen, SDL_BLENDMODE_BLEND);
 
             MainTime.Update();
 

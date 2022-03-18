@@ -3,6 +3,7 @@
 
 #include "GameObject.h"
 #include "Bullet.h"
+#include "ImpTimer.h"
 
 class Enemy{
 public:
@@ -89,6 +90,12 @@ private:
     SDL_Rect frame_clip[4][20];
 
 
+    GameTime EnemyTime;
+    /* Enemy move */
+    bool is_move;
+
+
+    /* Enemy moving */
     vector<Bullet> shot;
 
 };

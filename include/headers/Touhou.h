@@ -36,6 +36,10 @@ const int COLOR_KEY_B = 0;
 
 const int RENDER_DRAW_COLOR = 0xFF;
 
+const int BOARD_X = 400;
+const int BOARD_Y = 30;
+const int BOARD_LIMITED_X = 880;
+const int BOARD_LIMITED_Y = 690;
 
 struct TimeData{
     int sec; // second

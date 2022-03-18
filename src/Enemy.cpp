@@ -7,6 +7,9 @@ Enemy::Enemy(){
     current_frame = 0;
     number_frames = 0;
     time_per_frame = 0;
+
+    EnemyTime.Start();
+    is_move = true;
 }
 
 Enemy::~Enemy(){

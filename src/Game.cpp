@@ -2,11 +2,15 @@
 
 
 void Game::load(){
+    /* Load Game Object */
+    GameBg.LoadImage(screen, "res/img/background.jpg");
+
     /* Load Character */{
     Hakurei.Set(8 , 5);
     Hakurei.SetPos(SCREEN_WIDTH / 2 - 16, SCREEN_HEIGHT - 200);
     Hakurei.Load(screen, "hakurei");}
 
+    /* Load Enemy */
     Test.SetPos(600 , 200);
     Test.Set(4, 10);
     Test.Load(screen, "00");
@@ -15,6 +19,10 @@ void Game::load(){
 }
 
 void Game::display(){
+    GameBg.Render(screen);
+    SDL_SetRenderDrawColor(screen, 0, 0, 0 , 100);
+    SDL_RenderFillRect(screen, &MainBoard);
+
     Hakurei.Update();
     Hakurei.Show(screen);
 

@@ -32,6 +32,7 @@ public:
 	void SetStatus(int status_) { current_status = status_ ;};
 	void Keydown(bool truth) { is_key = truth;};
 	bool IsKeydown() { return is_key;};
+	bool BorderCollision();
 
 	void AddBullet();
 	void Shoot(bool truth){ is_shoot = truth;};
