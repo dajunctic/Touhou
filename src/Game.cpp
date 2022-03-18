@@ -2,22 +2,24 @@
 
 
 void Game::load(){
-    Test.SetPos(600 , 200);
-    Test.InitBullet();
-
+    /* Load Character */{
     Hakurei.Set(8 , 5);
     Hakurei.SetPos(SCREEN_WIDTH / 2 - 16, SCREEN_HEIGHT - 200);
-    Hakurei.Load(screen, "hakurei");
+    Hakurei.Load(screen, "hakurei");}
+
+    Test.SetPos(600 , 200);
+    Test.Set(4, 10);
+    Test.Load(screen, "00");
+    Test.InitBullet();
+
 }
 
 void Game::display(){
     Hakurei.Update();
     Hakurei.Show(screen);
 
-    SDL_Rect r = { int(Test.GetPos().fi) , int(Test.GetPos().se) , 50, 50};
-    SDL_SetRenderDrawColor(screen, 255, 0 , 0, 0);
-    SDL_RenderFillRect(screen, &r);
-
+    Test.Update();
+    Test.Show(screen);
     Test.HandleBullet(screen);
 
 }

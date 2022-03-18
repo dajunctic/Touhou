@@ -1,7 +1,12 @@
 #include "Enemy.h"
 
 Enemy::Enemy(){
+    current_status = 0;
 
+    time_count = 0;
+    current_frame = 0;
+    number_frames = 0;
+    time_per_frame = 0;
 }
 
 Enemy::~Enemy(){
@@ -25,6 +30,7 @@ void Enemy::HandleBullet(SDL_Renderer * screen){
     Object draw;
     draw.LoadImage(screen, "res/img/enemy/b_00.png");
     for(auto &x : shot){
+        
         x.HandleMove();
         draw.SetRect(x.GetPos().fi, x.GetPos().se);
         draw.Render(screen);
