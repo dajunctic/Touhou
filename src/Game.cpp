@@ -2,20 +2,29 @@
 
 
 void Game::load(){
-    /* Load Game Object */
-    GameBg.LoadImage(screen, "res/img/background.jpg");
+    
+    /* Load Game Object */{   
+        GameBg.LoadImage(screen, "res/img/background.jpg");
+        GameBg2.LoadImage(screen, "res/img/bg.png");
 
+        for(int i = 0 ; i < 9 ; i++){
+            string id = to_string(i);
+            if(i < 10) id = '0' + id;
+            string path = "res/img/bullet/b_" +  id + ".png";
+            shot_img[i].LoadImage(screen, path);
+        }
+    }
     /* Load Character */{
-    Hakurei.Set(8 , 5);
-    Hakurei.SetPos(SCREEN_WIDTH / 2 - 16, SCREEN_HEIGHT - 200);
-    Hakurei.Load(screen, "hakurei");}
-
-    /* Load Enemy */
-    Test.SetPos(600 , 200);
-    Test.Set(4, 10);
-    Test.Load(screen, "00");
-    Test.InitBullet();
-
+        Hakurei.Set(8 , 5);
+        Hakurei.SetPos(SCREEN_WIDTH / 2 - 16, SCREEN_HEIGHT - 200);
+        Hakurei.Load(screen, "hakurei");
+    }
+    /* Load Enemy */{
+        Test.SetPos(600 , 200);
+        Test.Set(4, 10);
+        Test.Load(screen, "00");
+        Test.InitBullet(0 , 40, 0);
+    }
 }
 
 void Game::display(){
@@ -23,12 +32,40 @@ void Game::display(){
     SDL_SetRenderDrawColor(screen, 0, 0, 0 , 100);
     SDL_RenderFillRect(screen, &MainBoard);
 
-    Hakurei.Update();
     Hakurei.Show(screen);
-
-    Test.Update();
     Test.Show(screen);
-    Test.HandleBullet(screen);
+    Test.HandleBullet(shot);
+
+
+    /* Display Bullet and Shot */{
+        for(auto &x : shot){
+            x.HandleMove();
+            int w = shot_img[x.GetName()].GetRect().w;
+            int h = shot_img[x.GetName()].GetRect().h;
+
+            shot_img[x.GetName()].SetRect(x.GetPos().fi - w / 2, x.GetPos().se - h / 2);
+            shot_img[x.GetName()].Render(screen);
+        }
+        vector<Bullet> tmp;
+
+        for(auto &s : shot){
+            int w = shot_img[s.GetName()].GetRect().w;
+            int h = shot_img[s.GetName()].GetRect().h;
+            int x = s.GetPos().fi;
+            int y = s.GetPos().se;
+
+            if (x + w <= BOARD_X or y + h <= BOARD_Y or x >= BOARD_LIMITED_X or y >= BOARD_LIMITED_Y){
+                continue;
+            }else
+                tmp.push_back(s);
+        
+        shot = tmp;
+            
+        }
+    }
+
+
+    GameBg2.Render(screen);
 
 }
 
@@ -106,4 +143,4 @@ void Game::HandleInput(SDL_Event e){
                 Hakurei.Move();
             }
         }
-    }
+}

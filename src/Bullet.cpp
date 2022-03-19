@@ -6,6 +6,7 @@ Bullet::Bullet(){
     angle = 90;
 
     start_point = 0;
+    status = EXISTED;
 }
 Bullet::~Bullet(){};
 void Bullet::SetRandomAngle(const int& st, const int& en){

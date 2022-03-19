@@ -20,10 +20,14 @@ private:
 
     GameTime MainTime;
     Object GameBg;
+    Object GameBg2;
     SDL_Rect MainBoard = {BOARD_X, BOARD_Y, BOARD_LIMITED_X - BOARD_X , BOARD_LIMITED_Y - BOARD_Y };
 
     Character Hakurei;
     Enemy Test;
+
+    vector<Bullet> shot;
+    Object shot_img[20];
      
 public:
 
@@ -123,6 +127,7 @@ public:
         close();
     }
     void display();
+    void HandleBullet();
     void HandleInput(SDL_Event e);
 };
 

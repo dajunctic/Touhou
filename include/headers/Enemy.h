@@ -5,6 +5,16 @@
 #include "Bullet.h"
 #include "ImpTimer.h"
 
+struct Plan{
+    int start_time, end_time; // time
+    int type;
+    Plan(int start_time, int end_time, int type = 0){
+        this->start_time = start_time;
+        this->end_time = end_time;
+        this->type = type;
+    }
+};
+
 class Enemy{
 public:
     // 0:    ENEMY_IDLE,
@@ -18,6 +28,7 @@ public:
     void SetType(const int& type_){ type = type_;};
     void SetPos(const double& x_, const double& y_) { x = x_; y = y_; };
     pair<double, double> GetPos() const { return {x , y}; };
+     pair<double, double> GetCenterPos() const { return {center_x, center_y}; };
 
     void SetSpeed (const double& x_speed_, const double& y_speed_){ x_speed = x_speed_; y_speed = y_speed_;};
     void SetAngle(const double& angle_){ angle = angle_;};
@@ -27,8 +38,9 @@ public:
 
     void HandleMove();
 
-    void InitBullet();
-    void HandleBullet(SDL_Renderer * screen);
+    void InitBullet(int start_time, int end_time, int type);
+    void HandleBullet(vector<Bullet> & shot);
+    void MakeBullet(vector<Bullet> & shot, int type);
 
     void Set(int number_frames_, int time_per_frame_){
         number_frames = number_frames_;
@@ -55,6 +67,10 @@ public:
         }
     }
     void Update(){
+        center_x = (x + img[current_status].GetRect().w / number_frames + x) / 2;
+        center_y = (y + img[current_status].GetRect().h + y) / 2;
+
+        EnemyTime.Update();
         time_count++;
         if(time_count % time_per_frame == 0){
             current_frame ++;
@@ -62,6 +78,8 @@ public:
         }
     }
     void Show(SDL_Renderer * screen){
+        Update();
+
         SDL_Texture* p_object = img[current_status].GetObject();
         SDL_Rect rect = img[current_status].GetRect();
 
@@ -74,6 +92,7 @@ private:
     int name;
 
     double x, y;
+    double center_x, center_y;
     
     double x_speed, y_speed;
 
@@ -94,10 +113,7 @@ private:
     /* Enemy move */
     bool is_move;
 
-
-    /* Enemy moving */
-    vector<Bullet> shot;
-
+    vector<Plan> plan;
 };
 
 

@@ -10,6 +10,11 @@ public:
         VERTICAL_SIN
     };
 
+    enum {
+        EXISTED,
+        DELETED
+    };
+
     Bullet();
     ~Bullet();
 
@@ -18,6 +23,9 @@ public:
     void SetStartPoint(const double& start_){ start_point = start_;};
     void SetPos(const double& x_, const double& y_) { x = x_; y = y_; };
     pair<double, double> GetPos() const { return {x , y}; };
+    pair<double, double> GetCenterPos() const { return {center_x, center_y}; };
+
+    int GetName() const { return name; };
 
     void SetSpeed (const double& x_speed_, const double& y_speed_){ x_speed = x_speed_; y_speed = y_speed_;};
     void SetAngle(const double& angle_){ angle = angle_;};
@@ -32,11 +40,14 @@ private:
     int name;
 
     double x, y;
+    double center_x, center_y;
     
     double x_speed, y_speed;
 
     double angle; // degree
     double start_point;
+
+    int status;
 
 };
 

@@ -127,17 +127,18 @@ void Character::Update() {
 	for(auto &[pos , id] : weapon) {
 		if(id == 0 or id == 1) pos.se -= 10;
 		if(id == 2){
-			pos.fi += 6 * cos(120*PI/180);
-        	pos.se -= 6 * sin(60*PI/180);
+			pos.fi += 6 * cos(99.0*PI/180);
+        	pos.se -= 6 * sin(80*PI/180);
 		}
 		if(id == 3){
-			pos.fi += 6 * cos(60*PI/180);
-        	pos.se -= 6 * sin(60*PI/180);
+			pos.fi += 6 * cos(80*PI/180);
+        	pos.se -= 6 * sin(80*PI/180);
 		}
 	}
 	
 }
 void Character::Show(SDL_Renderer * screen) {
+	Update();
 
 	/*#########################        Bullet Character            ################################################*/
 	for(auto [pos, id] : weapon){
@@ -186,8 +187,8 @@ void Character::AddBullet(){
 		weapon.push_back({{x, y + 5}, 1});
 		weapon.push_back({{x + 30, y + 5}, 1});
 
-		weapon.push_back({{yin_x - 5 , yin_y}, 2});
-		weapon.push_back({{yin_x + second_yin_x - 10, yin_y}, 3});
+		weapon.push_back({{yin_x - 15 , yin_y}, 2});
+		weapon.push_back({{yin_x + second_yin_x - 20, yin_y}, 3});
 	}
 	else{
 
@@ -207,8 +208,8 @@ void Character::AddBullet(){
 		}
 		y_ = weapon[it].fi.se;
 		if(yin_y - y_ > 200){
-			weapon.push_back({{yin_x - 5 , yin_y}, 2});
-			weapon.push_back({{yin_x + second_yin_x - 10, yin_y}, 3});
+			weapon.push_back({{yin_x - 15 , yin_y}, 2});
+			weapon.push_back({{yin_x + second_yin_x - 20, yin_y}, 3});
 		}
 	}
 }
