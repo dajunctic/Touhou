@@ -20,10 +20,40 @@ void Game::load(){
         Hakurei.Load(screen, "hakurei");
     }
     /* Load Enemy */{
-        Test.SetPos(600 , 200);
-        Test.Set(4, 10);
-        Test.Load(screen, "00");
-        Test.InitBullet(0 , 40, 0);
+
+        for(int i = 0 ; i < 2 ; i++){
+            string path = "res/img/enemy/enemy_";
+            string tmp = to_string(i);
+            if(i < 10) tmp = '0' + tmp;
+
+            enemy_img[i][0].LoadImage(screen, path + tmp + ".png");
+            enemy_img[i][1].LoadImage(screen, path + tmp + "_left.png");
+            enemy_img[i][2].LoadImage(screen, path + tmp + "_right.png");
+        //    enemy_img[i][3].LoadImage(screen, path + tmp + "_attack.png");
+        }
+
+    // Stage 1
+    {
+        Enemy Test;
+    //    Enemy Test2;
+
+        for(int i = 500 ; i <= 700 ; i += 200){
+
+            Test.SetPos(i , 200);
+            Test.Set(4, 10);
+            Test.SetName(1);
+            Test.Load( enemy_img[1][0].GetRect());
+            Test.InitBullet(0 , 10, 0);  
+
+            Test.SetOrbit(2,2, 60,{2,2},-0.01, 90);
+
+            Test.SetOrbit(5,5, 60,{2,2}, 0, -90);
+            Test.SetOrbit(7,7, 60,{0,0}, 0, 90);
+
+            enemy.push_back(Test);
+        }
+    }
+ 
     }
 }
 
@@ -33,9 +63,10 @@ void Game::display(){
     SDL_RenderFillRect(screen, &MainBoard);
 
     Hakurei.Show(screen);
-    Test.Show(screen);
-    Test.HandleBullet(shot);
+    Hakurei.HandleBullet(enemy);
 
+    /* Display Enemy */
+    HandleEnemy();
 
     /* Display Bullet and Shot */{
         for(auto &x : shot){
@@ -64,9 +95,17 @@ void Game::display(){
         }
     }
 
-
     GameBg2.Render(screen);
 
+}
+
+void Game::HandleEnemy(){
+
+    for(auto &x : enemy){
+        x.Show(screen, enemy_img[x.GetName()][x.GetStatus()]);
+        x.HandleMove();
+        x.HandleBullet(shot);
+    }
 }
 
 

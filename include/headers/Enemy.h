@@ -15,11 +15,31 @@ struct Plan{
     }
 };
 
+struct Orbit{
+    double st, en; // time;
+    int step;   // frame
+
+    double x_speed, y_speed;
+    double angle;
+    double a;
+
+    Orbit(double st, double en, int step,  double x_speed, double y_speed, double a, double angle){
+        this->st = st;
+        this->en = en;
+        this->step = step;
+        this->x_speed = x_speed;
+        this->y_speed = y_speed;
+        this->a = a;
+        this->angle = angle;
+    }
+};
+
 class Enemy{
 public:
     // 0:    ENEMY_IDLE,
     // 1:    ENEMY_LEFT,
     // 2:    ENEMY_RIGHT
+
 
     Enemy();
     ~Enemy();
@@ -28,15 +48,13 @@ public:
     void SetType(const int& type_){ type = type_;};
     void SetPos(const double& x_, const double& y_) { x = x_; y = y_; };
     pair<double, double> GetPos() const { return {x , y}; };
-     pair<double, double> GetCenterPos() const { return {center_x, center_y}; };
+    pair<double, double> GetCenterPos() const { return {center_x, center_y}; };
 
     void SetSpeed (const double& x_speed_, const double& y_speed_){ x_speed = x_speed_; y_speed = y_speed_;};
     void SetAngle(const double& angle_){ angle = angle_;};
 
     
     void SetRandomAngle(const int& st, const int& en);
-
-    void HandleMove();
 
     void InitBullet(int start_time, int end_time, int type);
     void HandleBullet(vector<Bullet> & shot);
@@ -46,15 +64,18 @@ public:
         number_frames = number_frames_;
         time_per_frame = time_per_frame_;
     }
-    void Load(SDL_Renderer * screen, string id){
+    void Load(SDL_Rect img){
+        {
+        // string path = "res/img/enemy/enemy_";
+        // img[0].LoadImage(screen, path + id + ".png");
+        // img[1].LoadImage(screen, path + id + "_left.png");
+        // img[2].LoadImage(screen, path + id + "_right.png");
+        }
+        
+        sizeImg = img;
 
-        string path = "res/img/enemy/enemy_";
-        img[0].LoadImage(screen, path + id + ".png");
-        img[1].LoadImage(screen, path + id + "_left.png");
-        img[2].LoadImage(screen, path + id + "_right.png");
-
-        int imageWidth = img[0].GetRect().w;
-        int imageHeight = img[0].GetRect().h;
+        int imageWidth = img.w;
+        int imageHeight = img.h;
         int frameWidth = imageWidth / number_frames;
 
         for(int i = 0 ; i < 3 ; i++){
@@ -67,8 +88,8 @@ public:
         }
     }
     void Update(){
-        center_x = (x + img[current_status].GetRect().w / number_frames + x) / 2;
-        center_y = (y + img[current_status].GetRect().h + y) / 2;
+        center_x = (x + sizeImg.w / number_frames + x) / 2;
+        center_y = (y + sizeImg.h + y) / 2;
 
         EnemyTime.Update();
         time_count++;
@@ -77,15 +98,27 @@ public:
             current_frame %= number_frames;
         }
     }
-    void Show(SDL_Renderer * screen){
+    void Show(SDL_Renderer * screen, Object& g){
         Update();
 
-        SDL_Texture* p_object = img[current_status].GetObject();
-        SDL_Rect rect = img[current_status].GetRect();
+        SDL_Texture* p_object = g.GetObject();
+        SDL_Rect rect = g.GetRect();
 
         SDL_Rect renderquad = { int(x) , int(y) , rect.w / number_frames, rect.h };
         SDL_RenderCopy(screen, p_object, &frame_clip[current_status][current_frame], &renderquad);
     }
+
+    int GetStatus() const { return current_status; };
+    int GetName() const { return name; };
+
+    void SetA(const double& _a){a = _a;};
+    double GetA() const { return a; };
+
+
+    void SetOrbit(double st, double en, int step, pair<double,double> v, double a, double angle){
+        orbit.push_back(Orbit(st,en, step,v.fi, v.se, a, angle));
+    };
+    void HandleMove();
 
 private:
     int type;
@@ -95,11 +128,12 @@ private:
     double center_x, center_y;
     
     double x_speed, y_speed;
+    double a;
 
     double angle; // degree
 
     /* Enemy Display */
-    Object img[4];
+    SDL_Rect sizeImg;
 
     int current_status; 
     int current_frame;
@@ -114,6 +148,8 @@ private:
     bool is_move;
 
     vector<Plan> plan;
+
+    vector<Orbit> orbit;
 };
 
 

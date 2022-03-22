@@ -2,9 +2,10 @@
 #define CHARACTER
 #include "GameObject.h"
 #include "Bullet.h"
+#include "Enemy.h"
+#include "GamePhysics.h"
 
 const int MAX_FRAMES = 20;
-
 
 class Character {
 public:
@@ -35,6 +36,7 @@ public:
 	bool BorderCollision();
 
 	void AddBullet();
+	void HandleBullet(vector<Enemy> & enemy);
 	void Shoot(bool truth){ is_shoot = truth;};
 private:
 	int current_frame;
@@ -70,6 +72,7 @@ private:
 	vector<pair<pair<int,int>, int> > weapon;
 	Object char_bullet[10];
 	bool is_shoot = false;
+
 };
 
 

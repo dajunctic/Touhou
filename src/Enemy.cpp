@@ -8,12 +8,39 @@ Enemy::Enemy(){
     number_frames = 0;
     time_per_frame = 0;
 
-    EnemyTime.Start();
+    x_speed = 0;
+    y_speed = 0;
+    a = 0;
+
     is_move = true;
+
+    EnemyTime.Start();
 }
 
 Enemy::~Enemy(){
     
+}
+
+void Enemy::HandleMove(){
+
+    for(auto &x : orbit){
+        int current_time = EnemyTime.GetSeconds();
+        if(x.st <=  current_time and current_time <= x.en and EnemyTime.CheckSeconds(x.step)){
+            x_speed = x.x_speed;
+            y_speed = x.y_speed;
+
+            angle = x.angle;
+            a = x.a;
+        }
+    }
+    x_speed += a;
+    y_speed += a;
+
+    x_speed = max(x_speed, 0.0);
+    y_speed = max(y_speed, 0.0);
+
+    x += x_speed * cos(angle*PI/180);
+    y += y_speed * sin(angle*PI/180);
 }
 
 void Enemy::InitBullet(int start_time, int end_time, int type){

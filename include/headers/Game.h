@@ -24,12 +24,20 @@ private:
     SDL_Rect MainBoard = {BOARD_X, BOARD_Y, BOARD_LIMITED_X - BOARD_X , BOARD_LIMITED_Y - BOARD_Y };
 
     Character Hakurei;
-    Enemy Test;
 
+    /* Enemy */
+    vector<Enemy> enemy;
+    Object enemy_img[20][4];
+    int wave_enemy = 0;
+
+
+    /* Bullet */
     vector<Bullet> shot;
     Object shot_img[20];
      
 public:
+
+    
 
     Game(){ 
         init();
@@ -127,8 +135,13 @@ public:
         close();
     }
     void display();
+
+    void HandleEnemy();
+    void MakeEnemy();
+
     void HandleBullet();
     void HandleInput(SDL_Event e);
+
 };
 
 #endif // GAME_H_
