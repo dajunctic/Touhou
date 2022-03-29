@@ -20,7 +20,6 @@ void Game::load(){
         Hakurei.Load(screen, "hakurei");
     }
     /* Load Enemy */{
-
         for(int i = 0 ; i < 2 ; i++){
             string path = "res/img/enemy/enemy_";
             string tmp = to_string(i);
@@ -29,7 +28,8 @@ void Game::load(){
             enemy_img[i][0].LoadImage(screen, path + tmp + ".png");
             enemy_img[i][1].LoadImage(screen, path + tmp + "_left.png");
             enemy_img[i][2].LoadImage(screen, path + tmp + "_right.png");
-        //    enemy_img[i][3].LoadImage(screen, path + tmp + "_attack.png");
+            enemy_img[i][3].LoadImage(screen, path + tmp + "_attack_left.png");
+            enemy_img[i][4].LoadImage(screen, path + tmp + "_attack_right.png");
         }
 
     // Stage 1
@@ -37,21 +37,42 @@ void Game::load(){
         Enemy Test;
     //    Enemy Test2;
 
+        int truth = 1;
+
         for(int i = 500 ; i <= 700 ; i += 200){
+            truth -= 1;
 
             Test.SetPos(i , 200);
-            Test.Set(4, 10);
+            Test.Set(4, 12, 2);
             Test.SetName(1);
-            Test.Load( enemy_img[1][0].GetRect());
-            Test.InitBullet(0 , 10, 0);  
+            Test.Load(enemy_img[1]);
+            Test.SetFitAttackFrame(11.0, 0.0);
+            Test.InitBullet(0 , 20, 1);  
 
-            Test.SetOrbit(2,2, 60,{2,2},-0.01, 90);
+            Test.SetOrbit(2,0,{2,2},-0.01, 90);
 
-            Test.SetOrbit(5,5, 60,{2,2}, 0, -90);
-            Test.SetOrbit(7,7, 60,{0,0}, 0, 90);
+            Test.SetOrbit(5, 0,{2,2}, 0, -90);
+            Test.SetOrbit(7, 0,{0,0}, 0, 90);
+
+
+            // Hinh elip //
+            int tmp = 8, tmp2 = 0;
+            for(int i = -90 ; i < 270 ; i+=5){
+                Test.SetOrbit(tmp, tmp2, {3,1}, 0,  i + 180 * truth);
+                tmp2 += 5;
+                if(tmp2 >= 60){
+                    tmp++;
+                    tmp2 = 0;
+                }
+            }
+            Test.SetOrbit(tmp, tmp2, {0,0}, 0, 180);
 
             enemy.push_back(Test);
         }
+
+
+
+        // Real //
     }
  
     }

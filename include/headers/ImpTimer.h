@@ -41,6 +41,7 @@ public:
 	bool CheckSeconds(int FPS_) {
 		return (count_time % FPS_ == 0);
 	}
+	int GetFrameTime() const { return count_time - FPS * component_time;};
 	int GetSeconds() const { return component_time ;};
 	int GetMinutes() const { return component_time / 60;};
 	int GetHours() const { return component_time / 3600;};

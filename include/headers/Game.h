@@ -27,7 +27,8 @@ private:
 
     /* Enemy */
     vector<Enemy> enemy;
-    Object enemy_img[20][4];
+ //   vector<vector<Object> > enemy_img(20);
+    Object enemy_img[20][10];
     int wave_enemy = 0;
 
 

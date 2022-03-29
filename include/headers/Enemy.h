@@ -23,7 +23,7 @@ struct Orbit{
     double angle;
     double a;
 
-    Orbit(double st, double en, int step,  double x_speed, double y_speed, double a, double angle){
+    Orbit(double st, int step,  double x_speed, double y_speed, double a, double angle){
         this->st = st;
         this->en = en;
         this->step = step;
@@ -38,8 +38,16 @@ class Enemy{
 public:
     // 0:    ENEMY_IDLE,
     // 1:    ENEMY_LEFT,
-    // 2:    ENEMY_RIGHT
-
+    // 2:    ENEMY_RIGHT,
+    // 3:   ENEMY_ATTACK_LEFT
+    // 4:   ENEMY_ATTACK_RIGHT
+    enum{
+        ENEMY_IDLE,
+        ENEMY_LEFT,
+        ENEMY_RIGHT,
+        ENEMY_ATTACK_LEFT,
+        ENEMY_ATTACK_RIGHT
+    };
 
     Enemy();
     ~Enemy();
@@ -58,13 +66,17 @@ public:
 
     void InitBullet(int start_time, int end_time, int type);
     void HandleBullet(vector<Bullet> & shot);
-    void MakeBullet(vector<Bullet> & shot, int type);
+    void MakeBullet(vector<Bullet> & shot, int ,int , int);
 
-    void Set(int number_frames_, int time_per_frame_){
+    void Set(int number_frames_, int time_per_frame_, int number_frame_attack_ = 0){
         number_frames = number_frames_;
+        number_frame_attack = number_frame_attack_;
+
+        if(number_frame_attack == 0) number_frame_attack = number_frames;
+
         time_per_frame = time_per_frame_;
     }
-    void Load(SDL_Rect img){
+    void Load(Object * img){
         {
         // string path = "res/img/enemy/enemy_";
         // img[0].LoadImage(screen, path + id + ".png");
@@ -72,13 +84,14 @@ public:
         // img[2].LoadImage(screen, path + id + "_right.png");
         }
         
-        sizeImg = img;
+        
 
-        int imageWidth = img.w;
-        int imageHeight = img.h;
-        int frameWidth = imageWidth / number_frames;
+        for(int i = 0 ; i < 5 ; i++){
+            sizeImg[i] = img[i].GetRect();
 
-        for(int i = 0 ; i < 3 ; i++){
+            int imageWidth =sizeImg[i].w;
+            int imageHeight = sizeImg[i].h;
+            int frameWidth = imageWidth / number_frames;
             for(int k = 0 ; k < number_frames ; k++){
                 frame_clip[i][k].x = k * frameWidth;
                 frame_clip[i][k].y = 0;
@@ -88,24 +101,54 @@ public:
         }
     }
     void Update(){
-        center_x = (x + sizeImg.w / number_frames + x) / 2;
-        center_y = (y + sizeImg.h + y) / 2;
+        center_x = (x + sizeImg[current_status].w / number_frames + x) / 2;
+        center_y = (y + sizeImg[current_status].h + y) / 2;
+
+        if(current_status == ENEMY_LEFT or current_status == ENEMY_RIGHT)
+            if(x_speed == 0 and y_speed == 0) 
+                current_status = ENEMY_IDLE;
 
         EnemyTime.Update();
         time_count++;
         if(time_count % time_per_frame == 0){
-            current_frame ++;
-            current_frame %= number_frames;
+            if(current_status == ENEMY_ATTACK_LEFT or current_status == ENEMY_ATTACK_RIGHT){
+                current_frame ++;
+                current_frame %= number_frame_attack;
+                if(current_frame == 0) time_attack ++;
+                if(time_attack == 2){
+                    current_status -= 2;
+                    current_frame = 0;
+                }
+            }
+            if(current_status == ENEMY_LEFT or current_status == ENEMY_RIGHT){
+                current_frame ++;
+                current_frame %= number_frames;
+            }
+
+            if(current_status == ENEMY_IDLE){
+                current_frame ++;
+                current_frame %= number_frames;
+            }
+
         }
+   
     }
     void Show(SDL_Renderer * screen, Object& g){
         Update();
 
         SDL_Texture* p_object = g.GetObject();
         SDL_Rect rect = g.GetRect();
+        SDL_Rect renderquad;
 
-        SDL_Rect renderquad = { int(x) , int(y) , rect.w / number_frames, rect.h };
-        SDL_RenderCopy(screen, p_object, &frame_clip[current_status][current_frame], &renderquad);
+        if(current_status == ENEMY_ATTACK_LEFT or current_status == ENEMY_ATTACK_RIGHT)
+            renderquad = { int(x - fit_attack_frame_x) , int(y - fit_attack_frame_y) , rect.w / number_frames, rect.h };
+        else 
+            renderquad = { int(x) , int(y) , rect.w / number_frames, rect.h };
+
+        if(current_frame != -1)
+            SDL_RenderCopy(screen, p_object, &frame_clip[current_status][current_frame], &renderquad);
+        else
+            SDL_RenderCopy(screen, p_object, &frame_clip[current_status][0], &renderquad);
     }
 
     int GetStatus() const { return current_status; };
@@ -115,10 +158,21 @@ public:
     double GetA() const { return a; };
 
 
-    void SetOrbit(double st, double en, int step, pair<double,double> v, double a, double angle){
-        orbit.push_back(Orbit(st,en, step,v.fi, v.se, a, angle));
+    void SetOrbit(double st, int step, pair<double,double> v, double a, double angle){
+        orbit.push_back(Orbit(st, step,v.fi, v.se, a, angle));
     };
     void HandleMove();
+
+    void ResetAttack(){
+        time_attack = 0;
+        current_status = current_direct + 2;
+        current_frame = -1;
+    }
+
+    void SetFitAttackFrame(double x, double y){
+        fit_attack_frame_x = x;
+        fit_attack_frame_y = y;
+    }
 
 private:
     int type;
@@ -133,23 +187,36 @@ private:
     double angle; // degree
 
     /* Enemy Display */
-    SDL_Rect sizeImg;
+    SDL_Rect sizeImg[20];
 
     int current_status; 
+    int current_direct;
     int current_frame;
     int number_frames;
     int time_count;
     int time_per_frame;
-    SDL_Rect frame_clip[4][20];
+    SDL_Rect frame_clip[10][20];
+    int number_frame_attack;
+    int time_attack;
+
+    double fit_attack_frame_x;
+    double fit_attack_frame_y;
 
 
     GameTime EnemyTime;
     /* Enemy move */
     bool is_move;
+    bool num_bullet;
 
     vector<Plan> plan;
 
     vector<Orbit> orbit;
+
+
+    int HP;
+    bool is_deleted = 0;
+
+
 };
 
 

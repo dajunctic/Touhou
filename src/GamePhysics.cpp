@@ -21,4 +21,5 @@ double sin(pair<double,double> a, pair<double, double> b){
 
     double denominator = vector_length(a) * vector_length(b);
     return numerator / denominator;
+
 }
