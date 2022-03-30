@@ -107,6 +107,13 @@ public:
         if(current_status == ENEMY_LEFT or current_status == ENEMY_RIGHT)
             if(x_speed == 0 and y_speed == 0) 
                 current_status = ENEMY_IDLE;
+        
+        if(x_speed + y_speed > 0 and current_status < ENEMY_ATTACK_LEFT){
+            if(-90 <= angle and angle <= 90) 
+                current_status = ENEMY_RIGHT;
+            else
+                current_status = ENEMY_LEFT;
+        }
 
         EnemyTime.Update();
         time_count++;
@@ -121,7 +128,11 @@ public:
                 }
             }
             if(current_status == ENEMY_LEFT or current_status == ENEMY_RIGHT){
-                current_frame ++;
+                current_frame++;
+                if(current_frame >= number_frames * 1 / 3 ){
+                    current_frame %= (number_frames * 2 / 3  );
+                    current_frame += number_frames * 2 / 3;
+                }
                 current_frame %= number_frames;
             }
 
@@ -203,10 +214,12 @@ private:
     double fit_attack_frame_y;
 
 
+
     GameTime EnemyTime;
     /* Enemy move */
     bool is_move;
-    bool num_bullet;
+    int num_bullet;
+    int angle_bullet;
 
     vector<Plan> plan;
 

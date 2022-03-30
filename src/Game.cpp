@@ -36,7 +36,7 @@ void Game::load(){
     {
         Enemy Test;
     //    Enemy Test2;
-
+    
         int truth = 1;
 
         for(int i = 500 ; i <= 700 ; i += 200){
@@ -47,7 +47,7 @@ void Game::load(){
             Test.SetName(1);
             Test.Load(enemy_img[1]);
             Test.SetFitAttackFrame(11.0, 0.0);
-            Test.InitBullet(0 , 20, 1);  
+            Test.InitBullet(0 , 8, 5);  
 
             Test.SetOrbit(2,0,{2,2},-0.01, 90);
 
@@ -57,8 +57,8 @@ void Game::load(){
 
             // Hinh elip //
             int tmp = 8, tmp2 = 0;
-            for(int i = -90 ; i < 270 ; i+=5){
-                Test.SetOrbit(tmp, tmp2, {3,1}, 0,  i + 180 * truth);
+            for(int j = -90 ; j < 270 ; j+=5){
+                Test.SetOrbit(tmp, tmp2, {2.5,1}, 0,  j + 180 * truth);
                 tmp2 += 5;
                 if(tmp2 >= 60){
                     tmp++;

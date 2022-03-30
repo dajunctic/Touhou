@@ -90,7 +90,7 @@ void Enemy::MakeBullet(vector<Bullet> & shot, int type, int st_time, int en_time
             b.SetPos(center_x, center_y);
             b.SetName(1);
             b.SetAngle(18 * (EnemyTime.GetSeconds() - st_time));
-            b.SetSpeed(2,2);
+            b.SetSpeed(4,4);
             b.SetType(b.VECTOR);
             shot.push_back(b);
 
@@ -98,7 +98,93 @@ void Enemy::MakeBullet(vector<Bullet> & shot, int type, int st_time, int en_time
         }     
     }
     if(type == 2){
+        // Cứ 1 s bắn ra 3 viên đạn xuống dưới (giống grave LOL)
+
+        if (EnemyTime.CheckSeconds(60)){
+            for (int i = 80; i <= 100; i += 10) {
+                Bullet b;
+                b.SetPos(center_x, center_y);
+                b.SetName(1);
+                b.SetAngle(i);
+                b.SetSpeed(3,3);
+                b.SetType(b.VECTOR);
+                shot.push_back(b);
+            }
+            
+            ResetAttack();
+        }
+
+    }
+    if(type == 3){
+        // Cứ 1s bắn ra 4 cặp đạn từ góc 70 tới 110 độ 
+        if (EnemyTime.CheckSeconds(60)) {
+            for (int i = 70; i <= 110; i += 10) {
+                Bullet b;
+                b.SetPos(center_x, center_y);
+                //b.SetAngle(18 * (EnemyTime.GetSeconds() - st_time));
+                b.SetAngle(i);
+                b.SetName(1);
+                b.SetSpeed(2,2);
+                b.SetType(b.VECTOR);
+                shot.push_back(b);
+                double base = 15;
+                double angle_radian = i;
+                
+                b.SetPos(center_x + sin(angle_radian) * base, center_y - cos(angle_radian) * base);
+                b.SetAngle(i);
+                b.SetSpeed(2,2);
+                b.SetType(b.VECTOR);
+                shot.push_back(b);
+            }
+
+            ResetAttack();
+        }
+    }
+    if(type == 4){
+        if (EnemyTime.CheckSeconds(60) and (EnemyTime.GetSeconds() - st_time)%2 == 0) {
+            for(int i = 0 ; i < 360 ; i += 12){
+                Bullet b;
+                b.SetPos(center_x, center_y);
+                b.SetName(1);
+                b.SetAngle(i);
+                b.SetSpeed(1.5,1.5);
+                b.SetType(b.VECTOR);
+                shot.push_back(b);
+                
+                double base = 15;
+                double angle_radian = i/180.0 * PI;
+                    
+                b.SetPos(center_x + sin(angle_radian) * base, center_y - cos(angle_radian) * base);
+                b.SetAngle(i);
+                b.SetSpeed(1.5,1.5);
+                b.SetType(b.VECTOR);
+                shot.push_back(b);
+            }
 
 
+            ResetAttack();
+        }
+
+       
+    }
+    if(type == 5){
+        if ((EnemyTime.GetSeconds() - st_time)%2 == 0 and EnemyTime.CheckSeconds(60)) {
+            angle_bullet = rand() % (150 - 30 + 1) + 30;
+            num_bullet = 3;
+        }
+	 	if (EnemyTime.CheckSeconds(20) and num_bullet){
+	 		Bullet b;
+
+            b.SetPos(center_x, center_y);
+            b.SetName(1);
+            b.SetAngle(angle_bullet);
+            b.SetSpeed(2,2);
+            b.SetType(b.VECTOR);
+            shot.push_back(b);
+
+            num_bullet--;
+
+            ResetAttack();
+	 	}
     }
 }
