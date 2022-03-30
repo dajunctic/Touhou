@@ -40,7 +40,7 @@ void Character::Load(SDL_Renderer * screen, string character_name) {
 	for(int i = 0 ; i < TOTAL_ACTION ; i++){
 		/* Load Sprite Sheet */
 		string path = "res/img/char/" + character_name + status[i] + ".png" ;
-		player[i].LoadImage(screen, path);
+		player[i].Load(screen, path);
 
 		/* Horizontal Sprite Sheet*/
 		int imageWidth = player[i].GetRect().w;
@@ -62,7 +62,7 @@ void Character::Load(SDL_Renderer * screen, string character_name) {
 {
 	for(int i = 0; i < 3 ; i++){
 		string path = "res/img/char/yinyang_0" + to_string(i) + ".png";
-		yinyang[i].LoadImage(screen, path);
+		yinyang[i].Load(screen, path);
 	}
 }
 
@@ -71,7 +71,7 @@ void Character::Load(SDL_Renderer * screen, string character_name) {
 	for(int i = 0 ; i < 3 ; i++){
 		string path = "res/img/char/char_bullet_0";
 		path = path + to_string(i) + ".png";
-		char_bullet[i].LoadImage(screen, path);
+		char_bullet[i].Load(screen, path);
 	}
 }
 }
@@ -135,7 +135,7 @@ void Character::Show(SDL_Renderer * screen) {
 
 	/*#######################3        Main Character                  ###########################################*/
 	{
-	SDL_Texture* p_object = player[current_status].GetObject();
+	SDL_Texture* p_object = player[current_status].GetImage();
 	SDL_Rect rect = player[current_status].GetRect();
 
 	SDL_Rect renderquad = { int(x) , int(y) , rect.w / number_frames, rect.h };
@@ -152,7 +152,7 @@ void Character::Show(SDL_Renderer * screen) {
 	}
 	/*########################      Yinyang arround character            ####################################### */
 	{
-	SDL_Texture* yinyang_object = yinyang[current_yinyang].GetObject();
+	SDL_Texture* yinyang_object = yinyang[current_yinyang].GetImage();
 	SDL_Rect yinyang_rect = yinyang[current_yinyang].GetRect();
 	SDL_Rect yinyang_renderquad = { int(yin_x), int(yin_y), yinyang_rect.w, yinyang_rect.h};
 	SDL_Point center = { yinyang_rect.w / 2, yinyang_rect.h / 2};

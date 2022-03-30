@@ -1,6 +1,6 @@
 #ifndef CHARACTER
 #define CHARACTER
-#include "GameObject.h"
+#include "GameImage.h"
 #include "Bullet.h"
 #include "Enemy.h"
 #include "GamePhysics.h"
@@ -54,10 +54,10 @@ private:
 
 	SDL_Rect frame_clip[TOTAL_ACTION][MAX_FRAMES];
 
-	Object player[TOTAL_ACTION];
+	Image player[TOTAL_ACTION];
 
 	/* About yinyang circle arround character */
-	Object yinyang[3];
+	Image yinyang[3];
 	double yin_x;
 	double yin_y;
 
@@ -70,7 +70,7 @@ private:
 	
 
 	vector<pair<pair<int,int>, int> > weapon;
-	Object char_bullet[10];
+	Image char_bullet[10];
 	bool is_shoot = false;
 
 };

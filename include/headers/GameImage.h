@@ -1,24 +1,24 @@
-#ifndef GAME_OBJECT_H_
-#define GAME_OBJECT_H_
+#ifndef GAME_IMAGE_H_
+#define GAME_IMAGE_H_
 
 #include "Touhou.h"
 
-class Object {
+class Image {
 public:
-	Object();
-	~Object();
+	Image();
+	~Image();
 
 	void SetRect(const int& x, const int& y) { rect.x = x, rect.y = y;}
 	SDL_Rect GetRect() const { return rect; }
-	SDL_Texture* GetObject() const { return p_object; }
+	SDL_Texture* GetImage() const { return p_image; }
 
-	void LoadImage(SDL_Renderer * screen, string path);
+	void Load(SDL_Renderer * screen, string path);
 	void Render(SDL_Renderer* des, SDL_Rect* clip = NULL);
 	void Free();
 
 protected:
-	SDL_Texture* p_object;
+	SDL_Texture* p_image;
 	SDL_Rect rect;
 };
 
-#endif // !GAME_OBJECT_H_
+#endif // !GAME_IMAGE_H_

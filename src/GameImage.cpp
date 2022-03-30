@@ -1,13 +1,13 @@
-#include "GameObject.h"
+#include "GameImage.h"
 
-Object::Object() {
-	p_object = NULL;
+Image::Image() {
+	p_image = NULL;
 	rect.x = rect.y = rect.w = rect.h = 0;
 }
-Object::~Object() {
+Image::~Image() {
 	Free();
 }
-void Object::LoadImage(SDL_Renderer * screen, string path) {
+void Image::Load(SDL_Renderer * screen, string path) {
 	SDL_Texture* new_texture = NULL;
 	SDL_Surface* load_surface = IMG_Load(path.c_str());
 
@@ -26,17 +26,17 @@ void Object::LoadImage(SDL_Renderer * screen, string path) {
 		throw error;
 		return;
 	}
-	p_object = new_texture;
+	p_image = new_texture;
 }
-void Object::Render(SDL_Renderer* des, SDL_Rect* clip) {
+void Image::Render(SDL_Renderer* des, SDL_Rect* clip) {
 	SDL_Rect renderquad = { rect.x, rect.y, rect.w, rect.h };
 
-	SDL_RenderCopy(des, p_object, clip, &renderquad);
+	SDL_RenderCopy(des, p_image, clip, &renderquad);
 }
-void Object::Free() {
-	if (p_object != NULL) {
-		SDL_DestroyTexture(p_object);
-		p_object = NULL;
+void Image::Free() {
+	if (p_image != NULL) {
+		SDL_DestroyTexture(p_image);
+		p_image = NULL;
 		rect.w = rect.h = 0;
 	}
 }

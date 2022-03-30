@@ -167,24 +167,4 @@ void Enemy::MakeBullet(vector<Bullet> & shot, int type, int st_time, int en_time
 
        
     }
-    if(type == 5){
-        if ((EnemyTime.GetSeconds() - st_time)%2 == 0 and EnemyTime.CheckSeconds(60)) {
-            angle_bullet = rand() % (150 - 30 + 1) + 30;
-            num_bullet = 3;
-        }
-	 	if (EnemyTime.CheckSeconds(20) and num_bullet){
-	 		Bullet b;
-
-            b.SetPos(center_x, center_y);
-            b.SetName(1);
-            b.SetAngle(angle_bullet);
-            b.SetSpeed(2,2);
-            b.SetType(b.VECTOR);
-            shot.push_back(b);
-
-            num_bullet--;
-
-            ResetAttack();
-	 	}
-    }
 }

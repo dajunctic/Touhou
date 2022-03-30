@@ -3,19 +3,19 @@
 
 void Game::load(){
     
-    /* Load Game Object */{   
-        GameBg.LoadImage(screen, "res/img/background.jpg");
-        GameBg2.LoadImage(screen, "res/img/bg.png");
+    /* Load Game Image */{   
+        GameBg.Load(screen, "res/img/background.jpg");
+        GameBg2.Load(screen, "res/img/bg.png");
 
         for(int i = 0 ; i < 9 ; i++){
             string id = to_string(i);
             if(i < 10) id = '0' + id;
             string path = "res/img/bullet/b_" +  id + ".png";
-            shot_img[i].LoadImage(screen, path);
+            shot_img[i].Load(screen, path);
         }
     }
     /* Load Character */{
-        Hakurei.Set(8 , 5);
+        Hakurei.Set(8 , 10);
         Hakurei.SetPos(SCREEN_WIDTH / 2 - 16, SCREEN_HEIGHT - 200);
         Hakurei.Load(screen, "hakurei");
     }
@@ -25,11 +25,11 @@ void Game::load(){
             string tmp = to_string(i);
             if(i < 10) tmp = '0' + tmp;
 
-            enemy_img[i][0].LoadImage(screen, path + tmp + ".png");
-            enemy_img[i][1].LoadImage(screen, path + tmp + "_left.png");
-            enemy_img[i][2].LoadImage(screen, path + tmp + "_right.png");
-            enemy_img[i][3].LoadImage(screen, path + tmp + "_attack_left.png");
-            enemy_img[i][4].LoadImage(screen, path + tmp + "_attack_right.png");
+            enemy_img[i][0].Load(screen, path + tmp + ".png");
+            enemy_img[i][1].Load(screen, path + tmp + "_left.png");
+            enemy_img[i][2].Load(screen, path + tmp + "_right.png");
+            enemy_img[i][3].Load(screen, path + tmp + "_attack_left.png");
+            enemy_img[i][4].Load(screen, path + tmp + "_attack_right.png");
         }
 
     // Stage 1
@@ -43,11 +43,11 @@ void Game::load(){
             truth -= 1;
 
             Test.SetPos(i , 200);
-            Test.Set(4, 12, 2);
+            Test.Set(4, 10, 2);
             Test.SetName(1);
             Test.Load(enemy_img[1]);
             Test.SetFitAttackFrame(11.0, 0.0);
-            Test.InitBullet(0 , 8, 5);  
+            Test.InitBullet(0 , 8, 2);  
 
             Test.SetOrbit(2,0,{2,2},-0.01, 90);
 

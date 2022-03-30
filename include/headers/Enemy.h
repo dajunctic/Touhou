@@ -1,7 +1,7 @@
 #if !defined(ENEMY_H_)
 #define ENEMY_H_
 
-#include "GameObject.h"
+#include "GameImage.h"
 #include "Bullet.h"
 #include "ImpTimer.h"
 
@@ -76,12 +76,12 @@ public:
 
         time_per_frame = time_per_frame_;
     }
-    void Load(Object * img){
+    void Load(Image * img){
         {
         // string path = "res/img/enemy/enemy_";
-        // img[0].LoadImage(screen, path + id + ".png");
-        // img[1].LoadImage(screen, path + id + "_left.png");
-        // img[2].LoadImage(screen, path + id + "_right.png");
+        // img[0].Load(screen, path + id + ".png");
+        // img[1].Load(screen, path + id + "_left.png");
+        // img[2].Load(screen, path + id + "_right.png");
         }
         
         
@@ -144,10 +144,10 @@ public:
         }
    
     }
-    void Show(SDL_Renderer * screen, Object& g){
+    void Show(SDL_Renderer * screen, Image& g){
         Update();
 
-        SDL_Texture* p_object = g.GetObject();
+        SDL_Texture* p_object = g.GetImage();
         SDL_Rect rect = g.GetRect();
         SDL_Rect renderquad;
 

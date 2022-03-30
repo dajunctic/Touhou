@@ -1,6 +1,6 @@
 #if !defined(BULLET_H_)
 #define BULLET_H_
-#include "GameObject.h"
+#include "GameImage.h"
 
 class Bullet{
 public:

@@ -2,7 +2,7 @@
 #define GAME_H_
 
 #include "Touhou.h"
-#include "GameObject.h"
+#include "GameImage.h"
 #include "Character.h"
 #include "Bullet.h"
 #include "ImpTimer.h"
@@ -19,22 +19,22 @@ private:
 
 
     GameTime MainTime;
-    Object GameBg;
-    Object GameBg2;
+    Image GameBg;
+    Image GameBg2;
     SDL_Rect MainBoard = {BOARD_X, BOARD_Y, BOARD_LIMITED_X - BOARD_X , BOARD_LIMITED_Y - BOARD_Y };
 
     Character Hakurei;
 
     /* Enemy */
     vector<Enemy> enemy;
- //   vector<vector<Object> > enemy_img(20);
-    Object enemy_img[20][10];
+ //   vector<vector<Image> > enemy_img(20);
+    Image enemy_img[20][10];
     int wave_enemy = 0;
 
 
     /* Bullet */
     vector<Bullet> shot;
-    Object shot_img[20];
+    Image shot_img[20];
      
 public:
 
