@@ -27,10 +27,12 @@ private:
 
     /* Enemy */
     vector<Enemy> enemy;
- //   vector<vector<Image> > enemy_img(20);
     Image enemy_img[20][10];
     int wave_enemy = 0;
 
+    /* Boss */
+    Image boss_img[20][10];
+    Enemy boss = Enemy(true);
 
     /* Bullet */
     vector<Bullet> shot;

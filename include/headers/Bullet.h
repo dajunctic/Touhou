@@ -29,6 +29,7 @@ public:
 
     void SetSpeed (const double& x_speed_, const double& y_speed_){ x_speed = x_speed_; y_speed = y_speed_;};
     void SetAngle(const double& angle_){ angle = angle_;};
+    double GetAngle() const { return angle; };
 
     
     void SetRandomAngle(const int& st, const int& en);

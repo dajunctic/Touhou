@@ -7,12 +7,15 @@ Character::Character() {
 	x = y = 0;
 	yin_x = yin_y;
 
-	move_speed = 2.6;
+	move_speed = 3;
 	is_move = false;
 	is_key = false;
 	move_x = move_y = 0;
 
 	memset(frame_clip, 0, sizeof(frame_clip));
+	is_shift = false;
+	circle_angle = 0;
+	circle_speed = 1;
 }
 Character::~Character() {
 	for(int i = 0 ; i < TOTAL_ACTION ; i++)
@@ -74,6 +77,9 @@ void Character::Load(SDL_Renderer * screen, string character_name) {
 		char_bullet[i].Load(screen, path);
 	}
 }
+
+	// Load Magic Circle //
+	magic_circle.Load(screen, "res/img/char/magic_circle.png");
 }
 
 bool Character::BorderCollision(){
@@ -90,17 +96,46 @@ bool Character::BorderCollision(){
 	return false;
 }
 void Character::Update() {
+	center_x = (x + player[current_status].GetRect().w / number_frames + x) / 2;
+	center_y = (y + player[current_status].GetRect().h + y) / 2;
+
+	if(is_shift) {
+		move_speed = 2.5;
+
+		if(yin_y >= y - 10){
+			yin_x += 5 * cos(-50.0 * PI / 180);
+			yin_y += 5 * sin(-50.0 * PI / 180);
+		}
+		
+
+	}else {
+		move_speed = 3;
+
+		if(yin_y <= y + 10){
+			yin_x -= 5 * cos(-50.0 * PI / 180);
+			yin_y -= 5 * sin(-50.0 * PI / 180);
+		}
+	}
+
 	if(is_move) {
 		x += move_x * move_speed;
 		y += move_y * move_speed;
 
+		yin_x += move_x * move_speed;
+		yin_y += move_y * move_speed; 
+
 		if(BorderCollision()){
 			x -= move_x * move_speed;
 			y -= move_y * move_speed;
-		}
 
-		yin_x = x - 20;
-		yin_y = y + 10;
+			yin_x -= move_x * move_speed;
+			yin_y -= move_y * move_speed; 
+		}
+		center_x = (x + player[current_status].GetRect().w / number_frames + x) / 2;
+		center_y = (y + player[current_status].GetRect().h + y) / 2;
+
+		// yin_x = x - 20;
+		// yin_y = y + 10;
 	}
 
 
@@ -141,14 +176,14 @@ void Character::Show(SDL_Renderer * screen) {
 	SDL_Rect renderquad = { int(x) , int(y) , rect.w / number_frames, rect.h };
 	SDL_RenderCopy(screen, p_object, &frame_clip[current_status][current_frame], &renderquad);
 
-	SDL_Rect border;
-	border.x = x;
-	border.y = y;
-	border.w = rect.w / number_frames;
-	border.h = rect.h;
+// 	SDL_Rect border;
+// 	border.x = x;
+// 	border.y = y;
+// 	border.w = rect.w / number_frames;
+// 	border.h = rect.h;
 
-//	SDL_SetRenderDrawColor(screen , 255, 0 , 0 , 0);
-	SDL_RenderDrawRect(screen , &border);
+// //	SDL_SetRenderDrawColor(screen , 255, 0 , 0 , 0);
+// 	SDL_RenderDrawRect(screen , &border);
 	}
 	/*########################      Yinyang arround character            ####################################### */
 	{
@@ -159,21 +194,32 @@ void Character::Show(SDL_Renderer * screen) {
 
     SDL_RenderCopyEx( screen, yinyang_object, NULL, &yinyang_renderquad, yinyang_angle , &center, SDL_FLIP_NONE );
 
-	SDL_Rect yinyang_renderquad2 = { int(yin_x  + second_yin_x), int(yin_y), yinyang_rect.w, yinyang_rect.h};
-	SDL_RenderCopyEx( screen, yinyang_object, NULL, &yinyang_renderquad2, yinyang_angle , &center, SDL_FLIP_NONE );
+	SDL_Rect yinyang_renderquad2 = { int(2 * center_x - yin_x - 15 ), int(yin_y), yinyang_rect.w, yinyang_rect.h};
+	SDL_RenderCopyEx( screen, yinyang_object, NULL, &yinyang_renderquad2, -yinyang_angle , &center, SDL_FLIP_NONE );
 	}
+
+	// Magic Circle //
+	circle_angle += circle_speed;
+	if(circle_angle >= 360) circle_angle - 360;
+	magic_circle.SetRect(center_x - magic_circle.GetRect().w / 2, center_y - magic_circle.GetRect().h / 2);
+
+	magic_circle.RenderAngle(screen, circle_angle);
 
 }
 
 void Character::AddBullet(){
 	
 	if(weapon.empty()){
-		weapon.push_back({{x + 13, y}, 0});
-		weapon.push_back({{x, y + 5}, 1});
-		weapon.push_back({{x + 30, y + 5}, 1});
+		if(is_shift){
+			weapon.push_back({{x + 2, y + 5}, 0});
+		}
+		else{
+			weapon.push_back({{x + 5, y + 5}, 1});
+			weapon.push_back({{2 * center_x - (x + 5) - 6, y + 5}, 1});
+		}
 
-		weapon.push_back({{yin_x - 15 , yin_y}, 2});
-		weapon.push_back({{yin_x + second_yin_x - 20, yin_y}, 3});
+		weapon.push_back({{yin_x , yin_y}, 2});
+		weapon.push_back({{2 * center_x - yin_x - 15  , yin_y}, 3});
 	}
 	else{
 
@@ -183,18 +229,34 @@ void Character::AddBullet(){
 		}
 		int y_ = weapon[it].fi.se;
 		if(y - y_ >= 50){
-			weapon.push_back({{x + 13, y}, 0});
-			weapon.push_back({{x, y + 5}, 1});
-			weapon.push_back({{x + 30, y + 5}, 1});
+
+			if(!is_shift){
+				weapon.push_back({{x + 5, y + 5}, 1});
+				weapon.push_back({{2 * center_x - (x + 5) - 6 , y + 5}, 1});
+			}
 		}
+
+		it = weapon.size() - 1;
+		while(weapon[it].se != 0 and it > 0){
+			it--;
+		}
+		y_ = weapon[it].fi.se;
+		if(y - y_ >= 40){
+
+			if(is_shift){
+				weapon.push_back({{x + 2, y + 5}, 0});
+			}
+		}
+
+
 		it = weapon.size() - 1;
 		while(weapon[it].se != 2 and weapon[it].se != 3 and it > 0){
 			it--;
 		}
 		y_ = weapon[it].fi.se;
-		if(yin_y - y_ > 200){
-			weapon.push_back({{yin_x - 15 , yin_y}, 2});
-			weapon.push_back({{yin_x + second_yin_x - 20, yin_y}, 3});
+		if(yin_y - y_ > 150){
+			weapon.push_back({{yin_x , yin_y}, 2});
+			weapon.push_back({{2 * center_x - yin_x - 15  , yin_y}, 3});
 		}
 	}
 }
@@ -207,14 +269,16 @@ void Character::HandleBullet(vector<Enemy>& enemy){
 	for(auto &[pos , id] : weapon) {
 		if(id == 0 or id == 1) pos.se -= 10;
 		if(id == 2 or id == 3){
-			if(enemy.empty()){
+			if(enemy.empty() or pos.se > 400){
+				double _angle = rand()% (80 - 40 + 1) + 40;
+
 				if(id == 2){
-					pos.fi += 6 * cos(99.0*PI/180);
-					pos.se -= 6 * sin(80*PI/180);
+					pos.fi += 6 * cos((180.0 - _angle)*PI/180);
+					pos.se -= 6 * sin(_angle*PI/180);
 				}
 				if(id == 3){
-					pos.fi += 6 * cos(80*PI/180);
-        			pos.se -= 6 * sin(80*PI/180);
+					pos.fi += 6 * cos(_angle*PI/180);
+        			pos.se -= 6 * sin(_angle*PI/180);
 				}
 			}else{
 				double x = pos.fi + char_bullet[2].GetRect().w / 2;

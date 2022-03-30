@@ -7,7 +7,8 @@ void Game::load(){
         GameBg.Load(screen, "res/img/background.jpg");
         GameBg2.Load(screen, "res/img/bg.png");
 
-        for(int i = 0 ; i < 9 ; i++){
+        // Load bullet Image
+        for(int i = 0 ; i < 12 ; i++){
             string id = to_string(i);
             if(i < 10) id = '0' + id;
             string path = "res/img/bullet/b_" +  id + ".png";
@@ -31,7 +32,21 @@ void Game::load(){
             enemy_img[i][3].Load(screen, path + tmp + "_attack_left.png");
             enemy_img[i][4].Load(screen, path + tmp + "_attack_right.png");
         }
+    }
+    /* Load Boss */{
+        for(int i = 1 ; i < 2 ; i++){
+            string path = "res/img/boss/boss_";
+            string tmp = to_string(i);
+            if(i < 10) tmp = '0' + tmp;
 
+            boss_img[i][0].Load(screen, path + tmp + "_idle.png");
+            boss_img[i][1].Load(screen, path + tmp + "_left.png");
+            boss_img[i][2].Load(screen, path + tmp + "_right.png");
+            boss_img[i][3].Load(screen, path + tmp + "_attack_left.png");
+            boss_img[i][4].Load(screen, path + tmp + "_attack_right.png");
+        }
+
+    }
     // Stage 1
     {
         Enemy Test;
@@ -47,7 +62,7 @@ void Game::load(){
             Test.SetName(1);
             Test.Load(enemy_img[1]);
             Test.SetFitAttackFrame(11.0, 0.0);
-            Test.InitBullet(0 , 8, 2);  
+            Test.InitBullet(0 , 8, 2, 10);  
 
             Test.SetOrbit(2,0,{2,2},-0.01, 90);
 
@@ -73,8 +88,41 @@ void Game::load(){
 
 
         // Real //
-    }
- 
+
+        /* BOSS */{
+            boss.SetPos(640 - 20 , 200);
+            boss.Set(4, 8, 7);
+            boss.SetName(1);
+            boss.Load(boss_img[1]);
+            boss.SetFitAttackFrame(0.0, 25.0);
+            boss.InitBullet(0 , 8, 2, 10);   
+
+            boss.SetOrbit(2,0,{2,2},-0.01, 90);
+
+            boss.SetOrbit(5, 0,{2,2}, 0, -90);
+            boss.SetOrbit(7, 0,{0,0}, 0, 90);
+
+            // Hinh elip //
+            int tmp = 8, tmp2 = 0;
+            for(int j = -90 ; j < 270 ; j+=5){
+                boss.SetOrbit(tmp, tmp2, {2.5,1}, 0,  j );
+                tmp2 += 5;
+                if(tmp2 >= 60){
+                    tmp++;
+                    tmp2 = 0;
+                }
+            }
+            boss.SetOrbit(tmp, tmp2, {0,0}, 0, 180);
+
+            // boss.SetOrbit(1,0,{4,4},-0.01, 90);
+
+            // boss.SetOrbit(4, 0,{2,2}, 0, -45);
+            // boss.SetOrbit(6, 0,{0,0}, 0, 180);
+            // boss.SetOrbit(7, 0,{4,4}, 0, 180);
+            // boss.SetOrbit(8, 0,{0,0}, 0, 180);
+
+            enemy.push_back(boss);
+        }
     }
 }
 
@@ -96,7 +144,7 @@ void Game::display(){
             int h = shot_img[x.GetName()].GetRect().h;
 
             shot_img[x.GetName()].SetRect(x.GetPos().fi - w / 2, x.GetPos().se - h / 2);
-            shot_img[x.GetName()].Render(screen);
+            shot_img[x.GetName()].RenderAngle(screen, 90 + x.GetAngle());
         }
         vector<Bullet> tmp;
 
@@ -123,9 +171,13 @@ void Game::display(){
 void Game::HandleEnemy(){
 
     for(auto &x : enemy){
-        x.Show(screen, enemy_img[x.GetName()][x.GetStatus()]);
+        if(x.IsBoss())
+            x.Show(screen, boss_img[x.GetName()][x.GetStatus()]);
+        else 
+            x.Show(screen, enemy_img[x.GetName()][x.GetStatus()]);
         x.HandleMove();
         x.HandleBullet(shot);
+
     }
 }
 
@@ -166,6 +218,10 @@ void Game::HandleInput(SDL_Event e){
             case SDLK_z:
                 Hakurei.Shoot(true);
                 break;
+
+            case SDLK_LSHIFT:
+                Hakurei.PressShift(true);
+                break;
             
             default:
                 break;
@@ -189,6 +245,10 @@ void Game::HandleInput(SDL_Event e){
 
             case SDLK_z:
                 Hakurei.Shoot(false);
+                break;
+
+            case SDLK_LSHIFT:
+                Hakurei.PressShift(false);
                 break;
 
             default:

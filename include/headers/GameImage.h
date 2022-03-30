@@ -13,7 +13,8 @@ public:
 	SDL_Texture* GetImage() const { return p_image; }
 
 	void Load(SDL_Renderer * screen, string path);
-	void Render(SDL_Renderer* des, SDL_Rect* clip = NULL);
+	void Render(SDL_Renderer* screen, SDL_Rect* clip = NULL);
+	void RenderAngle(SDL_Renderer* screen, double angle, SDL_Rect* clip = NULL);
 	void Free();
 
 protected:

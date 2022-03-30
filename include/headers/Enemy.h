@@ -8,10 +8,12 @@
 struct Plan{
     int start_time, end_time; // time
     int type;
-    Plan(int start_time, int end_time, int type = 0){
+    int name;
+    Plan(int start_time, int end_time, int type, int name = 0){
         this->start_time = start_time;
         this->end_time = end_time;
         this->type = type;
+        this->name = name;
     }
 };
 
@@ -49,7 +51,7 @@ public:
         ENEMY_ATTACK_RIGHT
     };
 
-    Enemy();
+    Enemy(bool is_boss_ = false);
     ~Enemy();
 
     void SetName(const int& name_){name = name_;};
@@ -64,9 +66,9 @@ public:
     
     void SetRandomAngle(const int& st, const int& en);
 
-    void InitBullet(int start_time, int end_time, int type);
+    void InitBullet(int start_time, int end_time, int type, int name = 0);
     void HandleBullet(vector<Bullet> & shot);
-    void MakeBullet(vector<Bullet> & shot, int ,int , int);
+    void MakeBullet(vector<Bullet> & shot, int ,int ,int , int);
 
     void Set(int number_frames_, int time_per_frame_, int number_frame_attack_ = 0){
         number_frames = number_frames_;
@@ -77,32 +79,38 @@ public:
         time_per_frame = time_per_frame_;
     }
     void Load(Image * img){
-        {
-        // string path = "res/img/enemy/enemy_";
-        // img[0].Load(screen, path + id + ".png");
-        // img[1].Load(screen, path + id + "_left.png");
-        // img[2].Load(screen, path + id + "_right.png");
-        }
-        
-        
 
         for(int i = 0 ; i < 5 ; i++){
             sizeImg[i] = img[i].GetRect();
 
             int imageWidth =sizeImg[i].w;
             int imageHeight = sizeImg[i].h;
-            int frameWidth = imageWidth / number_frames;
-            for(int k = 0 ; k < number_frames ; k++){
-                frame_clip[i][k].x = k * frameWidth;
-                frame_clip[i][k].y = 0;
-                frame_clip[i][k].w = frameWidth;
-                frame_clip[i][k].h = imageHeight;
+            int frameWidth;
+            
+            if(i >= ENEMY_ATTACK_LEFT){
+                frameWidth = imageWidth / number_frame_attack;
+
+                for(int k = 0 ; k < number_frame_attack ; k++){
+                    frame_clip[i][k].x = k * frameWidth;
+                    frame_clip[i][k].y = 0;
+                    frame_clip[i][k].w = frameWidth;
+                    frame_clip[i][k].h = imageHeight;
+                }
+            }else{
+                frameWidth = imageWidth / number_frames;
+
+                for(int k = 0 ; k < number_frames ; k++){
+                    frame_clip[i][k].x = k * frameWidth;
+                    frame_clip[i][k].y = 0;
+                    frame_clip[i][k].w = frameWidth;
+                    frame_clip[i][k].h = imageHeight;
+                }
             }
         }
     }
     void Update(){
-        center_x = (x + sizeImg[current_status].w / number_frames + x) / 2;
-        center_y = (y + sizeImg[current_status].h + y) / 2;
+        center_x = (x + sizeImg[0].w / number_frames + x) / 2;
+        center_y = (y + sizeImg[0].h + y) / 2;
 
         if(current_status == ENEMY_LEFT or current_status == ENEMY_RIGHT)
             if(x_speed == 0 and y_speed == 0) 
@@ -128,10 +136,11 @@ public:
                 }
             }
             if(current_status == ENEMY_LEFT or current_status == ENEMY_RIGHT){
-                current_frame++;
-                if(current_frame >= number_frames * 1 / 3 ){
-                    current_frame %= (number_frames * 2 / 3  );
-                    current_frame += number_frames * 2 / 3;
+               
+                if(current_frame == number_frames - 1 ){
+                   current_frame = number_frames - 1;
+                }else{
+                    current_frame++;
                 }
                 current_frame %= number_frames;
             }
@@ -152,12 +161,13 @@ public:
         SDL_Rect renderquad;
 
         if(current_status == ENEMY_ATTACK_LEFT or current_status == ENEMY_ATTACK_RIGHT)
-            renderquad = { int(x - fit_attack_frame_x) , int(y - fit_attack_frame_y) , rect.w / number_frames, rect.h };
+            renderquad = { int(x - fit_attack_frame_x) , int(y - fit_attack_frame_y) , rect.w / number_frame_attack, rect.h };
         else 
             renderquad = { int(x) , int(y) , rect.w / number_frames, rect.h };
 
         if(current_frame != -1)
             SDL_RenderCopy(screen, p_object, &frame_clip[current_status][current_frame], &renderquad);
+
         else
             SDL_RenderCopy(screen, p_object, &frame_clip[current_status][0], &renderquad);
     }
@@ -175,6 +185,7 @@ public:
     void HandleMove();
 
     void ResetAttack(){
+
         time_attack = 0;
         current_status = current_direct + 2;
         current_frame = -1;
@@ -184,6 +195,8 @@ public:
         fit_attack_frame_x = x;
         fit_attack_frame_y = y;
     }
+
+    bool IsBoss() const { return is_boss;};
 
 private:
     int type;
@@ -217,7 +230,6 @@ private:
 
     GameTime EnemyTime;
     /* Enemy move */
-    bool is_move;
     int num_bullet;
     int angle_bullet;
 
@@ -229,6 +241,9 @@ private:
     int HP;
     bool is_deleted = 0;
 
+
+    /* BOSS */
+    bool is_boss;
 
 };
 

@@ -30,6 +30,7 @@ public:
 
 	void Move();
 	void SetMove(bool truth) { is_move = truth;};
+	void PressShift(bool truth){ is_shift = truth;}
 	void SetStatus(int status_) { current_status = status_ ;};
 	void Keydown(bool truth) { is_key = truth;};
 	bool IsKeydown() { return is_key;};
@@ -50,6 +51,7 @@ private:
 	double move_x, move_y;
 
 	double x, y;
+	double center_x, center_y;
 	pair<int,int> move_vector[TOTAL_ACTION] = {{0, 0}, {-1 , 0}, {1 , 0}, {0 , -1}, {0 , 1} };
 
 	SDL_Rect frame_clip[TOTAL_ACTION][MAX_FRAMES];
@@ -61,7 +63,7 @@ private:
 	double yin_x;
 	double yin_y;
 
-	int current_yinyang = 0;
+	int current_yinyang = 2;
 	double yinyang_angle = 0;
 	double second_yin_x = 58;
 	double yinyang_speed = PI;
@@ -72,6 +74,13 @@ private:
 	vector<pair<pair<int,int>, int> > weapon;
 	Image char_bullet[10];
 	bool is_shoot = false;
+
+
+	/* Press Shift */
+	bool is_shift;
+
+	Image magic_circle;
+	double circle_speed, circle_angle;
 
 };
 

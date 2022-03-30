@@ -28,11 +28,19 @@ void Image::Load(SDL_Renderer * screen, string path) {
 	}
 	p_image = new_texture;
 }
-void Image::Render(SDL_Renderer* des, SDL_Rect* clip) {
+void Image::Render(SDL_Renderer* screen, SDL_Rect* clip) {
 	SDL_Rect renderquad = { rect.x, rect.y, rect.w, rect.h };
 
-	SDL_RenderCopy(des, p_image, clip, &renderquad);
+	SDL_RenderCopy(screen, p_image, clip, &renderquad);
 }
+void Image::RenderAngle(SDL_Renderer* screen, double angle, SDL_Rect* clip) {
+	SDL_Rect renderquad = { rect.x, rect.y, rect.w, rect.h };
+	SDL_Point center = {rect.w / 2, rect.h / 2};
+
+//	SDL_RenderCopy(des, p_image, clip, &renderquad);
+	SDL_RenderCopyEx( screen, p_image, NULL, &renderquad, angle , &center, SDL_FLIP_NONE );
+}
+
 void Image::Free() {
 	if (p_image != NULL) {
 		SDL_DestroyTexture(p_image);

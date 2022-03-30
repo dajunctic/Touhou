@@ -1,6 +1,6 @@
 #include "Enemy.h"
 
-Enemy::Enemy(){
+Enemy::Enemy(bool is_boss_ ){
     current_status = ENEMY_IDLE;
 
     time_count = 0;
@@ -17,7 +17,7 @@ Enemy::Enemy(){
     y_speed = 0;
     a = 0;
 
-    is_move = true;
+    is_boss = is_boss_;
 
     EnemyTime.Start();
 }
@@ -48,19 +48,19 @@ void Enemy::HandleMove(){
     y += y_speed * sin(angle*PI/180);
 }
 
-void Enemy::InitBullet(int start_time, int end_time, int type){
-    plan.push_back({start_time, end_time, type});
+void Enemy::InitBullet(int start_time, int end_time, int type, int name ){
+    plan.push_back({start_time, end_time, type, name});
 }
 
 void Enemy::HandleBullet(vector<Bullet> & shot){
     for(auto x : plan){
         if(x.start_time <= EnemyTime.GetSeconds() and EnemyTime.GetSeconds() <= x.end_time){
-            MakeBullet(shot, x.type, x.start_time, x.end_time);
+            MakeBullet(shot, x.type, x.name,  x.start_time, x.end_time);
         }
     }
 }
 
-void Enemy::MakeBullet(vector<Bullet> & shot, int type, int st_time, int en_time){
+void Enemy::MakeBullet(vector<Bullet> & shot, int type, int name, int st_time, int en_time){
     if(type == 0){
 
         // * Cứ 0.5 s 1 vòng tròn đạn bắn ra *//
@@ -70,7 +70,7 @@ void Enemy::MakeBullet(vector<Bullet> & shot, int type, int st_time, int en_time
                 Bullet b;
 
                 b.SetPos(center_x, center_y);
-                b.SetName(0);
+                b.SetName(name);
                 b.SetAngle(i);
                 b.SetSpeed(1.5,1.5);
                 b.SetType(b.VECTOR);
@@ -88,7 +88,7 @@ void Enemy::MakeBullet(vector<Bullet> & shot, int type, int st_time, int en_time
         if (EnemyTime.CheckSeconds(30)) {
             Bullet b;
             b.SetPos(center_x, center_y);
-            b.SetName(1);
+            b.SetName(name);
             b.SetAngle(18 * (EnemyTime.GetSeconds() - st_time));
             b.SetSpeed(4,4);
             b.SetType(b.VECTOR);
@@ -104,7 +104,7 @@ void Enemy::MakeBullet(vector<Bullet> & shot, int type, int st_time, int en_time
             for (int i = 80; i <= 100; i += 10) {
                 Bullet b;
                 b.SetPos(center_x, center_y);
-                b.SetName(1);
+                b.SetName(name);
                 b.SetAngle(i);
                 b.SetSpeed(3,3);
                 b.SetType(b.VECTOR);
@@ -123,7 +123,7 @@ void Enemy::MakeBullet(vector<Bullet> & shot, int type, int st_time, int en_time
                 b.SetPos(center_x, center_y);
                 //b.SetAngle(18 * (EnemyTime.GetSeconds() - st_time));
                 b.SetAngle(i);
-                b.SetName(1);
+                b.SetName(name);
                 b.SetSpeed(2,2);
                 b.SetType(b.VECTOR);
                 shot.push_back(b);
@@ -145,7 +145,7 @@ void Enemy::MakeBullet(vector<Bullet> & shot, int type, int st_time, int en_time
             for(int i = 0 ; i < 360 ; i += 12){
                 Bullet b;
                 b.SetPos(center_x, center_y);
-                b.SetName(1);
+                b.SetName(name);
                 b.SetAngle(i);
                 b.SetSpeed(1.5,1.5);
                 b.SetType(b.VECTOR);
