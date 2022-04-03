@@ -27,6 +27,13 @@ void Image::Load(SDL_Renderer * screen, string path) {
 		return;
 	}
 	p_image = new_texture;
+	SetBlendMode(SDL_BLENDMODE_BLEND);
+}
+void Image::SetBlendMode(SDL_BlendMode blending) {
+	SDL_SetTextureBlendMode(p_image, blending);
+}
+void Image::SetAlpha(Uint8 alpha) {
+	SDL_SetTextureAlphaMod(p_image, alpha);
 }
 void Image::Render(SDL_Renderer* screen, SDL_Rect* clip) {
 	SDL_Rect renderquad = { rect.x, rect.y, rect.w, rect.h };

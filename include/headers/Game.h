@@ -5,8 +5,9 @@
 #include "GameImage.h"
 #include "Character.h"
 #include "Bullet.h"
-#include "ImpTimer.h"
+#include "GameTime.h"
 #include "Enemy.h"
+#include "GameMenu.h"
 
 class Game{
 
@@ -17,8 +18,27 @@ private:
 
     multiset<int> Key;
 
+    int SCENE = TITLE;
 
-    GameTime MainTime;
+    /* Title introduction */
+    Image dazu;
+    Image dazu_warning;
+    Uint8 dazu_alpha = 0;
+
+    Mix_Chunk* dazu_sound = NULL;
+    Mix_Chunk* dazu_bg = NULL;
+    Mix_Chunk* tv = NULL;
+
+    /* Menu scene */
+    int current_menu_bg = -1;
+    Image menu_bg[4];
+    Mix_Music* menu_bgm = NULL;
+    Menu menu;
+
+
+
+    /* New Game Screen */
+    Time g_time;
     Image GameBg;
     Image GameBg2;
     SDL_Rect MainBoard = {BOARD_X, BOARD_Y, BOARD_LIMITED_X - BOARD_X , BOARD_LIMITED_Y - BOARD_Y };
@@ -39,12 +59,17 @@ private:
     Image shot_img[20];
      
 public:
+    enum SCENENAME{
+        TITLE,
+        MENU,
+        PLAY
+    };
 
-    
+    bool quit = false;
+
 
     Game(){ 
         init();
-        load();
     };
     ~Game(){};
     void init() {
@@ -55,7 +80,7 @@ public:
         if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
             cerr << "Warning: Linear texture filtering not enabled!" ;
 
-        window = SDL_CreateWindow("Touhou", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+        window = SDL_CreateWindow("Touhou - The Horror Night", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 
         if (window == NULL)
             cerr <<  "Can't create window!";
@@ -79,6 +104,18 @@ public:
                 SDL_SetWindowIcon(window, icon);
             }
         }
+
+        /* Init Sound and Music */
+        if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) == -1) {
+            printf("%s", Mix_GetError());
+        }
+
+        if (TTF_Init() < 0){
+            SDL_Log("%s", TTF_GetError());
+        }
+
+        Mix_Volume(-1, 64);
+        Mix_VolumeMusic(64);
     }
     void close() {
         /* Destroy window */
@@ -89,19 +126,23 @@ public:
 
         /*  Quit  SDL subsystems  */
         IMG_Quit();
+        Mix_Quit();
+        TTF_Quit();
         SDL_Quit();
     }
     void load();
     void run() {
-        ImpTimer fps_time;
+        int DELAY_TIME = 1000 / FPS;
+        Uint32 frameStart;
+	    Uint32 frameTime;
 
-        bool quit = false;
+
         SDL_Event e;
 
-        MainTime.Start();
+        g_time.Start();
 
         while (!quit) {
-            fps_time.start();
+            frameStart = SDL_GetTicks();
             while (SDL_PollEvent(&e) != 0) {
                 if (e.type == SDL_QUIT)
                     quit = true;
@@ -113,12 +154,12 @@ public:
 
             /*#########################################################*/
                             /* Sovle Display Problem */
-            SDL_SetRenderDrawColor(screen, 0, 0, 0, 0);
+            SDL_SetRenderDrawColor(screen, 0, 0, 0, 255);
             SDL_Rect r = {0, 0 , 1280 , 720};
             SDL_RenderFillRect( screen, &r );
             SDL_SetRenderDrawBlendMode(screen, SDL_BLENDMODE_BLEND);
 
-            MainTime.Update();
+            g_time.Update();
 
             display();
             /*#########################################################*/
@@ -127,11 +168,10 @@ public:
             /*#########################################################*/
                     /* FPS Problem: Don't Edit or Fix */
             {
-            int real_time = fps_time.getTicks();
-            int time_each_frame = 1000 / FPS; // ms
-            int delay_time = time_each_frame - real_time;
-            if (delay_time >= 0)
-                SDL_Delay(delay_time);
+                frameTime = SDL_GetTicks() - frameStart;
+                if (frameTime < DELAY_TIME){
+                    SDL_Delay(DELAY_TIME - frameTime);
+                }
             }
             /*#########################################################*/
         }
@@ -144,6 +184,7 @@ public:
 
     void HandleBullet();
     void HandleInput(SDL_Event e);
+
 
 };
 

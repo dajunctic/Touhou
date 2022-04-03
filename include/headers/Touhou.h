@@ -15,6 +15,8 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
+#include <SDL_ttf.h>
 
 using namespace std;
 
@@ -27,7 +29,6 @@ const int FPS = 60; /* Frame per second*/
 
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
-const int SCREEN_BPP = 32;
 
 const int COLOR_KEY_R = 0;
 const int COLOR_KEY_G = 255;

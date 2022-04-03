@@ -2,6 +2,23 @@
 
 
 void Game::load(){
+    /* Load Title Introduction */{
+        dazu.Load(screen, "res/img/Dazu.png");
+        dazu_warning.Load(screen, "res/img/warning.png");
+        dazu.SetAlpha(dazu_alpha);
+        dazu_sound = Mix_LoadWAV("res/sfx/DazuDazuGamer.wav");
+        dazu_bg = Mix_LoadWAV("res/sfx/horror.wav");
+    }
+    /* Load Menu */{
+        for(int i = 0 ; i < 4 ; i++){
+            string path = "res/img/bg/menu_bg_0" + to_string(i) + ".jpg";
+            menu_bg[i].Load(screen, path);
+        }
+        menu_bgm = Mix_LoadMUS("res/bgm/YourReality.mp3");
+        tv = Mix_LoadWAV("res/sfx/tv.wav");
+        menu.Load(screen);
+    //    Mix_VolumeMusic(64);
+    }
     
     /* Load Game Image */{   
         GameBg.Load(screen, "res/img/background.jpg");
@@ -47,8 +64,7 @@ void Game::load(){
         }
 
     }
-    // Stage 1
-    {
+    /* Charpter 1 */{
         Enemy Test;
     //    Enemy Test2;
     
@@ -127,44 +143,92 @@ void Game::load(){
 }
 
 void Game::display(){
-    GameBg.Render(screen);
-    SDL_SetRenderDrawColor(screen, 0, 0, 0 , 100);
-    SDL_RenderFillRect(screen, &MainBoard);
+    if(SCENE == TITLE){
+        if(g_time.CheckTime(2 , 0))
+            Mix_PlayChannel(-1, dazu_sound , 0); 
 
-    Hakurei.Show(screen);
-    Hakurei.HandleBullet(enemy);
-
-    /* Display Enemy */
-    HandleEnemy();
-
-    /* Display Bullet and Shot */{
-        for(auto &x : shot){
-            x.HandleMove();
-            int w = shot_img[x.GetName()].GetRect().w;
-            int h = shot_img[x.GetName()].GetRect().h;
-
-            shot_img[x.GetName()].SetRect(x.GetPos().fi - w / 2, x.GetPos().se - h / 2);
-            shot_img[x.GetName()].RenderAngle(screen, 90 + x.GetAngle());
-        }
-        vector<Bullet> tmp;
-
-        for(auto &s : shot){
-            int w = shot_img[s.GetName()].GetRect().w;
-            int h = shot_img[s.GetName()].GetRect().h;
-            int x = s.GetPos().fi;
-            int y = s.GetPos().se;
-
-            if (x + w <= BOARD_X or y + h <= BOARD_Y or x >= BOARD_LIMITED_X or y >= BOARD_LIMITED_Y){
-                continue;
-            }else
-                tmp.push_back(s);
+        if(g_time.CheckTime(0 , 1))
+            Mix_PlayChannel(-1, dazu_bg , 0); 
         
-        shot = tmp;
-            
+        if(g_time.CheckPeriod(0, 4) or g_time.CheckPeriod(10, 17)){
+            if(dazu_alpha + 1 > 255) dazu_alpha = 255;
+            else dazu_alpha += 1;
+        }
+        else{
+            if(dazu_alpha - 1 < 0) dazu_alpha = 0;
+            else dazu_alpha -= 1;
+        }
+        
+        if(g_time.CheckPeriod(0, 10)){
+            dazu.SetAlpha(dazu_alpha);
+            dazu.Render(screen);
+        }
+
+        if(g_time.CheckPeriod(10, 25)){
+            dazu_warning.SetAlpha(dazu_alpha);
+            dazu_warning.Render(screen);
+        }
+        if(g_time.CheckTime(22))
+            Mix_PlayChannel(-1, tv, 0);
+        if(g_time.CheckTime(25)){
+            Mix_HaltChannel(-1);
+            g_time.Reset();
+            SCENE = MENU;
         }
     }
+    if(SCENE == MENU){
+        if(g_time.CheckTime(0 , 1)){
+            Mix_PlayMusic(menu_bgm, -1);
+        }
 
-    GameBg2.Render(screen);
+        if(g_time.GetSeconds() % 4 == 0 and g_time.GetFrameTime() == 0){
+            current_menu_bg ++;
+            current_menu_bg %= 4;
+        }
+        menu_bg[current_menu_bg].Render(screen);
+        menu.show(screen);
+    }
+
+    if(SCENE == PLAY){
+        GameBg.Render(screen);
+        SDL_SetRenderDrawColor(screen, 0, 0, 0 , 100);
+        SDL_RenderFillRect(screen, &MainBoard);
+
+        Hakurei.Show(screen);
+        Hakurei.HandleBullet(enemy);
+
+        /* Display Enemy */
+        HandleEnemy();
+
+        /* Display Bullet and Shot */{
+            for(auto &x : shot){
+                x.HandleMove();
+                int w = shot_img[x.GetName()].GetRect().w;
+                int h = shot_img[x.GetName()].GetRect().h;
+
+                shot_img[x.GetName()].SetRect(x.GetPos().fi - w / 2, x.GetPos().se - h / 2);
+                shot_img[x.GetName()].RenderAngle(screen, 90 + x.GetAngle());
+            }
+            vector<Bullet> tmp;
+
+            for(auto &s : shot){
+                int w = shot_img[s.GetName()].GetRect().w;
+                int h = shot_img[s.GetName()].GetRect().h;
+                int x = s.GetPos().fi;
+                int y = s.GetPos().se;
+
+                if (x + w <= BOARD_X or y + h <= BOARD_Y or x >= BOARD_LIMITED_X or y >= BOARD_LIMITED_Y){
+                    continue;
+                }else
+                    tmp.push_back(s);
+            
+            shot = tmp;
+                
+            }
+        }
+
+        GameBg2.Render(screen);
+    }
 
 }
 
@@ -183,6 +247,7 @@ void Game::HandleEnemy(){
 
 
 void Game::HandleInput(SDL_Event e){
+    if(SCENE == PLAY){
         if(e.type == SDL_KEYDOWN){
 
             switch (e.key.keysym.sym){
@@ -263,4 +328,8 @@ void Game::HandleInput(SDL_Event e){
                 Hakurei.Move();
             }
         }
+    }
+    if(SCENE == MENU){
+        menu.HandleInput(e, &quit, window);
+    }
 }

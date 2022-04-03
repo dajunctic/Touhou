@@ -3,7 +3,7 @@
 
 #include "GameImage.h"
 #include "Bullet.h"
-#include "ImpTimer.h"
+#include "GameTime.h"
 
 struct Plan{
     int start_time, end_time; // time
@@ -228,7 +228,7 @@ private:
 
 
 
-    GameTime EnemyTime;
+    Time EnemyTime;
     /* Enemy move */
     int num_bullet;
     int angle_bullet;

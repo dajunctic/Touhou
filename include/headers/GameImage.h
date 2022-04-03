@@ -13,6 +13,8 @@ public:
 	SDL_Texture* GetImage() const { return p_image; }
 
 	void Load(SDL_Renderer * screen, string path);
+	void SetBlendMode(SDL_BlendMode blending);
+	void SetAlpha(Uint8 alpha);
 	void Render(SDL_Renderer* screen, SDL_Rect* clip = NULL);
 	void RenderAngle(SDL_Renderer* screen, double angle, SDL_Rect* clip = NULL);
 	void Free();

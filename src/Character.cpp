@@ -199,6 +199,8 @@ void Character::Show(SDL_Renderer * screen) {
 	}
 
 	// Magic Circle //
+
+	if(!is_shift) return;
 	circle_angle += circle_speed;
 	if(circle_angle >= 360) circle_angle - 360;
 	magic_circle.SetRect(center_x - magic_circle.GetRect().w / 2, center_y - magic_circle.GetRect().h / 2);
@@ -262,8 +264,12 @@ void Character::AddBullet(){
 }
 
 void Character::HandleBullet(vector<Enemy>& enemy){
+	
+
+
 	/* Bullet */
 	if(is_shoot) AddBullet();
+
 
 
 	for(auto &[pos , id] : weapon) {
