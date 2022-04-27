@@ -103,7 +103,7 @@ public:
         }
         
     }
-    void HandleInput(SDL_Event e, bool * quit, SDL_Window * window);
+    void HandleInput(SDL_Event e, bool * quit, SDL_Window * window, int * SCENE);
     bool isFullScreen = true;
 
     void ToggleFullScreen(SDL_Window* window, bool currentState){

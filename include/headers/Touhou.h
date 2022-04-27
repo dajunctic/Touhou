@@ -6,11 +6,13 @@
 #include <cstdlib>
 #include <utility>
 #include <fstream>
+#include <numeric>
 #include <vector>
 #include <string>
 #include <math.h>
 #include <queue>
 #include <stack>
+#include <map>
 #include <set>
 
 #include <SDL.h>
@@ -37,21 +39,10 @@ const int COLOR_KEY_B = 0;
 
 const int RENDER_DRAW_COLOR = 0xFF;
 
-const int BOARD_X = 400;
-const int BOARD_Y = 30;
-const int BOARD_LIMITED_X = 880;
-const int BOARD_LIMITED_Y = 690;
-
-struct TimeData{
-    int sec; // second
-    int min; // minute
-    int hour; // hour
-    TimeData(int h = 0, int m = 0, int s = 0){
-        this->hour = h;
-        this->min = m;
-        this-> sec = s;
-    }
-};
+const int BOARD_X = 340;
+const int BOARD_Y = 0;
+const int BOARD_LIMITED_X = 1280;
+const int BOARD_LIMITED_Y = 720;
 
 enum KEYBOARD_INPUT{
     K_LEFT,

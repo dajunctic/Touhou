@@ -8,7 +8,7 @@ Menu::~Menu(){
 
 }
 
-void Menu::HandleInput(SDL_Event e, bool * quit, SDL_Window * window){
+void Menu::HandleInput(SDL_Event e, bool * quit, SDL_Window * window, int * SCENE){
     if(e.type == SDL_KEYDOWN){
         if(current_page == MAIN){
             switch (e.key.keysym.sym){
@@ -26,6 +26,9 @@ void Menu::HandleInput(SDL_Event e, bool * quit, SDL_Window * window){
                 /* Options */
                 if(current_choice == OPTIONS){
                     current_page = OPTIONS;
+                }
+                if(current_choice == MAIN){
+                    *SCENE = 2;
                 }
                 /* Quit */
                 if(current_choice == QUIT) 

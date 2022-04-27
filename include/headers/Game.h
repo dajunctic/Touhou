@@ -3,20 +3,25 @@
 
 #include "Touhou.h"
 #include "GameImage.h"
+#include "GameTime.h"
+#include "GameMenu.h"
+#include "GameStage.h"
 #include "Character.h"
 #include "Bullet.h"
-#include "GameTime.h"
 #include "Enemy.h"
-#include "GameMenu.h"
+
+enum SCENENAME
+{
+    TITLE,
+    MENU,
+    PLAY
+};
 
 class Game{
-
 private:
     SDL_Window* window = NULL;
     SDL_Renderer* screen = NULL;
     SDL_Event* event = NULL;
-
-    multiset<int> Key;
 
     int SCENE = TITLE;
 
@@ -38,32 +43,10 @@ private:
 
 
     /* New Game Screen */
-    Time g_time;
-    Image GameBg;
-    Image GameBg2;
-    SDL_Rect MainBoard = {BOARD_X, BOARD_Y, BOARD_LIMITED_X - BOARD_X , BOARD_LIMITED_Y - BOARD_Y };
-
-    Character Hakurei;
-
-    /* Enemy */
-    vector<Enemy> enemy;
-    Image enemy_img[20][10];
-    int wave_enemy = 0;
-
-    /* Boss */
-    Image boss_img[20][10];
-    Enemy boss = Enemy(true);
-
-    /* Bullet */
-    vector<Bullet> shot;
-    Image shot_img[20];
+    Time time;
+    Stage stage;
      
 public:
-    enum SCENENAME{
-        TITLE,
-        MENU,
-        PLAY
-    };
 
     bool quit = false;
 
@@ -139,11 +122,13 @@ public:
 
         SDL_Event e;
 
-        g_time.Start();
+        time.Start();
 
-        while (!quit) {
+        while (!quit) 
+        {
             frameStart = SDL_GetTicks();
-            while (SDL_PollEvent(&e) != 0) {
+            while (SDL_PollEvent(&e) != 0) 
+            {
                 if (e.type == SDL_QUIT)
                     quit = true;
 
@@ -159,7 +144,7 @@ public:
             SDL_RenderFillRect( screen, &r );
             SDL_SetRenderDrawBlendMode(screen, SDL_BLENDMODE_BLEND);
 
-            g_time.Update();
+            time.Update();
 
             display();
             /*#########################################################*/
@@ -179,12 +164,7 @@ public:
     }
     void display();
 
-    void HandleEnemy();
-    void MakeEnemy();
-
-    void HandleBullet();
     void HandleInput(SDL_Event e);
-
 
 };
 

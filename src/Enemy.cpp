@@ -101,7 +101,7 @@ void Enemy::MakeBullet(vector<Bullet> & shot, int type, int name, int st_time, i
         // Cứ 1 s bắn ra 3 viên đạn xuống dưới (giống grave LOL)
 
         if (EnemyTime.CheckSeconds(60)){
-            for (int i = 80; i <= 100; i += 10) {
+            for (int i = 75; i <= 115; i += 15) {
                 Bullet b;
                 b.SetPos(center_x, center_y);
                 b.SetName(name);

@@ -1,6 +1,9 @@
 #if !defined(BULLET_H_)
 #define BULLET_H_
+
 #include "GameImage.h"
+#include "GamePhysics.h"
+#include "GameTime.h"
 
 class Bullet{
 public:
@@ -9,11 +12,7 @@ public:
         HORIZONTAL_SIN,
         VERTICAL_SIN
     };
-
-    enum {
-        EXISTED,
-        DELETED
-    };
+    vector<int> RadiusCollision {0, 1, 2 , 3, 4 , 5, 6, 7, 8, 9};
 
     Bullet();
     ~Bullet();
@@ -30,12 +29,13 @@ public:
     void SetSpeed (const double& x_speed_, const double& y_speed_){ x_speed = x_speed_; y_speed = y_speed_;};
     void SetAngle(const double& angle_){ angle = angle_;};
     double GetAngle() const { return angle; };
-
     
     void SetRandomAngle(const int& st, const int& en);
 
     void HandleMove();
-
+    void HandleCollision(pair<double,double>, double, SDL_Rect ); // Handle Collision with the player //
+    bool IsDelete() const{ return is_delete; };
+    void setDelete();
 private:
     int type;
     int name;
@@ -50,6 +50,38 @@ private:
 
     int status;
 
+    bool is_delete;
+
+};
+
+/* Bomb */
+
+class Bomb{
+private:
+    Image magic_cirle;
+    double rotate_angle;
+    double rotate_speed;
+
+    Animation fire;
+    Image amulet;
+
+    Time bomb_time;
+
+    Animation effect;
+
+    bool is_used;
+    bool is_attack;
+public:
+    Bomb();
+    ~Bomb();
+
+    void load(SDL_Renderer * renderer);
+    void show(SDL_Renderer * renderer);
+    void use();
+    bool isUsed();
+    bool isAttack();
+    void setAttack(bool choice);
+    void reset();
 };
 
 #endif // BULLET_H_

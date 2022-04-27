@@ -23,6 +23,7 @@ public:
 
 	void Set(int frame_count, int time_per_frame);
 	void SetPos(double x, double y);
+	SDL_Rect getRect();
 
 	void Load(SDL_Renderer * screen, string character_name);
 	void Update();
@@ -39,6 +40,13 @@ public:
 	void AddBullet();
 	void HandleBullet(vector<Enemy> & enemy);
 	void Shoot(bool truth){ is_shoot = truth;};
+	double GetRadius() const{ return radius; };
+	pair<double, double> GetCenter() const { return {center_x, center_y};};
+	void Die(bool truth){ is_die = truth; };
+	bool IsDie() const { return is_die; };
+	void setRessurect(bool truth) { is_ressurect = truth; };
+	bool isRessurect() const { return is_ressurect; };
+	
 private:
 	int current_frame;
 	int number_frames;
@@ -74,6 +82,7 @@ private:
 	vector<pair<pair<int,int>, int> > weapon;
 	Image char_bullet[10];
 	bool is_shoot = false;
+	int bullet_power[3] = {3, 1, 2};
 
 
 	/* Press Shift */
@@ -81,6 +90,14 @@ private:
 
 	Image magic_circle;
 	double circle_speed, circle_angle;
+
+	double radius = 5;
+
+	// Handle die //
+	bool is_die = false;
+	bool is_ressurect = false;
+	int time_ressurect = -1; 
+	Image ressurect_img;
 
 };
 

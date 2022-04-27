@@ -5,11 +5,13 @@
 #include "Bullet.h"
 #include "GameTime.h"
 
-struct Plan{
+struct Plan
+{
     int start_time, end_time; // time
     int type;
     int name;
-    Plan(int start_time, int end_time, int type, int name = 0){
+    Plan(int start_time, int end_time, int type, int name = 0)
+    {
         this->start_time = start_time;
         this->end_time = end_time;
         this->type = type;
@@ -17,7 +19,8 @@ struct Plan{
     }
 };
 
-struct Orbit{
+struct Orbit
+{
     double st, en; // time;
     int step;   // frame
 
@@ -36,7 +39,8 @@ struct Orbit{
     }
 };
 
-class Enemy{
+class Enemy
+{
 public:
     // 0:    ENEMY_IDLE,
     // 1:    ENEMY_LEFT,
@@ -59,7 +63,7 @@ public:
     void SetPos(const double& x_, const double& y_) { x = x_; y = y_; };
     pair<double, double> GetPos() const { return {x , y}; };
     pair<double, double> GetCenterPos() const { return {center_x, center_y}; };
-
+    SDL_Rect GetRect(){ return {int(x) + sizeImg[0].w / number_frames / 4, int(y) + sizeImg[0].h/4, sizeImg[0].w / number_frames / 2 , sizeImg[0].h/2};};
     void SetSpeed (const double& x_speed_, const double& y_speed_){ x_speed = x_speed_; y_speed = y_speed_;};
     void SetAngle(const double& angle_){ angle = angle_;};
 
@@ -78,7 +82,8 @@ public:
 
         time_per_frame = time_per_frame_;
     }
-    void Load(Image * img){
+    void Load(Image * img)
+    {
 
         for(int i = 0 ; i < 5 ; i++){
             sizeImg[i] = img[i].GetRect();
@@ -108,7 +113,8 @@ public:
             }
         }
     }
-    void Update(){
+    void Update()
+    {
         center_x = (x + sizeImg[0].w / number_frames + x) / 2;
         center_y = (y + sizeImg[0].h + y) / 2;
 
@@ -137,15 +143,18 @@ public:
             }
             if(current_status == ENEMY_LEFT or current_status == ENEMY_RIGHT){
                
-                if(current_frame == number_frames - 1 ){
+                if(current_frame == number_frames - 1 )
+                {
                    current_frame = number_frames - 1;
-                }else{
+                }else
+                {
                     current_frame++;
                 }
                 current_frame %= number_frames;
             }
 
-            if(current_status == ENEMY_IDLE){
+            if(current_status == ENEMY_IDLE)
+            {
                 current_frame ++;
                 current_frame %= number_frames;
             }
@@ -153,7 +162,8 @@ public:
         }
    
     }
-    void Show(SDL_Renderer * screen, Image& g){
+    void Show(SDL_Renderer * screen, Image& g)
+    {
         Update();
 
         SDL_Texture* p_object = g.GetImage();
@@ -179,24 +189,45 @@ public:
     double GetA() const { return a; };
 
 
-    void SetOrbit(double st, int step, pair<double,double> v, double a, double angle){
+    void SetOrbit(double st, int step, pair<double,double> v, double a, double angle)
+    {
         orbit.push_back(Orbit(st, step,v.fi, v.se, a, angle));
     };
     void HandleMove();
 
-    void ResetAttack(){
+    void ResetAttack()
+    {
 
         time_attack = 0;
         current_status = current_direct + 2;
         current_frame = -1;
     }
 
-    void SetFitAttackFrame(double x, double y){
+    void SetFitAttackFrame(double x, double y)
+    {
         fit_attack_frame_x = x;
         fit_attack_frame_y = y;
     }
 
     bool IsBoss() const { return is_boss;};
+
+    void setHeathPoint(int health_point_)
+    {   
+        HP = health_point_;
+    }
+    void minusHealhPoint(int health_point_minus_)
+    {
+        HP -= health_point_minus_;
+        if(HP < 0)
+        {
+            is_die = true;
+        }
+    }
+    void recoverHealth(int health_point_add)
+    {
+        HP += health_point_add;
+    }
+    bool isDie() const { return is_die; }
 
 private:
     int type;
@@ -226,8 +257,6 @@ private:
     double fit_attack_frame_x;
     double fit_attack_frame_y;
 
-
-
     Time EnemyTime;
     /* Enemy move */
     int num_bullet;
@@ -238,12 +267,13 @@ private:
     vector<Orbit> orbit;
 
 
-    int HP;
-    bool is_deleted = 0;
+    int HP = 100; // Health Point
+    bool is_die = false;
 
 
     /* BOSS */
     bool is_boss;
+
 
 };
 
