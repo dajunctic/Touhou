@@ -35,7 +35,7 @@ private:
     int level = EASY;
 
     Image esc;
-    int scene = MAIN;
+    int scene = LEVEL_CHOICE;
 
     // Story //
     Story story;

@@ -52,15 +52,15 @@ void Enemy::InitBullet(int start_time, int end_time, int type, int name ){
     plan.push_back({start_time, end_time, type, name});
 }
 
-void Enemy::HandleBullet(vector<Bullet> & shot){
+void Enemy::HandleBullet(vector<Bullet> & shot, pair<double,double>charcor){
     for(auto x : plan){
         if(x.start_time <= EnemyTime.GetSeconds() and EnemyTime.GetSeconds() <= x.end_time){
-            MakeBullet(shot, x.type, x.name,  x.start_time, x.end_time);
+            MakeBullet(shot, x.type, x.name,  x.start_time, x.end_time, charcor);
         }
     }
 }
 
-void Enemy::MakeBullet(vector<Bullet> & shot, int type, int name, int st_time, int en_time){
+void Enemy::MakeBullet(vector<Bullet> & shot, int type, int name, int st_time, int en_time, pair<double,double>charcor){
     if(type == 0){
 
         // * Cứ 0.5 s 1 vòng tròn đạn bắn ra *//

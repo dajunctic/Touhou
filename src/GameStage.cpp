@@ -521,7 +521,7 @@ void Stage::HandleEnemy(SDL_Renderer * renderer)
             x.Show(renderer, enemy_img[x.GetName()][x.GetStatus()]);
         }
         x.HandleMove();
-        x.HandleBullet(shot);
+        x.HandleBullet(shot, Hakurei.GetCenter());
 
     }
 

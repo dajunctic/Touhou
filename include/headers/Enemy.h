@@ -71,8 +71,8 @@ public:
     void SetRandomAngle(const int& st, const int& en);
 
     void InitBullet(int start_time, int end_time, int type, int name = 0);
-    void HandleBullet(vector<Bullet> & shot);
-    void MakeBullet(vector<Bullet> & shot, int ,int ,int , int);
+    void HandleBullet(vector<Bullet> & shot, pair<double,double>);
+    void MakeBullet(vector<Bullet> & shot, int ,int ,int , int, pair<double,double>);
 
     void Set(int number_frames_, int time_per_frame_, int number_frame_attack_ = 0){
         number_frames = number_frames_;
