@@ -7,6 +7,7 @@ double distance(pair<double, double> , pair<double,double> );
 double vector_length(pair<double, double> );
 double cos(pair<double,double>, pair<double, double>);
 double sin(pair<double,double>, pair<double, double>);
+double tan(pair<double,double>, pair<double, double>);
 
 bool PointInCircle(pair<double,double> P, pair<double, double> O, double r);
 bool RectInRect(SDL_Rect a, SDL_Rect b);

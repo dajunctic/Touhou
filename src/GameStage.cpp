@@ -58,7 +58,7 @@ void Stage::Load(SDL_Renderer * renderer)
     /* Load Character */
     {
         Hakurei.Set(8 , 10);
-        Hakurei.SetPos(SCREEN_WIDTH / 2 - 16, SCREEN_HEIGHT - 200);
+        Hakurei.SetPos((940 / 2 - 16) + 340, SCREEN_HEIGHT - 200);
         Hakurei.Load(renderer, "hakurei");
     }
     /* Load Enemy */
@@ -521,7 +521,7 @@ void Stage::HandleEnemy(SDL_Renderer * renderer)
             x.Show(renderer, enemy_img[x.GetName()][x.GetStatus()]);
         }
         x.HandleMove();
-        x.HandleBullet(shot, Hakurei.GetCenter());
+        x.HandleBullet(shot ,Hakurei.GetCenter());
 
     }
 

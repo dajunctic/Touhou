@@ -55,7 +55,7 @@ void Enemy::InitBullet(int start_time, int end_time, int type, int name ){
 void Enemy::HandleBullet(vector<Bullet> & shot, pair<double,double>charcor){
     for(auto x : plan){
         if(x.start_time <= EnemyTime.GetSeconds() and EnemyTime.GetSeconds() <= x.end_time){
-            MakeBullet(shot, x.type, x.name,  x.start_time, x.end_time, charcor);
+            MakeBullet(shot, x.type, x.name,  x.start_time, x.end_time ,charcor);
         }
     }
 }
@@ -173,7 +173,11 @@ void Enemy::MakeBullet(vector<Bullet> & shot, int type, int name, int st_time, i
                 Bullet b;
                 b.SetPos(center_x,center_y);
                 b.SetName(name);
-                b.SetAngle(90);// tam de 90
+                pair<double,double> p(1,0);
+                pair<double,double> p2(charcor.first - center_x, charcor.second - center_y);
+                double ang = acos(cos(p , p2)) / PI * 180;
+                if (charcor.second - center_y < 0 or (charcor.first - center_x == 0 and charcor.second - center_y < 0)) ang = -ang;
+                b.SetAngle(ang);
                 b.SetSpeed(1.5,1.5);
                 b.SetType(b.VECTOR);
                 shot.push_back(b);
@@ -188,8 +192,13 @@ void Enemy::MakeBullet(vector<Bullet> & shot, int type, int name, int st_time, i
             Bullet b;
             b.SetPos(center_x,center_y);
             b.SetName(name);
-            b.SetAngle(90);//ching angle huong ve character
+            pair<double,double> p(1,0);
+            pair<double,double> p2(charcor.first - center_x, charcor.second - center_y);
+            double ang = acos(cos(p , p2)) / PI * 180;
+            if (charcor.second - center_y < 0 or (charcor.first - center_x == 0 and charcor.second - center_y < 0)) ang = -ang;
+            b.SetAngle(ang);
             b.SetSpeed(1,1);
+            b.SetType(b.VECTOR);
             shot.push_back(b);
         }
     }
