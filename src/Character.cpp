@@ -112,53 +112,55 @@ bool Character::BorderCollision()
 }
 void Character::Update() 
 {
-	center_x = (x + player[current_status].GetRect().w / number_frames + x) / 2;
-	center_y = (y + player[current_status].GetRect().h + y) / 2;
-
-	if(is_shift) 
+	if(!is_paused)
 	{
-		move_speed = 2.5;
-
-		if(yin_y >= y - 10)
-		{
-			yin_x += 5 * cos(-50.0 * PI / 180);
-			yin_y += 5 * sin(-50.0 * PI / 180);
-		}
-	}
-	else 
-	{
-		move_speed = 3;
-
-		if(yin_y <= y + 10)
-		{
-			yin_x -= 5 * cos(-50.0 * PI / 180);
-			yin_y -= 5 * sin(-50.0 * PI / 180);
-		}
-	}
-
-	if(is_move) 
-	{
-		x += move_x * move_speed;
-		y += move_y * move_speed;
-
-		yin_x += move_x * move_speed;
-		yin_y += move_y * move_speed; 
-
-		if(BorderCollision())
-		{
-			x -= move_x * move_speed;
-			y -= move_y * move_speed;
-
-			yin_x -= move_x * move_speed;
-			yin_y -= move_y * move_speed; 
-		}
 		center_x = (x + player[current_status].GetRect().w / number_frames + x) / 2;
 		center_y = (y + player[current_status].GetRect().h + y) / 2;
 
-		// yin_x = x - 20;
-		// yin_y = y + 10;
-	}
+		if(is_shift) 
+		{
+			move_speed = 2.5;
 
+			if(yin_y >= y - 10)
+			{
+				yin_x += 5 * cos(-50.0 * PI / 180);
+				yin_y += 5 * sin(-50.0 * PI / 180);
+			}
+		}
+		else 
+		{
+			move_speed = 3;
+
+			if(yin_y <= y + 10)
+			{
+				yin_x -= 5 * cos(-50.0 * PI / 180);
+				yin_y -= 5 * sin(-50.0 * PI / 180);
+			}
+		}
+
+		if(is_move) 
+		{
+			x += move_x * move_speed;
+			y += move_y * move_speed;
+
+			yin_x += move_x * move_speed;
+			yin_y += move_y * move_speed; 
+
+			if(BorderCollision())
+			{
+				x -= move_x * move_speed;
+				y -= move_y * move_speed;
+
+				yin_x -= move_x * move_speed;
+				yin_y -= move_y * move_speed; 
+			}
+			center_x = (x + player[current_status].GetRect().w / number_frames + x) / 2;
+			center_y = (y + player[current_status].GetRect().h + y) / 2;
+
+			// yin_x = x - 20;
+			// yin_y = y + 10;
+		}
+	}
 
 	time_count ++;
 	if(time_count % time_per_frame == 0) 
@@ -327,7 +329,7 @@ void Character::AddBullet()
 	}
 }
 
-void Character::HandleBullet(vector<Enemy>& enemy)
+void Character::HandleBullet(vector<Enemy>& enemy, int * score)
 {
 	/* Check collision with the enemy */
 	vector<pair<pair<int,int>, int> > temp;
@@ -361,6 +363,7 @@ void Character::HandleBullet(vector<Enemy>& enemy)
 				{
 					vanish = true;
 					xx.minusHealhPoint(bullet_power[id]);
+					*score += 10 * bullet_power[id];
 				}
 			}
 			else
@@ -369,6 +372,7 @@ void Character::HandleBullet(vector<Enemy>& enemy)
 				{
 					vanish = true;
 					xx.minusHealhPoint(bullet_power[id]);
+					*score += 10 * bullet_power[id];
 				}
 			}
 		}
@@ -436,4 +440,13 @@ void Character::HandleBullet(vector<Enemy>& enemy)
 			}
 		}
 	}
+}
+
+void Character::pause()
+{
+	is_paused = true;
+}
+void Character::resume()
+{
+	is_paused = false;
 }

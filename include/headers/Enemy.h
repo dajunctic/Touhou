@@ -114,22 +114,25 @@ public:
         }
     }
     void Update()
-    {
-        center_x = (x + sizeImg[0].w / number_frames + x) / 2;
-        center_y = (y + sizeImg[0].h + y) / 2;
+    {   
+        if(!is_paused)
+        {
+            center_x = (x + sizeImg[0].w / number_frames + x) / 2;
+            center_y = (y + sizeImg[0].h + y) / 2;
 
-        if(current_status == ENEMY_LEFT or current_status == ENEMY_RIGHT)
-            if(x_speed == 0 and y_speed == 0) 
-                current_status = ENEMY_IDLE;
-        
-        if(x_speed + y_speed > 0 and current_status < ENEMY_ATTACK_LEFT){
-            if(-90 <= angle and angle <= 90) 
-                current_status = ENEMY_RIGHT;
-            else
-                current_status = ENEMY_LEFT;
+            if(current_status == ENEMY_LEFT or current_status == ENEMY_RIGHT)
+                if(x_speed == 0 and y_speed == 0) 
+                    current_status = ENEMY_IDLE;
+            
+            if(x_speed + y_speed > 0 and current_status < ENEMY_ATTACK_LEFT){
+                if(-90 <= angle and angle <= 90) 
+                    current_status = ENEMY_RIGHT;
+                else
+                    current_status = ENEMY_LEFT;
+            }
+
+            EnemyTime.Update();
         }
-
-        EnemyTime.Update();
         time_count++;
         if(time_count % time_per_frame == 0){
             if(current_status == ENEMY_ATTACK_LEFT or current_status == ENEMY_ATTACK_RIGHT){
@@ -211,8 +214,13 @@ public:
 
     bool IsBoss() const { return is_boss;};
 
+    int getDefaultHP()
+    {
+        return default_HP;
+    }
     void setHeathPoint(int health_point_)
     {   
+        default_HP = health_point_;
         HP = health_point_;
     }
     void minusHealhPoint(int health_point_minus_)
@@ -228,6 +236,8 @@ public:
         HP += health_point_add;
     }
     bool isDie() const { return is_die; }
+    void pause();
+    void resume();
 
 private:
     int type;
@@ -268,12 +278,14 @@ private:
 
 
     int HP = 100; // Health Point
+    int default_HP = 100;
     bool is_die = false;
 
 
     /* BOSS */
     bool is_boss;
 
+    bool is_paused = false;
 
 };
 

@@ -9,6 +9,13 @@
 
 class End{
 private:
+    bool is_mystery = true;
+    
+    Image mystery_bg;
+    Image Dajunctic;
+    Image textbox;
+    Dialogue mystery;
+
     Dialogue postscript1;
     Dialogue postscript2;
     string script1;

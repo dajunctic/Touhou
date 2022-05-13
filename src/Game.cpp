@@ -16,7 +16,7 @@ void Game::load(){
         }
         menu_bgm = Mix_LoadMUS("res/bgm/YourReality.mp3");
         tv = Mix_LoadWAV("res/sfx/tv.wav");
-        menu.Load(screen);
+        menu.load(screen);
     }
     stage.Load(screen);
 }

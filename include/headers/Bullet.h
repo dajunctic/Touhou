@@ -36,6 +36,9 @@ public:
     void HandleCollision(pair<double,double>, double, SDL_Rect ); // Handle Collision with the player //
     bool IsDelete() const{ return is_delete; };
     void setDelete();
+
+    void pause();
+    void resume();
 private:
     int type;
     int name;
@@ -51,6 +54,8 @@ private:
     int status;
 
     bool is_delete;
+
+    bool is_paused;
 
 };
 

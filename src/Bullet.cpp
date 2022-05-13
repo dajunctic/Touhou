@@ -8,6 +8,7 @@ Bullet::Bullet(){
     start_point = 0;
 
     is_delete = false;
+    is_paused = false;
 }
 Bullet::~Bullet(){};
 void Bullet::SetRandomAngle(const int& st, const int& en){
@@ -17,7 +18,17 @@ void Bullet::setDelete()
 {
     is_delete = true;
 }
+void Bullet::pause()
+{
+    is_paused = true;
+}
+void Bullet::resume()
+{
+    is_paused = false;
+}
 void Bullet::HandleMove(){
+    if(is_paused) return;
+
     if(type == VECTOR){
         x += x_speed * cos(angle*PI/180);
         y += y_speed * sin(angle*PI/180);

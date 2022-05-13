@@ -23,6 +23,8 @@ private:
     int line_space = 30;
     vector<string> line;
 
+    double x, y;
+
 public:
     Text();
     ~Text();
@@ -32,6 +34,9 @@ public:
     void setColor(SDL_Renderer * renderer, Uint8 r, Uint8 b, Uint8 g, Uint8 a = 255);
     void setPos(double, double);
     void setText(SDL_Renderer *, string);
+    void setAlpha(Uint8 a);
+    double getPosX();
+    double getPosY();
     void setRender(SDL_Renderer *);
     void show(SDL_Renderer *);
 

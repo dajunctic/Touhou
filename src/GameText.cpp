@@ -42,11 +42,13 @@ void Text::setColor(SDL_Renderer * renderer, Uint8 r, Uint8 b, Uint8 g, Uint8 a)
     color.b = b;
     color.g = g;
     color.a = a;
-    setRender(renderer);
+//    setRender(renderer);
 }
 
 void Text::setPos(double x, double y)
 {
+    this->x = x;
+    this->y = y;
     desRect.x = int(x);
     desRect.y = int(y);
 }
@@ -54,7 +56,8 @@ void Text::setPos(double x, double y)
 void Text::setText(SDL_Renderer* renderer, string text)
 {
     this->text = text;
-    setRender(renderer);
+    TTF_SizeText(font, text.c_str(), &srcRect.w, &srcRect.h);
+//    setRender(renderer);
 }
 
 void Text::setRender(SDL_Renderer * renderer)
@@ -64,19 +67,37 @@ void Text::setRender(SDL_Renderer * renderer)
     desRect.w = srcRect.w;
 	desRect.h = srcRect.h;
 
-    surface = TTF_RenderText_Blended(font, text.c_str(), color);
+    SDL_Surface * surface = TTF_RenderText_Blended(font, text.c_str(), color);
 	texture = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
+
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 }
 
 void Text::show(SDL_Renderer * renderer)
 {
+    desRect.x = int(x);
+    desRect.y = int(y);
+    setRender(renderer);
     SDL_RenderCopy(renderer, texture, &srcRect, &desRect);
+    SDL_DestroyTexture(texture);
 
+}
+void Text::setAlpha(Uint8 a)
+{
+    SDL_SetTextureAlphaMod(texture, a);
+}
+double Text::getPosX()
+{
+    return x;
+}
+double Text::getPosY()
+{
+    return y;
 }
 SDL_Rect Text::getRect()
 {
-    return desRect;
+    return srcRect;
 }
 
 void Text::setLineSpace(int line_space_)

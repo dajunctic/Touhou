@@ -2,6 +2,8 @@
 
 Story::Story()
 {
+    is_play_music = false;
+
     current_script = 0;
     next_script = false;
 
@@ -225,9 +227,18 @@ void Story::load(SDL_Renderer * renderer)
     am.Load(renderer, "res/img/char/am9.png");
     am_sad.Load(renderer, "res/img/char/am2.png");
     am_blink.Load(renderer, "res/img/char/am3.png");
+
+    bgm = Mix_LoadMUS("res/bgm/dokidoki.mp3");
 }
+
 void Story::show(SDL_Renderer * renderer)
 {
+    if(is_play_music == false)
+    {
+        is_play_music = true;
+        Mix_PlayMusic(bgm, -1);
+    }
+
     showBackground(renderer);
     showCharacter(renderer);
 
@@ -400,6 +411,8 @@ void Story::handleInput(SDL_Event e, int * scene)
                     if(current_script ==  scripts.size())
                     {
                         *scene = 2; // MAIN
+                        is_play_music = false;
+                        Mix_HaltMusic();
                     }
                     next_script = true;
                     loadBg = true;
@@ -416,6 +429,8 @@ void Story::handleInput(SDL_Event e, int * scene)
                     if(current_script ==  scripts.size())
                     {
                         *scene = 2; // MAIN
+                        is_play_music = false;
+                        Mix_HaltMusic();
                     }
                     next_script = true;
                     loadBg = true;

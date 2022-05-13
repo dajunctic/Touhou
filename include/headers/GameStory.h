@@ -32,6 +32,10 @@ private:
     Image rh, rh_happy, rh_surprise, rh_blink, rh_shy; // Reimu Hakurei
     Image am, am_sad, am_blink; // Alice Margatroid
 
+
+    Mix_Music * bgm = NULL;
+    bool is_play_music;
+
 public:
     Story();
     ~Story();

@@ -25,8 +25,17 @@ enum SCENE{
     END
 };
 
+enum MAIN_SCENE{
+    INTRO,
+    PROCESS,
+    WIN,
+    LOSE
+};
+
 class Stage{
 private:
+    Mix_Music * bgm = NULL;
+    bool isBgm = true;
 
     multiset<int> Key;
     Image level_theme;
@@ -35,7 +44,7 @@ private:
     int level = EASY;
 
     Image esc;
-    int scene = LEVEL_CHOICE;
+    int scene = MAIN;
 
     // Story //
     Story story;
@@ -49,8 +58,18 @@ private:
     Image StageBg;
     SDL_Rect MainBoard = {BOARD_X, BOARD_Y, BOARD_LIMITED_X - BOARD_X , BOARD_LIMITED_Y - BOARD_Y };
     
+    // Game Play Display Process //
+    int current_display = INTRO;
+    Text stage_name;
+    Text stage_content;
+    int stage_content_alpha = 255;
+    bool stage_content_blur = false;
+
+
+
     int explode = 3;
-    int life = 5;
+    int default_life = 3;
+    int life = default_life;
     Text explode_text;
     Text life_text;
     int score = 0;
@@ -83,6 +102,17 @@ private:
     Image powershard_img[6];
     vector<PowerShard> shards;
 
+    bool is_paused = false;
+    Image pause;
+    Image die;
+    Image win;
+
+    bool is_loser = false;
+    bool is_winner = false;
+
+    Mix_Chunk * dead_sfx = NULL;
+    Mix_Chunk * enemy_dead = NULL;
+
 public:
     Stage(){};
     ~Stage(){};
@@ -90,6 +120,7 @@ public:
     void Load(SDL_Renderer * renderer);
     void Show(SDL_Renderer * renderer);
 
+    void createEnemy();
     void HandleEnemy(SDL_Renderer * renderer);
     void HandleShot(SDL_Renderer * renderer);
     void HandleInput(SDL_Event e, int * SCENE);

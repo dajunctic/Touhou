@@ -38,7 +38,7 @@ public:
 	bool BorderCollision();
 
 	void AddBullet();
-	void HandleBullet(vector<Enemy> & enemy);
+	void HandleBullet(vector<Enemy> & enemy, int * score);
 	void Shoot(bool truth){ is_shoot = truth;};
 	double GetRadius() const{ return radius; };
 	pair<double, double> GetCenter() const { return {center_x, center_y};};
@@ -46,6 +46,9 @@ public:
 	bool IsDie() const { return is_die; };
 	void setRessurect(bool truth) { is_ressurect = truth; };
 	bool isRessurect() const { return is_ressurect; };
+
+	void pause();
+	void resume();
 	
 private:
 	int current_frame;
@@ -98,6 +101,9 @@ private:
 	bool is_ressurect = false;
 	int time_ressurect = -1; 
 	Image ressurect_img;
+
+
+	bool is_paused = false;
 
 };
 

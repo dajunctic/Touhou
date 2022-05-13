@@ -9,6 +9,17 @@ void Stage::Load(SDL_Renderer * renderer)
     esc.Load(renderer, "res/gui/esc.png");
     esc.SetRect((SCREEN_WIDTH - esc.GetRect().w)/2, SCREEN_HEIGHT - esc.GetRect().h);
 
+    pause.Load(renderer, "res/gui/pause.png");
+    die.Load(renderer, "res/gui/die.png");
+    win.Load(renderer, "res/gui/win.png");
+
+    stage_name.setSize(45);
+    stage_name.setPos(250, SCREEN_HEIGHT / 2 - 100);
+    stage_name.setText(renderer, "STAGE 1");
+
+    stage_content.setSize(25);
+    stage_content.setPos(620, 720);
+    stage_content.setText(renderer, "The mysterious blood sacrifice.");
 
     // Story //
     story.load(renderer);
@@ -16,8 +27,8 @@ void Stage::Load(SDL_Renderer * renderer)
     game_end.load(renderer);
 
      /* Load Game Image */{   
-        GameBg.Load(renderer, "res/img/bg/theme_03.jpg");
-        GameBg.SetRect(170, 0);
+        GameBg.Load(renderer, "res/img/bg/theme_00.jpg");
+        GameBg.SetRect(0, 0);
         StageBg.Load(renderer, "res/img/bg/chapter_01.png");
         // Load bullet Image
         for(int i = 0 ; i < 12 ; i++){
@@ -58,7 +69,7 @@ void Stage::Load(SDL_Renderer * renderer)
     /* Load Character */
     {
         Hakurei.Set(8 , 10);
-        Hakurei.SetPos(SCREEN_WIDTH / 2 - 16, SCREEN_HEIGHT - 200);
+        Hakurei.SetPos((SCREEN_WIDTH + BOARD_X) / 2 - 16, SCREEN_HEIGHT - 200);
         Hakurei.Load(renderer, "hakurei");
     }
     /* Load Enemy */
@@ -94,6 +105,12 @@ void Stage::Load(SDL_Renderer * renderer)
         }
 
     }
+    createEnemy();
+    
+}
+
+void Stage::createEnemy()
+{
     /* Charpter 1 */
     {
     //    Enemy Test2;
@@ -167,6 +184,11 @@ void Stage::Load(SDL_Renderer * renderer)
             enemy.push_back(boss);
         }
     }
+
+    bgm = Mix_LoadMUS("res/bgm/ShanghaiScarletTeahouse.mp3");
+
+    dead_sfx = Mix_LoadWAV("res/sfx/dead.wav");
+    enemy_dead = Mix_LoadWAV("res/sfx/enemy_dead.wav");
 }
 
 void Stage::Show(SDL_Renderer * renderer)
@@ -191,24 +213,78 @@ void Stage::Show(SDL_Renderer * renderer)
     }
     if(scene == MAIN)
     {
+        if(!isBgm)
+        {
+            isBgm = true;
+            Mix_PlayMusic(bgm, -1);
+        }
         GameBg.Render(renderer);
         // SDL_SetRenderDrawColor(renderer, 0, 0, 0 , 100);
         // SDL_RenderFillRect(renderer, &MainBoard);
         bomb.show(renderer);
 
         Hakurei.Show(renderer);
-        Hakurei.HandleBullet(enemy);
 
-        /* Display Enemy */
-    
-        HandleEnemy(renderer);
-        HandleShot(renderer);
+        if(current_display == INTRO)
+        {
+            if(stage_name.getPosX() <= 810 - stage_name.getRect().w / 2)
+            {
+                stage_name.setPos(stage_name.getPosX() + 5, stage_name.getPosY());
+            }
+            else
+            {
+                stage_content_blur = true;
+            }
+
+            if(stage_content.getPosY() >= 360 - stage_content.getRect().h / 2)
+            {
+                stage_content.setPos(stage_content.getPosX(), stage_content.getPosY() - 4);
+            }
+
+            if(stage_content_blur)
+            {
+                stage_content_alpha --;
+            }
+
+            if(stage_content_alpha == -1)
+            {
+                current_display = PROCESS;
+                isBgm = false;
+            }
+            else
+            {
+                stage_name.setAlpha(stage_content_alpha);
+                stage_content.setAlpha(stage_content_alpha);
+                stage_name.show(renderer);
+                stage_content.show(renderer);
+            }
+        }
+
+        if(current_display == PROCESS)
+        {
+            Hakurei.HandleBullet(enemy, &score);
+
+            /* Display Enemy */
+        
+            HandleEnemy(renderer);
+            HandleShot(renderer);
+        }
 
         /* Show Another */
+        if(is_paused) pause.Render(renderer);
+        if(is_loser) die.Render(renderer);
+        if(is_winner) win.Render(renderer);
+
         StageBg.Render(renderer);
         life_text.show(renderer);
         explode_text.show(renderer);
+
+        string score_str = to_string(score);
+        int tmp  = score_str.size();
+        for(int i = 0 ; i < 6 - tmp ; i++) score_str = '0' + score_str;
+        score_text.setText(renderer, score_str);
         score_text.show(renderer);
+
         hakurei_animation.show(renderer);
     }
 }
@@ -229,6 +305,10 @@ void Stage::HandleEnemy(SDL_Renderer * renderer)
     {
         if(RectInRect(x.getRect(), Hakurei.getRect()))
         {
+            if(x.getType() == 4)  
+                score += 1;
+            else 
+                score += 100;
             x.setDelete();
         }
     }
@@ -256,6 +336,9 @@ void Stage::HandleEnemy(SDL_Renderer * renderer)
     {
         if (x.isDie())
         {
+            // add score
+            score += x.getDefaultHP() * 10;
+            Mix_PlayChannel(-1, enemy_dead , 0);
 
             // make explosion
             Animation component;
@@ -326,6 +409,11 @@ void Stage::HandleEnemy(SDL_Renderer * renderer)
         x.show(renderer, &powershard_img[x.getType()], Hakurei.GetCenter());
     }
 
+    if(shards.empty() and enemy.empty())
+    {
+        is_winner = true;
+    }
+
     // show explosion
     vector<Animation> erased_explosion;
     for(auto &x : explosion)
@@ -372,12 +460,21 @@ void Stage::HandleShot(SDL_Renderer * renderer)
 
         if(s->IsDelete())
         {
+
+
             Hakurei.Die(true);
+            
+            Mix_PlayChannel(-1, dead_sfx, 0);
+
             life --;
             life_text.setText(renderer, to_string(life));
             if(life)
             {
                 Hakurei.setRessurect(true);
+            }
+            else
+            {
+                is_loser = true;
             }
 
         }
@@ -516,10 +613,57 @@ void Stage::HandleInput(SDL_Event e,int * SCENE)
                 case SDLK_z:
                     Hakurei.Shoot(false);
                     break;
-                
 
                 case SDLK_LSHIFT:
                     Hakurei.PressShift(false);
+                    break;
+
+                case SDLK_p:
+                    if(current_display == PROCESS)
+                    {
+                        is_paused = !is_paused;
+                        if(is_paused == true)
+                        {
+                            Hakurei.pause();
+                            for(auto &x : enemy) x.pause();
+                            for(auto &x : shot) x.pause();
+                        }
+                        else
+                        {
+                            Hakurei.resume();
+                            for(auto &x : enemy) x.resume();
+                            for(auto &x : shot) x.resume();
+                        }
+                    }
+                    break;
+                case SDLK_RETURN:
+                    if(current_display == PROCESS)
+                    {
+                        if(is_paused == true)
+                        {
+                            is_paused = false;
+                            Hakurei.resume();
+                            for(auto &x : enemy) x.resume();
+                            for(auto &x : shot) x.resume();
+                        }
+                        if(is_loser == true)
+                        {
+                            enemy.clear();
+                            shot.clear();
+                            is_loser = false;
+                            
+                            createEnemy();
+                            Hakurei.setRessurect(true);
+                            life = default_life;
+                        }
+                        if(is_winner == true)
+                        {
+                            Mix_HaltMusic();
+
+                        //    Mix_HaltChannel(-1);
+                            scene = END;
+                        }
+                    }
                     break;
 
                 default:

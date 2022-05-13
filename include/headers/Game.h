@@ -23,7 +23,7 @@ private:
     SDL_Renderer* screen = NULL;
     SDL_Event* event = NULL;
 
-    int SCENE = TITLE;
+    int SCENE = MENU;
 
     /* Title introduction */
     Image dazu;
@@ -39,7 +39,6 @@ private:
     Image menu_bg[4];
     Mix_Music* menu_bgm = NULL;
     Menu menu;
-
 
 
     /* New Game Screen */

@@ -60,6 +60,15 @@ void Enemy::HandleBullet(vector<Bullet> & shot){
     }
 }
 
+void Enemy::pause()
+{
+    is_paused = true;
+}
+void Enemy::resume()
+{
+    is_paused = false;
+}
+
 void Enemy::MakeBullet(vector<Bullet> & shot, int type, int name, int st_time, int en_time){
     if(type == 0){
 

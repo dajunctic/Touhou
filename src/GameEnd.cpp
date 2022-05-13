@@ -32,9 +32,32 @@ void End::load(SDL_Renderer * renderer)
 
     bg = Mix_LoadMUS("res/bgm/Thanks.mp3");
     thankyou = Mix_LoadWAV("res/sfx/thanks.wav");
+
+
+    mystery_bg.Load(renderer, "res/img/bg/self.jpg");
+    Dajunctic.Load(renderer, "res/img/char/daj.png");
+    Dajunctic.SetRect((SCREEN_WIDTH - Dajunctic.GetRect().w)/2, SCREEN_HEIGHT - Dajunctic.GetRect().h);
+    textbox.Load(renderer, "res/gui/textbox.png");
+    textbox.SetBlendMode(SDL_BLENDMODE_BLEND);
+    textbox.SetAlpha(255);
+
+    mystery.setSize(150 ,565 ,1280 - 150 * 2, SCREEN_HEIGHT - 500);
+    mystery.load(renderer);
+    mystery.setTextSpeed(0.4);
+    mystery.setText(renderer, "Hakurei Reimu, I remember! You dare to disrupt my plans! You'll have to pay the price in the future.");
 }
 void End::show(SDL_Renderer * renderer)
 {
+    if(is_mystery)
+    {
+        mystery_bg.Render(renderer);
+        Dajunctic.Render(renderer);
+        textbox.Render(renderer);
+        mystery.show(renderer);
+        return;
+    }
+
+
     if(!isBgm )
     {
         isBgm = true;
@@ -65,6 +88,12 @@ void End::handleInput(SDL_Event e, int * SCENE)
         switch (e.key.keysym.sym)
         {
         case SDLK_RETURN:
+            if(is_mystery)
+            {
+                is_mystery = false;
+                return;
+            }
+
             if(isBack)
             {
                 *SCENE = 1; // MENU
@@ -72,6 +101,11 @@ void End::handleInput(SDL_Event e, int * SCENE)
             }
             break;
         case SDLK_SPACE:
+            if(is_mystery)
+            {
+                is_mystery = false;
+                return;
+            }
             if(isBack)
             {
                 *SCENE = 1; // MENU
