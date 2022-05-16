@@ -28,7 +28,7 @@ void End::load(SDL_Renderer * renderer)
     back.setPos((SCREEN_WIDTH - back.getRect().w) / 2, 680);
 
     thanks.Load(renderer, "res/gui/thanks.png");
-    thanks.SetRect((SCREEN_WIDTH - thanks.GetRect().w) / 2, 250);
+    thanks.SetRect((SCREEN_WIDTH - thanks.GetRect().w) / 2, 360);
 
     bg = Mix_LoadMUS("res/bgm/Thanks.mp3");
     thankyou = Mix_LoadWAV("res/sfx/thanks.wav");

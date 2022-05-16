@@ -40,7 +40,6 @@ private:
     Mix_Music* menu_bgm = NULL;
     Menu menu;
 
-
     /* New Game Screen */
     Time time;
     Stage stage;

@@ -9,6 +9,7 @@
 #include "GameStory.h"
 #include "GameEnd.h"
 #include "PowerShard.h"
+#include "GameTime.h"
 
 enum DIFFICULTY{
     EASY,
@@ -38,12 +39,14 @@ private:
     bool isBgm = true;
 
     multiset<int> Key;
+
+    // Level Choice //
     Image level_theme;
     Image level_img; /* Level of difficulty */
     Image select;
     int level = EASY;
 
-    Image esc;
+    Text esc;
     int scene = MAIN;
 
     // Story //
@@ -102,6 +105,8 @@ private:
     Image powershard_img[6];
     vector<PowerShard> shards;
 
+
+    /* Game Status */
     bool is_paused = false;
     Image pause;
     Image die;
@@ -113,6 +118,18 @@ private:
     Mix_Chunk * dead_sfx = NULL;
     Mix_Chunk * enemy_dead = NULL;
 
+    /* Notification */
+    Image noti_img;
+    Text noti_text;
+    double noti_x = 610;
+    double noti_y = -65;
+    double limit_noti_x = 1280;
+    double limit_noti_y = 25;
+    Time noti_time;
+
+    bool is_noti = true;
+    Mix_Chunk * noti = NULL;
+
 public:
     Stage(){};
     ~Stage(){};
@@ -120,6 +137,7 @@ public:
     void Load(SDL_Renderer * renderer);
     void Show(SDL_Renderer * renderer);
 
+    void setNotification(bool);
     void createEnemy();
     void HandleEnemy(SDL_Renderer * renderer);
     void HandleShot(SDL_Renderer * renderer);

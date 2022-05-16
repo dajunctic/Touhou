@@ -37,6 +37,8 @@ public:
 
     void load(SDL_Renderer * renderer);
     void show(SDL_Renderer * renderer);
+    void updateInfo();
+    bool isLocked();
     void HandleInput(SDL_Event e, bool * quit, SDL_Window * window, int * SCENE);
     bool isFullScreen = true;
 
@@ -76,8 +78,20 @@ private:
     int current_song = 0;
     SongList music;
     Text music_text;
+    Text music_gui;
     Animation dance[2];
 
+    /*################# EPISODES ################ */
+
+    Image eps_lock;
+    Image eps_unlock;
+    Image eps_select;
+    Image eps_tail;
+    Image wallpaper;
+    int current_eps = 0;
+    int total_eps = 2;
+    bool is_lock = true;
+    bool is_wallpaper = false;
 
 };
 

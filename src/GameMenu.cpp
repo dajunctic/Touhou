@@ -27,16 +27,27 @@ void Menu::load(SDL_Renderer * renderer)
     esc.Load(renderer, "res/gui/esc.png");
     theme.Load(renderer, "res/gui/theme.png");
 
+    // Musis Load//
     music.readFile("res/dat/music_list.txt");
     music.loadMusic("res/dat/music_name_file.txt");
     music.print();
     music_text.setSize(25);
+    music_gui.setSize(25);
+    music_gui.setFont("fonts/segoeprb.ttf");
     dance[0].set(20, 10);
     dance[0].setPos(920 , 100);
     dance[0].load(renderer, "res/gui/animation/dance1.png");
     dance[1].set(18, 10);
     dance[1].setPos(920 , 420);
     dance[1].load(renderer, "res/gui/animation/dance2.png");
+
+    // Episodes Load//
+    eps_lock.Load(renderer, "res/gui/eps_locked.png");
+    eps_unlock.Load(renderer, "res/gui/eps_unlocked.png");
+    eps_select.Load(renderer, "res/gui/eps_select.png");
+    eps_tail.Load(renderer, "res/gui/eps_tail.png");
+    eps_tail.SetRect(0 , 720 - eps_tail.GetRect().h);
+    wallpaper.Load(renderer, "res/img/bg/eps.jpg");
 }
 
 void Menu::show(SDL_Renderer * renderer)
@@ -111,20 +122,47 @@ void Menu::show(SDL_Renderer * renderer)
             else 
                 music_text.setColor(renderer, 255 , 255, 255);
 
+    //        music_text.setFont("fonts/mgenplus-2pp-regular.ttf");
             music_text.setText(renderer, to_string(i+1) + ". " + music.at(i));
             music_text.setPos(100 , 80 + i * 50);
             
             music_text.show(renderer);
         }
         
-        music_text.setColor(renderer, 255 , 255, 255);
-        music_text.setText(renderer, "[ Esc to return Home ]");
-        music_text.setPos(SCREEN_WIDTH / 2 - music_text.getRect().w / 2, 680);
-        music_text.show(renderer);
+        music_gui.setColor(renderer, 255 , 255, 255);
+    //    music_gui.setFont("fonts/segoeprb.ttf");
+        music_gui.setText(renderer, "ESC to return Home");
+        music_gui.setPos(SCREEN_WIDTH / 2 - music_gui.getRect().w / 2, 670);
+        music_gui.show(renderer);
+
+        music_gui.setColor(renderer, 255, 153, 51);
+        music_gui.setText(renderer, "MUSIC BACKGROUND");
+        music_gui.setPos(SCREEN_WIDTH / 2 - music_gui.getRect().w / 2, 10);
+        music_gui.show(renderer);
 
         dance[0].show(renderer);
         dance[1].show(renderer);
 
+    }
+    if(current_page == EPISODES)
+    {
+        if(is_wallpaper)
+        {
+            wallpaper.Render(renderer);
+            eps_tail.Render(renderer);
+            return;
+        }
+
+        if(is_lock)
+        {
+            eps_lock.Render(renderer);
+        }
+        else
+        {
+            eps_unlock.Render(renderer);
+        }
+        eps_select.SetRect(100, 80 + 266 * current_eps);
+        eps_select.Render(renderer);
     }
 }
 
@@ -147,15 +185,22 @@ void Menu::HandleInput(SDL_Event e, bool * quit, SDL_Window * window, int * SCEN
                 if(current_choice == OPTIONS)
                 {
                     current_page = OPTIONS;
+                    return;
                 }
                 if(current_choice == MAIN)
                 {
                     *SCENE = 2;
-                    Mix_HaltMusic();
                 }
                 if(current_choice == MUSIC)
                 {
                     current_page = MUSIC;
+                    return;
+                }
+                if(current_choice == EPISODES)
+                {
+                    current_page = EPISODES;
+                    updateInfo();
+                    return;
                 }
                 /* Quit */
                 if(current_choice == QUIT) 
@@ -268,7 +313,7 @@ void Menu::HandleInput(SDL_Event e, bool * quit, SDL_Window * window, int * SCEN
                 break;
             }
         }
-        if (current_page == MUSIC)
+        if(current_page == MUSIC)
         {
             switch (e.key.keysym.sym)
             {
@@ -295,7 +340,70 @@ void Menu::HandleInput(SDL_Event e, bool * quit, SDL_Window * window, int * SCEN
                 break;
             }
         }
+        if(current_page == EPISODES)
+        {
+            switch (e.key.keysym.sym)
+            {
+            case SDLK_ESCAPE:
+                current_eps = 0;
+                is_wallpaper = false;
+                current_page = MAIN;
+                break;
+
+            case SDLK_DOWN:
+                current_eps += 1;
+                current_eps %= total_eps;
+                break;
+            
+            case SDLK_UP:
+                current_eps += total_eps - 1;
+                current_eps %= total_eps;
+
+                break;
+
+            case SDLK_RETURN:
+                if(is_wallpaper)
+                {
+                    ShellExecute(NULL, "open", "https://www.peakpx.com/en/hd-wallpaper-desktop-ahrwv/download/1920x1080", NULL, NULL, SW_SHOWNORMAL);
+                    return;
+                }
+
+                if(is_lock == false)
+                {
+                    if(current_eps == 0)
+                    {
+                        is_wallpaper = true;
+                    }
+                }
+
+                break;
+
+                
+            default:
+                break;
+            }
+        }
     }
+}
+
+void Menu::updateInfo()
+{
+    ifstream file("res/dat/notification.txt");
+
+    string a;
+    getline(file, a);
+
+    if(a == "false")
+        is_lock = false;
+    else 
+        is_lock = true;
+
+    file.close();
+}
+
+bool Menu::isLocked()
+{
+    return is_lock;
 }
 
 void Menu::ToggleFullScreen(SDL_Window* window, bool currentState){

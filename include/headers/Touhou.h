@@ -1,6 +1,7 @@
 #ifndef TOUHOU_H_
 #define TOUHOU_H_
 
+#include <windows.h>
 #include <iostream>
 #include <stdlib.h>
 #include <cstdlib>

@@ -2,13 +2,18 @@
 
 void Stage::Load(SDL_Renderer * renderer)
 {
+    // Level Choice //
     level_theme.Load(renderer, "res/gui/theme_difficulty.png");
     level_img.Load(renderer, "res/gui/difficulty.png");
     select.Load(renderer, "res/gui/select_.png");
 
-    esc.Load(renderer, "res/gui/esc.png");
-    esc.SetRect((SCREEN_WIDTH - esc.GetRect().w)/2, SCREEN_HEIGHT - esc.GetRect().h);
+    esc.setColor(renderer, 255 , 255, 255);
+    esc.setSize(25);
+    esc.setFont("fonts/segoeprb.ttf");
+    esc.setText(renderer, "ESC to return Home");
+    esc.setPos(SCREEN_WIDTH / 2 - esc.getRect().w / 2, 670);
 
+    // game status //
     pause.Load(renderer, "res/gui/pause.png");
     die.Load(renderer, "res/gui/die.png");
     win.Load(renderer, "res/gui/win.png");
@@ -20,6 +25,17 @@ void Stage::Load(SDL_Renderer * renderer)
     stage_content.setSize(25);
     stage_content.setPos(620, 720);
     stage_content.setText(renderer, "The mysterious blood sacrifice.");
+
+    // Notification //
+    noti_img.Load(renderer, "res/gui/notification.png");
+    noti_img.SetRect(noti_x, noti_y);
+    noti_text.setSize(20);
+    noti_text.setColor(renderer, 255, 67, 53);
+    noti_text.setFont("fonts/segoeprb.ttf");
+    noti_text.setPos(noti_x + 70, noti_y + 20);
+    noti_text.setText(renderer, "Unlock a new episode!");
+    noti_time.Start();
+    noti = Mix_LoadWAV("res/sfx/notification.wav");
 
     // Story //
     story.load(renderer);
@@ -190,19 +206,17 @@ void Stage::createEnemy()
     dead_sfx = Mix_LoadWAV("res/sfx/dead.wav");
     enemy_dead = Mix_LoadWAV("res/sfx/enemy_dead.wav");
 }
-
 void Stage::Show(SDL_Renderer * renderer)
 {
     if(scene == LEVEL_CHOICE){
         level_theme.Render(renderer);
-        select.SetRect((SCREEN_WIDTH - select.GetRect().w)/2, 216 + level * 75);
+        select.SetRect((SCREEN_WIDTH - select.GetRect().w)/2, 220 + level * 75);
         select.Render(renderer);
 
         level_img.Render(renderer);
         
-        esc.Render(renderer);
+        esc.show(renderer);
     }
-
     if(scene == STORY)
     {
         story.show(renderer);
@@ -273,7 +287,30 @@ void Stage::Show(SDL_Renderer * renderer)
         /* Show Another */
         if(is_paused) pause.Render(renderer);
         if(is_loser) die.Render(renderer);
-        if(is_winner) win.Render(renderer);
+        if(is_winner){
+            win.Render(renderer);
+
+            if(is_noti)
+            {
+                if(noti_y == -65) Mix_PlayChannel(-1, noti, 0);
+
+                if(noti_y < limit_noti_y)
+                {
+                    noti_y += 5;
+                }
+                else{
+                    noti_time.Update();
+                    if(noti_x < limit_noti_x and noti_time.GetSeconds() >= 3) noti_x += 10;
+                }
+
+                noti_img.SetRect(noti_x, noti_y);
+                noti_img.Render(renderer);
+
+                noti_text.setPos(noti_x + 70, noti_y + 15);
+                noti_text.show(renderer);
+            }
+            
+        }
 
         StageBg.Render(renderer);
         life_text.show(renderer);
@@ -287,6 +324,10 @@ void Stage::Show(SDL_Renderer * renderer)
 
         hakurei_animation.show(renderer);
     }
+}
+void Stage::setNotification(bool value)
+{
+    is_noti = value;
 }
 
 void Stage::HandleEnemy(SDL_Renderer * renderer)
@@ -527,6 +568,7 @@ void Stage::HandleInput(SDL_Event e,int * SCENE)
                 
                 case SDLK_RETURN:
                     scene = STORY;
+                    Mix_HaltMusic();
                     break;
                     
                 default:
@@ -660,7 +702,15 @@ void Stage::HandleInput(SDL_Event e,int * SCENE)
                         {
                             Mix_HaltMusic();
 
+                            is_noti = false;
+                        
+                            ofstream file("res/dat/notification.txt");
+                            file << "false";
+
+                            file.close();
+
                         //    Mix_HaltChannel(-1);
+
                             scene = END;
                         }
                     }

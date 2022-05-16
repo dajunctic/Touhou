@@ -29,7 +29,7 @@ void Game::display(){
         if(time.CheckTime(0 , 1))
             Mix_PlayChannel(-1, dazu_bg , 0); 
         
-        if(time.CheckPeriod(0, 4) or time.CheckPeriod(10, 17)){
+        if(time.CheckPeriod(0, 4)){
             if(dazu_alpha + 1 > 255) dazu_alpha = 255;
             else dazu_alpha += 1;
         }
@@ -43,13 +43,9 @@ void Game::display(){
             dazu.Render(screen);
         }
 
-        if(time.CheckPeriod(10, 25)){
-            dazu_warning.SetAlpha(dazu_alpha);
-            dazu_warning.Render(screen);
-        }
-        if(time.CheckTime(22))
+        if(time.CheckTime(8))
             Mix_PlayChannel(-1, tv, 0);
-        if(time.CheckTime(25)){
+        if(time.CheckTime(11)){
             Mix_HaltChannel(-1);
             time.Reset();
             SCENE = MENU;
@@ -58,6 +54,7 @@ void Game::display(){
     if(SCENE == MENU){
         if(time.CheckTime(0 , 1)){
             Mix_PlayMusic(menu_bgm, -1);
+            menu.updateInfo();
         }
 
         if(time.GetSeconds() % 4 == 0 and time.GetFrameTime() == 0){
@@ -80,5 +77,7 @@ void Game::HandleInput(SDL_Event e){
     }
     if(SCENE == MENU){
         menu.HandleInput(e, &quit, window, &SCENE);
+        if(SCENE == PLAY) stage.setNotification(menu.isLocked());
+        return;
     }
 }
