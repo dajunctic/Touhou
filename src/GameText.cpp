@@ -72,6 +72,7 @@ void Text::setRender(SDL_Renderer * renderer)
 	SDL_FreeSurface(surface);
 
     SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+    SDL_SetTextureAlphaMod(texture, color.a);
 }
 
 void Text::show(SDL_Renderer * renderer)
@@ -80,12 +81,14 @@ void Text::show(SDL_Renderer * renderer)
     desRect.y = int(y);
     setRender(renderer);
     SDL_RenderCopy(renderer, texture, &srcRect, &desRect);
+    
     SDL_DestroyTexture(texture);
 
 }
 void Text::setAlpha(Uint8 a)
 {
-    SDL_SetTextureAlphaMod(texture, a);
+    color.a = a;
+//    SDL_SetTextureAlphaMod(texture, a);
 }
 double Text::getPosX()
 {

@@ -48,6 +48,8 @@ public:
     /*left c-left center c-right right */
     int getPosX(string, SDL_Rect);
     int getPosY(SDL_Rect);
+
+    void reset();
     
 };
 

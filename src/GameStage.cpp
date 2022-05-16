@@ -122,89 +122,86 @@ void Stage::Load(SDL_Renderer * renderer)
 
     }
     createEnemy();
-    
-}
-
-void Stage::createEnemy()
-{
-    /* Charpter 1 */
-    {
-    //    Enemy Test2;
-    
-        int truth = 1;
-
-        for(int i = 700 ; i <= 900 ; i += 200)
-        {
-            truth -= 1;
-            Enemy Test;
-
-            Test.SetPos(i , 200);
-            Test.Set(4, 10, 2);
-            Test.SetName(1);
-            Test.Load(enemy_img[1]);
-            Test.SetFitAttackFrame(11.0, 0.0);
-            Test.InitBullet(0 , 2, 0, 11);  
-
-            /*
-            Test.SetOrbit(2,0,{2,2},-0.01, 90);
-
-            Test.SetOrbit(5, 0,{2,2}, 0, -90);
-            Test.SetOrbit(7, 0,{0,0}, 0, 90);
-
-            // Hinh elip //
-            int tmp = 8, tmp2 = 0;
-            for(int j = -90 ; j < 270 ; j+=5)
-            {
-                Test.SetOrbit(tmp, tmp2, {2.5,1}, 0,  j + 180 * truth);
-                tmp2 += 5;
-                if(tmp2 >= 60){
-                    tmp++;
-                    tmp2 = 0;
-                }
-            }
-            Test.SetOrbit(tmp, tmp2, {0,0}, 0, 180);
-            */
-
-            enemy.push_back(Test);
-        }
-
-        // Real //
-
-        /* BOSS */
-        {
-            boss.SetPos(840 - 20 , 200);
-            boss.Set(4, 8, 7);
-            boss.SetName(1);
-            boss.Load(boss_img[1]);
-            boss.SetFitAttackFrame(0.0, 25.0);
-            boss.InitBullet(0 , 2, 0, 11);   
-
-            // boss.SetOrbit(2,0,{2,2},-0.01, 90);
-
-            // boss.SetOrbit(5, 0,{2,2}, 0, -90);
-            // boss.SetOrbit(7, 0,{0,0}, 0, 90);
-
-            // // Hinh elip //
-            // int tmp = 8, tmp2 = 0;
-            // for(int j = -90 ; j < 270 ; j+=5)
-            // {
-            //     boss.SetOrbit(tmp, tmp2, {2.5,1}, 0,  j );
-            //     tmp2 += 5;
-            //     if(tmp2 >= 60){
-            //         tmp++;
-            //         tmp2 = 0;
-            //     }
-            // }
-            // boss.SetOrbit(tmp, tmp2, {0,0}, 0, 180);
-
-            enemy.push_back(boss);
-        }
-    }
-
     bgm = Mix_LoadMUS("res/bgm/ShanghaiScarletTeahouse.mp3");
 
     dead_sfx = Mix_LoadWAV("res/sfx/dead.wav");
     enemy_dead = Mix_LoadWAV("res/sfx/enemy_dead.wav");
+}
+
+void Stage::createEnemy()
+{
+    enemy.clear();
+    shot.clear();
+
+//    Enemy Test2;
+
+    int truth = 1;
+
+    for(int i = 700 ; i <= 900 ; i += 200)
+    {
+        truth -= 1;
+        Enemy Test;
+
+        Test.SetPos(i , 200);
+        Test.Set(4, 10, 2);
+        Test.SetName(1);
+        Test.Load(enemy_img[1]);
+        Test.SetFitAttackFrame(11.0, 0.0);
+        Test.InitBullet(0 , 2, 0, 11);  
+
+        /*
+        Test.SetOrbit(2,0,{2,2},-0.01, 90);
+
+        Test.SetOrbit(5, 0,{2,2}, 0, -90);
+        Test.SetOrbit(7, 0,{0,0}, 0, 90);
+
+        // Hinh elip //
+        int tmp = 8, tmp2 = 0;
+        for(int j = -90 ; j < 270 ; j+=5)
+        {
+            Test.SetOrbit(tmp, tmp2, {2.5,1}, 0,  j + 180 * truth);
+            tmp2 += 5;
+            if(tmp2 >= 60){
+                tmp++;
+                tmp2 = 0;
+            }
+        }
+        Test.SetOrbit(tmp, tmp2, {0,0}, 0, 180);
+        */
+
+        enemy.push_back(Test);
+    }
+
+    // Real //
+    Enemy boss = Enemy(true);
+    /* BOSS */
+    boss.SetPos(840 - 20 , 200);
+    boss.Set(4, 8, 7);
+    boss.SetName(1);
+    boss.Load(boss_img[1]);
+    boss.SetFitAttackFrame(0.0, 25.0);
+    boss.InitBullet(0 , 2, 0, 11);   
+
+    // boss.SetOrbit(2,0,{2,2},-0.01, 90);
+
+    // boss.SetOrbit(5, 0,{2,2}, 0, -90);
+    // boss.SetOrbit(7, 0,{0,0}, 0, 90);
+
+    // // Hinh elip //
+    // int tmp = 8, tmp2 = 0;
+    // for(int j = -90 ; j < 270 ; j+=5)
+    // {
+    //     boss.SetOrbit(tmp, tmp2, {2.5,1}, 0,  j );
+    //     tmp2 += 5;
+    //     if(tmp2 >= 60){
+    //         tmp++;
+    //         tmp2 = 0;
+    //     }
+    // }
+    // boss.SetOrbit(tmp, tmp2, {0,0}, 0, 180);
+
+    enemy.push_back(boss);
+    
 }
 void Stage::Show(SDL_Renderer * renderer)
 {
@@ -324,6 +321,11 @@ void Stage::Show(SDL_Renderer * renderer)
 
         hakurei_animation.show(renderer);
     }
+}
+
+void Stage::setScene(int scene_)
+{
+    scene = scene_;
 }
 void Stage::setNotification(bool value)
 {
@@ -690,13 +692,7 @@ void Stage::HandleInput(SDL_Event e,int * SCENE)
                         }
                         if(is_loser == true)
                         {
-                            enemy.clear();
-                            shot.clear();
-                            is_loser = false;
-                            
-                            createEnemy();
-                            Hakurei.setRessurect(true);
-                            life = default_life;
+                            reset();
                         }
                         if(is_winner == true)
                         {
@@ -731,4 +727,28 @@ void Stage::HandleInput(SDL_Event e,int * SCENE)
             }
         }
     }
+}
+
+void Stage::reset()
+{
+    enemy.clear();
+    shot.clear();
+
+    if(is_loser) Hakurei.setRessurect(true);
+
+    is_loser = false;
+    is_winner = false;
+    
+    createEnemy();
+    
+    life = default_life;
+
+
+    int stage_content_alpha = 255;
+    bool stage_content_blur = false;
+    stage_name.setPos(250, SCREEN_HEIGHT / 2 - 100);
+    stage_content.setPos(620, 720);
+
+
+    story.reset();
 }

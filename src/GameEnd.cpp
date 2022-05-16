@@ -118,3 +118,11 @@ void End::handleInput(SDL_Event e, int * SCENE)
         }
     }
 }
+void End::reset()
+{
+    bool isBgm = false;
+    bool isThank = false;
+    bool isBack = false;
+
+    bool is_mystery = true;
+}

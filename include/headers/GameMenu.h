@@ -39,6 +39,7 @@ public:
     void show(SDL_Renderer * renderer);
     void updateInfo();
     bool isLocked();
+    void setReturn(bool);
     void HandleInput(SDL_Event e, bool * quit, SDL_Window * window, int * SCENE);
     bool isFullScreen = true;
 
@@ -52,6 +53,8 @@ private:
     int current_choice = 0; /* display choice in menu */
     int total_choice = 5; /* Total dishes in menu */
     int current_page = 0; /* display chosen page in menu */
+
+    bool is_return = false;
 
     /*################# Options ################ */
     Image options;

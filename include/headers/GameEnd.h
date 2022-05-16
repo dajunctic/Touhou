@@ -39,6 +39,7 @@ public:
     void load(SDL_Renderer * renderer);
     void show(SDL_Renderer * renderer);
     void handleInput(SDL_Event, int *);
+    void reset();
 };
 
 

@@ -52,6 +52,12 @@ void Menu::load(SDL_Renderer * renderer)
 
 void Menu::show(SDL_Renderer * renderer)
 {
+    if(is_return){
+        updateInfo();
+        is_return = false;
+        music.play(current_song);
+    }
+
     if(current_page == MAIN){
         int y = current_choice * 66 + 343;
         int x = (336  - hover.GetRect().w) / 2;
@@ -199,7 +205,6 @@ void Menu::HandleInput(SDL_Event e, bool * quit, SDL_Window * window, int * SCEN
                 if(current_choice == EPISODES)
                 {
                     current_page = EPISODES;
-                    updateInfo();
                     return;
                 }
                 /* Quit */
@@ -399,6 +404,11 @@ void Menu::updateInfo()
         is_lock = true;
 
     file.close();
+}
+
+void Menu::setReturn(bool truth__value_)
+{
+    is_return = truth__value_;
 }
 
 bool Menu::isLocked()

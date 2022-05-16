@@ -47,7 +47,7 @@ private:
     int level = EASY;
 
     Text esc;
-    int scene = MAIN;
+    int scene = LEVEL_CHOICE;
 
     // Story //
     Story story;
@@ -89,7 +89,6 @@ private:
 
     /* Boss */
     Image boss_img[20][10];
-    Enemy boss = Enemy(true);
 
     /* Bullet */
     vector<Bullet> shot;
@@ -138,9 +137,11 @@ public:
     void Show(SDL_Renderer * renderer);
 
     void setNotification(bool);
+    void setScene(int);
     void createEnemy();
     void HandleEnemy(SDL_Renderer * renderer);
     void HandleShot(SDL_Renderer * renderer);
     void HandleInput(SDL_Event e, int * SCENE);
+    void reset();
 };
 #endif // GAME_STAGE_H_

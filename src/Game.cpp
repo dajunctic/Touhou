@@ -10,7 +10,8 @@ void Game::load(){
         dazu_bg = Mix_LoadWAV("res/sfx/horror.wav");
     }
     /* Load Menu */{
-        for(int i = 0 ; i < 4 ; i++){
+        for(int i = 0 ; i < 4 ; i++)
+        {
             string path = "res/img/bg/menu_bg_0" + to_string(i) + ".jpg";
             menu_bg[i].Load(screen, path);
         }
@@ -21,8 +22,10 @@ void Game::load(){
     stage.Load(screen);
 }
 
-void Game::display(){
-    if(SCENE == TITLE){
+void Game::display()
+{
+    if(SCENE == TITLE)
+    {
         if(time.CheckTime(2 , 0))
             Mix_PlayChannel(-1, dazu_sound , 0); 
 
@@ -51,7 +54,8 @@ void Game::display(){
             SCENE = MENU;
         }
     }
-    if(SCENE == MENU){
+    if(SCENE == MENU)
+    {
         if(time.CheckTime(0 , 1)){
             Mix_PlayMusic(menu_bgm, -1);
             menu.updateInfo();
@@ -64,16 +68,24 @@ void Game::display(){
         menu_bg[current_menu_bg].Render(screen);
         menu.show(screen);
     }
-
-    if(SCENE == PLAY){
+    if(SCENE == PLAY)
+    {
         stage.Show(screen);
     }
 
 }
 
-void Game::HandleInput(SDL_Event e){
-    if(SCENE == PLAY){
+void Game::HandleInput(SDL_Event e)
+{
+    if(SCENE == PLAY)
+    {
         stage.HandleInput(e, &SCENE);
+        if(SCENE == MENU)
+        {
+            menu.setReturn(true);
+            stage.setScene(0);
+            stage.reset();
+        }
     }
     if(SCENE == MENU){
         menu.HandleInput(e, &quit, window, &SCENE);
