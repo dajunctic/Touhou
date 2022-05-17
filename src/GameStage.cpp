@@ -2,6 +2,8 @@
 
 void Stage::Load(SDL_Renderer * renderer)
 {
+    stage_time.Start();
+
     level_theme.Load(renderer, "res/gui/theme_difficulty.png");
     level_img.Load(renderer, "res/gui/difficulty.png");
     select.Load(renderer, "res/gui/select_.png");
@@ -96,7 +98,7 @@ void Stage::Load(SDL_Renderer * renderer)
     }
     /* Charpter 1 */
     {
-        
+/*        
     // 1st wave
         Enemy FstWaveR[6];
         Enemy FstWaveL[6];
@@ -116,11 +118,16 @@ void Stage::Load(SDL_Renderer * renderer)
             FstWaveR[i].SetOrbit(2+i,0,{2,2},0,90);
             FstWaveL[i].SetOrbit(2+i,0,{2,2},0,90);
         }
+        if (level == LEGENDARY) {
+            for (int i = 1; i < 6; i++) {
+                FstWaveR[i].InitBullet(2+i,3+i,19-i,11);
+                FstWaveL[i].InitBullet(2+i,3+i,8+i,11);
+            }
+        }
         for (int i = 0; i < 6; i++) {
             enemy.push_back(FstWaveR[i]);
             enemy.push_back(FstWaveL[i]);
         }
-
     // 2nd wave
         Enemy SecondWaveR[6];
         Enemy SecondWaveL[6];
@@ -139,6 +146,14 @@ void Stage::Load(SDL_Renderer * renderer)
         for (int i = 0; i < 6; i++) {
             SecondWaveR[i].SetOrbit(10+i,0,{4,4},0,180);
             SecondWaveL[i].SetOrbit(10+i,0,{4,4},0,0);
+        }
+        for (int i = 0; i < 6; i += 3) {
+            SecondWaveR[i].InitBullet(10+i,13+i,7,11);
+            SecondWaveL[i].InitBullet(10+i,13+i,7,11);
+        }
+        if (level == LEGENDARY) {
+            SecondWaveR[2].InitBullet(12,13,8,11);
+            SecondWaveL[4].InitBullet(14,15,8,11);
         }
         for (int i = 0; i < 6; i++) {
             enemy.push_back(SecondWaveR[i]);
@@ -173,16 +188,16 @@ void Stage::Load(SDL_Renderer * renderer)
             ThirdWaveL[i].SetFitAttackFrame(11.0, 0.0);
         }
         for (int i = 0; i < 4; i++) {
-            ThirdWaveR[i].SetOrbit(17+i,0,{2,2},0,30);
-            ThirdWaveR[i].InitBullet(18+i,20+i,5,11);
-            ThirdWaveL[i].SetOrbit(17+i,0,{2,2},0,150);
-            ThirdWaveL[i].InitBullet(18+i,20+i,5,11);
+            ThirdWaveR[i].SetOrbit(19+i,0,{2,2},0,30);
+            ThirdWaveR[i].InitBullet(20+i,22+i,5,11);
+            ThirdWaveL[i].SetOrbit(19+i,0,{2,2},0,150);
+            ThirdWaveL[i].InitBullet(20+i,22+i,5,11);
         }
         for (int i = 4; i < 8; i++) {
-            ThirdWaveR[i].SetOrbit(13+i,30,{2,2},0,30);
-            ThirdWaveR[i].InitBullet(14+i,16+i,5,11);
-            ThirdWaveL[i].SetOrbit(13+i,30,{2,2},0,150);
-            ThirdWaveL[i].InitBullet(14+i,16+i,5,11);
+            ThirdWaveR[i].SetOrbit(15+i,30,{2,2},0,30);
+            ThirdWaveR[i].InitBullet(16+i,18+i,5,11);
+            ThirdWaveL[i].SetOrbit(15+i,30,{2,2},0,150);
+            ThirdWaveL[i].InitBullet(16+i,18+i,5,11);
         }
         for (int i = 0; i < 8; i++) {
             enemy.push_back(ThirdWaveR[i]);
@@ -191,16 +206,16 @@ void Stage::Load(SDL_Renderer * renderer)
 
     //4th wave
         Enemy FourthWave[10];
-        FourthWave[0].SetPos(380,-110);
-        FourthWave[1].SetPos(470,-60);
-        FourthWave[2].SetPos(560,-80);
-        FourthWave[3].SetPos(650,-140);
-        FourthWave[4].SetPos(740,-160);
-        FourthWave[5].SetPos(830,-180);
-        FourthWave[6].SetPos(920,-130);
-        FourthWave[7].SetPos(1010,-100);
-        FourthWave[8].SetPos(1100,-90);
-        FourthWave[9].SetPos(1190,-170);
+        FourthWave[0].SetPos(380,-140);
+        FourthWave[1].SetPos(470,-100);
+        FourthWave[2].SetPos(560,-120);
+        FourthWave[3].SetPos(650,-180);
+        FourthWave[4].SetPos(740,-200); 
+        FourthWave[5].SetPos(830,-220);
+        FourthWave[6].SetPos(920,-170);
+        FourthWave[7].SetPos(1010,-140);
+        FourthWave[8].SetPos(1100,-130);
+        FourthWave[9].SetPos(1190,-210);
         for (int i = 0; i < 10; i++) {
             FourthWave[i].Set(4, 10, 2);
             FourthWave[i].SetName(1);
@@ -208,27 +223,27 @@ void Stage::Load(SDL_Renderer * renderer)
             FourthWave[i].SetFitAttackFrame(11.0, 0.0);
             FourthWave[i].InitBullet(25,34,6,11);
         }
-        FourthWave[0].SetOrbit(20,0,{3,3},-0.01,90);
-        FourthWave[3].SetOrbit(20,30,{3,3},-0.01,90);
-        FourthWave[8].SetOrbit(21,0,{3,3},-0.01,90);
-        FourthWave[5].SetOrbit(21,30,{3,3},-0.01,90);
-        FourthWave[9].SetOrbit(22,0,{3,3},-0.01,90);
-        FourthWave[1].SetOrbit(22,30,{3,3},-0.01,90);
-        FourthWave[6].SetOrbit(23,0,{3,3},-0.01,90);
-        FourthWave[7].SetOrbit(23,30,{3,3},-0.01,90);
-        FourthWave[4].SetOrbit(24,0,{3,3},-0.01,90);
-        FourthWave[2].SetOrbit(24,30,{3,3},-0.01,90);
+        FourthWave[0].SetOrbit(23,0,{3,3},-0.01,90);
+        FourthWave[3].SetOrbit(23,30,{3,3},-0.01,90);
+        FourthWave[8].SetOrbit(24,0,{3,3},-0.01,90);
+        FourthWave[5].SetOrbit(24,30,{3,3},-0.01,90);
+        FourthWave[9].SetOrbit(25,0,{3,3},-0.01,90);
+        FourthWave[1].SetOrbit(25,30,{3,3},-0.01,90);
+        FourthWave[6].SetOrbit(26,0,{3,3},-0.01,90);
+        FourthWave[7].SetOrbit(26,30,{3,3},-0.01,90);
+        FourthWave[4].SetOrbit(27,0,{3,3},-0.01,90);
+        FourthWave[2].SetOrbit(27,30,{3,3},-0.01,90);
 
-        FourthWave[0].SetOrbit(35,0,{0,0},0.01,270);
-        FourthWave[3].SetOrbit(35,30,{0,0},0.01,270);
-        FourthWave[8].SetOrbit(36,0,{0,0},0.01,270);
-        FourthWave[5].SetOrbit(36,30,{0,0},0.01,270);
-        FourthWave[9].SetOrbit(37,0,{0,0},0.01,270);
-        FourthWave[1].SetOrbit(37,30,{0,0},0.01,270);
-        FourthWave[6].SetOrbit(38,0,{0,0},0.01,270);
-        FourthWave[7].SetOrbit(38,30,{0,0},0.01,270);
-        FourthWave[4].SetOrbit(39,0,{0,0},0.01,270);
-        FourthWave[2].SetOrbit(39,30,{0,0},0.01,270);
+        FourthWave[0].SetOrbit(37,0,{0,0},0.01,270);
+        FourthWave[3].SetOrbit(37,30,{0,0},0.01,270);
+        FourthWave[8].SetOrbit(38,0,{0,0},0.01,270);
+        FourthWave[5].SetOrbit(38,30,{0,0},0.01,270);
+        FourthWave[9].SetOrbit(39,0,{0,0},0.01,270);
+        FourthWave[1].SetOrbit(39,30,{0,0},0.01,270);
+        FourthWave[6].SetOrbit(40,0,{0,0},0.01,270);
+        FourthWave[7].SetOrbit(40,30,{0,0},0.01,270);
+        FourthWave[4].SetOrbit(41,0,{0,0},0.01,270);
+        FourthWave[2].SetOrbit(41,30,{0,0},0.01,270);
         for (int i = 0; i < 10; i++) {
             enemy.push_back(FourthWave[i]);
         }
@@ -241,72 +256,23 @@ void Stage::Load(SDL_Renderer * renderer)
             FifthWave[i].Load(enemy_img[1]);
             FifthWave[i].SetFitAttackFrame(11.0, 0.0);
         }
-        FifthWave[0].SetOrbit(30,0,{4,4},0,90);
-        FifthWave[1].SetOrbit(30,15,{4,4},0,90);
-        FifthWave[2].SetOrbit(30,30,{4,4},0,90);
-        FifthWave[3].SetOrbit(30,45,{4,4},0,90);
-        FifthWave[4].SetOrbit(31,0,{4,4},0,90);
-        FifthWave[5].SetOrbit(31,15,{4,4},0,90);
-        FifthWave[6].SetOrbit(31,30,{4,4},0,90);
-        FifthWave[7].SetOrbit(31,45,{4,4},0,90);
-        FifthWave[8].SetOrbit(32,0,{4,4},0,90);
-        FifthWave[9].SetOrbit(32,15,{4,4},0,90);
-        FifthWave[10].SetOrbit(32,30,{4,4},0,90);
-        FifthWave[11].SetOrbit(32,45,{4,4},0,90);
+        FifthWave[0].SetOrbit(32,0,{4,4},0,90);
+        FifthWave[1].SetOrbit(32,15,{4,4},0,90);
+        FifthWave[2].SetOrbit(32,30,{4,4},0,90);
+        FifthWave[3].SetOrbit(32,45,{4,4},0,90);
+        FifthWave[4].SetOrbit(33,0,{4,4},0,90);
+        FifthWave[5].SetOrbit(33,15,{4,4},0,90);
+        FifthWave[6].SetOrbit(33,30,{4,4},0,90);
+        FifthWave[7].SetOrbit(33,45,{4,4},0,90);
+        FifthWave[8].SetOrbit(34,0,{4,4},0,90);
+        FifthWave[9].SetOrbit(34,15,{4,4},0,90);
+        FifthWave[10].SetOrbit(34,30,{4,4},0,90);
+        FifthWave[11].SetOrbit(34,45,{4,4},0,90);
         for (int i = 0; i < 12; i++) {
             enemy.push_back(FifthWave[i]);
         }
-
-       
+*/       
         /*After boss*/
-        /*
-        //1st Wave
-        Enemy FirstWaveAB;
-        Enemy FirstWaveAB2;
-        FirstWaveAB.SetPos(550, 200);
-        FirstWaveAB.Set(4, 10, 2);
-        FirstWaveAB.SetName(1);
-        FirstWaveAB.Load(enemy_img[1]);
-        FirstWaveAB.SetFitAttackFrame(11.0, 0.0);
-        FirstWaveAB2.SetPos(1030, 200);
-        FirstWaveAB2.Set(4, 10, 2);
-        FirstWaveAB2.SetName(1);
-        FirstWaveAB2.Load(enemy_img[1]);
-        FirstWaveAB2.SetFitAttackFrame(11.0, 0.0);
-        // Chưa xử lí biến time
-        enemy.push_back(FirstWaveAB); enemy.push_back(FirstWaveAB2);
-
-
-        //2nd Wave
-        Enemy SecondWaveLAB[6];
-        Enemy SecondWaveRAB[6];
-        for (int i = 0; i < 6; i++) {
-            if (i%2 == 0) SecondWaveLAB[i].SetPos(440, -30*i - 60);
-            else SecondWaveLAB[i].SetPos(490, -30*i - 60);
-            SecondWaveLAB[i].Set(4, 10, 2);
-            SecondWaveLAB[i].SetName(1);
-            SecondWaveLAB[i].Load(enemy_img[1]);
-            SecondWaveLAB[i].SetFitAttackFrame(11.0, 0.0);
-            if (i%2 == 0) SecondWaveRAB[i].SetPos(1080, -30*i - 60);
-            else SecondWaveRAB[i].SetPos(1130, -30*i - 60);
-            SecondWaveRAB[i].Set(4, 10, 2);
-            SecondWaveRAB[i].SetName(1);
-            SecondWaveRAB[i].Load(enemy_img[1]);
-            SecondWaveRAB[i].SetFitAttackFrame(11.0, 0.0);
-        }
-        for (int i = 0; i < 6; i++) {
-            SecondWaveLAB[i].SetOrbit(3+i,0,{2,2},-0.01,90);
-            SecondWaveRAB[i].SetOrbit(3+i,0,{2,2},-0.01,90);
-        }
-        for (int i = 0; i < 6; i++) {
-            SecondWaveLAB[i].SetOrbit(8+i,0,{2,2},0,60);
-            SecondWaveRAB[i].SetOrbit(8+i,0,{2,2},0,120);
-        }
-        for (int i = 0; i < 6; i++) {
-            enemy.push_back(SecondWaveLAB[i]);
-            enemy.push_back(SecondWaveRAB[i]);
-        }
-        */
 
     //    Enemy Test2;
         /*
@@ -404,6 +370,7 @@ void Stage::Show(SDL_Renderer * renderer)
     }
     if(scene == MAIN)
     {
+        stage_time.Update();
         GameBg.Render(renderer);
         // SDL_SetRenderDrawColor(renderer, 0, 0, 0 , 100);
         // SDL_RenderFillRect(renderer, &MainBoard);
@@ -413,6 +380,7 @@ void Stage::Show(SDL_Renderer * renderer)
         Hakurei.HandleBullet(enemy);
 
         /* Display Enemy */
+        createEnemyViaTime();
     
         HandleEnemy(renderer);
         HandleShot(renderer);
@@ -424,6 +392,26 @@ void Stage::Show(SDL_Renderer * renderer)
         score_text.show(renderer);
         hakurei_animation.show(renderer);
     }
+}
+
+void Stage::createEnemyViaTime(){
+    //1st Wave
+    Enemy FirstWaveAB;
+    Enemy FirstWaveAB2;
+    FirstWaveAB.SetPos(600, 200);
+    FirstWaveAB.Set(4, 10, 2);
+    FirstWaveAB.SetName(1);
+    FirstWaveAB.Load(enemy_img[1]);
+    FirstWaveAB.SetFitAttackFrame(11.0, 0.0);
+    FirstWaveAB.InitBullet(3,63,19,11);
+    FirstWaveAB2.SetPos(970, 200);
+    FirstWaveAB2.Set(4, 10, 2);
+    FirstWaveAB2.SetName(1);
+    FirstWaveAB2.Load(enemy_img[1]);
+    FirstWaveAB2.SetFitAttackFrame(11.0, 0.0);
+    FirstWaveAB2.InitBullet(3,63,19,11);
+
+    if (stage_time.GetSeconds() == 3 and stage_time.CheckSeconds(60)) {enemy.push_back(FirstWaveAB); enemy.push_back(FirstWaveAB2);}
 }
 
 void Stage::HandleEnemy(SDL_Renderer * renderer)
@@ -521,7 +509,7 @@ void Stage::HandleEnemy(SDL_Renderer * renderer)
             x.Show(renderer, enemy_img[x.GetName()][x.GetStatus()]);
         }
         x.HandleMove();
-        x.HandleBullet(shot ,Hakurei.GetCenter());
+        x.HandleBullet(shot ,Hakurei.GetCenter(),level);
 
     }
 

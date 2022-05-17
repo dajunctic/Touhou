@@ -28,11 +28,13 @@ enum SCENE{
 class Stage{
 private:
 
+    Time stage_time; 
+
     multiset<int> Key;
     Image level_theme;
     Image level_img; /* Level of difficulty */
     Image select;
-    int level = EASY;
+    int level = LEGENDARY;
 
     Image esc;
     int scene = MAIN;
@@ -50,7 +52,7 @@ private:
     SDL_Rect MainBoard = {BOARD_X, BOARD_Y, BOARD_LIMITED_X - BOARD_X , BOARD_LIMITED_Y - BOARD_Y };
     
     int explode = 3;
-    int life = 5;
+    int life = 3;
     Text explode_text;
     Text life_text;
     int score = 0;
@@ -89,6 +91,8 @@ public:
 
     void Load(SDL_Renderer * renderer);
     void Show(SDL_Renderer * renderer);
+
+    void createEnemyViaTime();
 
     void HandleEnemy(SDL_Renderer * renderer);
     void HandleShot(SDL_Renderer * renderer);

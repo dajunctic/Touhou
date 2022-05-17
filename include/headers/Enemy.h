@@ -5,11 +5,13 @@
 #include "Bullet.h"
 #include "GameTime.h"
 
+
 struct Plan
 {
     int start_time, end_time; // time
     int type;
     int name;
+    int dif; //difficulty
     Plan(int start_time, int end_time, int type, int name = 0)
     {
         this->start_time = start_time;
@@ -71,8 +73,8 @@ public:
     void SetRandomAngle(const int& st, const int& en);
 
     void InitBullet(int start_time, int end_time, int type, int name = 0);
-    void HandleBullet(vector<Bullet> & shot ,pair<double,double>);
-    void MakeBullet(vector<Bullet> & shot, int ,int ,int , int, pair<double,double>);
+    void HandleBullet(vector<Bullet> & shot ,pair<double,double>,int level);
+    void MakeBullet(vector<Bullet> & shot, int ,int ,int , int, pair<double,double>, int);
 
     void Set(int number_frames_, int time_per_frame_, int number_frame_attack_ = 0){
         number_frames = number_frames_;
@@ -130,6 +132,8 @@ public:
         }
 
         EnemyTime.Update();
+
+
         time_count++;
         if(time_count % time_per_frame == 0){
             if(current_status == ENEMY_ATTACK_LEFT or current_status == ENEMY_ATTACK_RIGHT){
@@ -269,6 +273,8 @@ private:
 
     int HP = 100; // Health Point
     bool is_die = false;
+
+    bool appear = false;
 
 
     /* BOSS */
