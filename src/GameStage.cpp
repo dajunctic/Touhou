@@ -322,20 +322,33 @@ void Stage::Load(SDL_Renderer * renderer)
             boss.SetName(1);
             boss.Load(boss_img[1]);
             boss.SetFitAttackFrame(0.0, 25.0);
+            boss.InitBullet(2,2,0,1);
+            boss.InitBullet(5,5,0,1);
+            boss.InitBullet(11,11,0,1);
+            
+            boss.InitBullet(20,22,4,9);
+            boss.InitBullet(25,40,3,11);
+
+            boss.InitBullet(25,40,20,2);
 
             boss.SetOrbit(2,0,{3,3},-0.02, 0);
             boss.SetOrbit(5,0,{3,3},-0.01, 180);
             boss.SetOrbit(11,0,{3,3},-0.02, 0);
             boss.SetOrbit(15,0,{2,2},-0.01,72);
             //Ngoi sao
-            boss.SetOrbit(20,0,{3,3},0,252);
-            boss.SetOrbit(21,30,{3,3},0,108);
-            boss.SetOrbit(23,0,{3,3},0,324);
-            boss.SetOrbit(24,30,{3,3},0,180);
-            boss.SetOrbit(26,0,{3,3},0,36);
-            boss.SetOrbit(27,30,{0,0},0,0);
+            boss.SetOrbit(20,0,{9,9},0,252);
+            boss.SetOrbit(20,30,{9,9},0,108);
+            boss.SetOrbit(21,0,{9,9},0,324);
+            boss.SetOrbit(21,30,{9,9},0,180);
+            boss.SetOrbit(22,0,{9,9},0,36);
+            boss.SetOrbit(22,30,{2,2},-0.01,252);
 
-                    
+            boss.SetOrbit(25,0,{3,3},-0.025,320);
+            boss.SetOrbit(30,0,{3,3},-0.025,140);
+            boss.SetOrbit(35,0,{3,3},-0.025,220);
+            boss.SetOrbit(40,0,{3,3},-0.025,40);
+
+            enemy.push_back(boss);        
             // boss.SetOrbit(2,0,{2,2},-0.01, 90);
 
             // boss.SetOrbit(5, 0,{2,2}, 0, -90);
@@ -354,7 +367,7 @@ void Stage::Load(SDL_Renderer * renderer)
             // }
             // boss.SetOrbit(tmp, tmp2, {0,0}, 0, 180);
 
-            enemy.push_back(boss);
+            
         }
     }
 }
