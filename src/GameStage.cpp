@@ -316,15 +316,26 @@ void Stage::Load(SDL_Renderer * renderer)
         // Real //
 
         /* BOSS */
-        /*
         {
-            boss.SetPos(840 - 20 , 200);
+            boss.SetPos((940 / 2 - 16) + 340 , 200);
             boss.Set(4, 8, 7);
             boss.SetName(1);
             boss.Load(boss_img[1]);
             boss.SetFitAttackFrame(0.0, 25.0);
-            boss.InitBullet(0 , 2, 0, 11);   
 
+            boss.SetOrbit(2,0,{3,3},-0.02, 0);
+            boss.SetOrbit(5,0,{3,3},-0.01, 180);
+            boss.SetOrbit(11,0,{3,3},-0.02, 0);
+            boss.SetOrbit(15,0,{2,2},-0.01,72);
+            //Ngoi sao
+            boss.SetOrbit(20,0,{3,3},0,252);
+            boss.SetOrbit(21,30,{3,3},0,108);
+            boss.SetOrbit(23,0,{3,3},0,324);
+            boss.SetOrbit(24,30,{3,3},0,180);
+            boss.SetOrbit(26,0,{3,3},0,36);
+            boss.SetOrbit(27,30,{0,0},0,0);
+
+                    
             // boss.SetOrbit(2,0,{2,2},-0.01, 90);
 
             // boss.SetOrbit(5, 0,{2,2}, 0, -90);
@@ -344,7 +355,7 @@ void Stage::Load(SDL_Renderer * renderer)
             // boss.SetOrbit(tmp, tmp2, {0,0}, 0, 180);
 
             enemy.push_back(boss);
-        }*/
+        }
     }
 }
 
@@ -395,7 +406,8 @@ void Stage::Show(SDL_Renderer * renderer)
 }
 
 void Stage::createEnemyViaTime(){
-    //1st Wave
+    //After Boss
+    /*
     Enemy FirstWaveAB;
     Enemy FirstWaveAB2;
     FirstWaveAB.SetPos(600, 180);
@@ -420,6 +432,7 @@ void Stage::createEnemyViaTime(){
         FirstWaveAB2.SetOrbit(11+i,30,{2,2},-0.01,205);
     }
     if (stage_time.GetSeconds() == 3 and stage_time.CheckSeconds(60)) {enemy.push_back(FirstWaveAB); enemy.push_back(FirstWaveAB2);}
+    */
 }
 
 void Stage::HandleEnemy(SDL_Renderer * renderer)
