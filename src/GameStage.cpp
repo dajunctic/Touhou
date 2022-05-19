@@ -398,19 +398,27 @@ void Stage::createEnemyViaTime(){
     //1st Wave
     Enemy FirstWaveAB;
     Enemy FirstWaveAB2;
-    FirstWaveAB.SetPos(600, 200);
+    FirstWaveAB.SetPos(600, 180);
     FirstWaveAB.Set(4, 10, 2);
     FirstWaveAB.SetName(1);
     FirstWaveAB.Load(enemy_img[1]);
     FirstWaveAB.SetFitAttackFrame(11.0, 0.0);
     FirstWaveAB.InitBullet(3,63,19,11);
-    FirstWaveAB2.SetPos(970, 200);
+    FirstWaveAB2.SetPos(970, 180);
     FirstWaveAB2.Set(4, 10, 2);
     FirstWaveAB2.SetName(1);
     FirstWaveAB2.Load(enemy_img[1]);
     FirstWaveAB2.SetFitAttackFrame(11.0, 0.0);
     FirstWaveAB2.InitBullet(3,63,19,11);
 
+    for (int i = 0; i <= 63; i += 9) {
+        FirstWaveAB.SetOrbit(5+i,30,{2,2},-0.01,205);
+        FirstWaveAB2.SetOrbit(5+i,30,{2,2},-0.01,335);
+        FirstWaveAB.SetOrbit(8+i,30,{2,2},-0.01,90);
+        FirstWaveAB2.SetOrbit(8+i,30,{2,2},-0.01,90);
+        FirstWaveAB.SetOrbit(11+i,30,{2,2},-0.01,335);
+        FirstWaveAB2.SetOrbit(11+i,30,{2,2},-0.01,205);
+    }
     if (stage_time.GetSeconds() == 3 and stage_time.CheckSeconds(60)) {enemy.push_back(FirstWaveAB); enemy.push_back(FirstWaveAB2);}
 }
 
