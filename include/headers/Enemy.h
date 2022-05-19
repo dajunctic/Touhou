@@ -41,6 +41,55 @@ struct Orbit
 
 class Enemy
 {
+private:
+    int type;
+    int name;
+
+    double x, y;
+    double center_x, center_y;
+    
+    double x_speed, y_speed;
+    double a;
+
+    double angle; // degree
+
+    /* Enemy Display */
+    SDL_Rect sizeImg[20];
+
+    int current_status; 
+    int current_direct;
+    int current_frame;
+    int number_frames;
+    int time_count;
+    int time_per_frame;
+    SDL_Rect frame_clip[10][20];
+    int number_frame_attack;
+    int time_attack;
+
+    double fit_attack_frame_x;
+    double fit_attack_frame_y;
+
+    Time EnemyTime;
+    /* Enemy move */
+    int num_bullet;
+    int angle_bullet;
+
+    vector<Plan> plan;
+
+    vector<Orbit> orbit;
+
+
+    int HP = 100; // Health Point
+    int default_HP = 100;
+    bool is_die = false;
+
+
+    /* BOSS */
+    bool is_boss;
+
+    bool is_paused = false;
+
+
 public:
     // 0:    ENEMY_IDLE,
     // 1:    ENEMY_LEFT,
@@ -54,6 +103,8 @@ public:
         ENEMY_ATTACK_LEFT,
         ENEMY_ATTACK_RIGHT
     };
+
+    int necessary = 0;
 
     Enemy(bool is_boss_ = false);
     ~Enemy();
@@ -71,8 +122,8 @@ public:
     void SetRandomAngle(const int& st, const int& en);
 
     void InitBullet(int start_time, int end_time, int type, int name = 0);
-    void HandleBullet(vector<Bullet> & shot);
-    void MakeBullet(vector<Bullet> & shot, int ,int ,int , int);
+    void HandleBullet(vector<Bullet> & shot ,pair<double,double>,int level);
+    void MakeBullet(vector<Bullet> & shot, int ,int ,int , int, pair<double,double>, int);
 
     void Set(int number_frames_, int time_per_frame_, int number_frame_attack_ = 0){
         number_frames = number_frames_;
@@ -101,7 +152,8 @@ public:
                     frame_clip[i][k].w = frameWidth;
                     frame_clip[i][k].h = imageHeight;
                 }
-            }else{
+            }
+            else{
                 frameWidth = imageWidth / number_frames;
 
                 for(int k = 0 ; k < number_frames ; k++){
@@ -239,53 +291,7 @@ public:
     void pause();
     void resume();
 
-private:
-    int type;
-    int name;
-
-    double x, y;
-    double center_x, center_y;
-    
-    double x_speed, y_speed;
-    double a;
-
-    double angle; // degree
-
-    /* Enemy Display */
-    SDL_Rect sizeImg[20];
-
-    int current_status; 
-    int current_direct;
-    int current_frame;
-    int number_frames;
-    int time_count;
-    int time_per_frame;
-    SDL_Rect frame_clip[10][20];
-    int number_frame_attack;
-    int time_attack;
-
-    double fit_attack_frame_x;
-    double fit_attack_frame_y;
-
-    Time EnemyTime;
-    /* Enemy move */
-    int num_bullet;
-    int angle_bullet;
-
-    vector<Plan> plan;
-
-    vector<Orbit> orbit;
-
-
-    int HP = 100; // Health Point
-    int default_HP = 100;
-    bool is_die = false;
-
-
-    /* BOSS */
-    bool is_boss;
-
-    bool is_paused = false;
+    bool checkInBoard();
 
 };
 

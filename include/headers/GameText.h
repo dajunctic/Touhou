@@ -75,5 +75,6 @@ public:
     void show(SDL_Renderer *);
     void finish();
     bool isFinished();
+    void reset();
 };
 #endif // GAME_TEXT_H

@@ -2,6 +2,8 @@
 
 void Stage::Load(SDL_Renderer * renderer)
 {
+    stage_time.Start();
+
     // Level Choice //
     level_theme.Load(renderer, "res/gui/theme_difficulty.png");
     level_img.Load(renderer, "res/gui/difficulty.png");
@@ -74,6 +76,7 @@ void Stage::Load(SDL_Renderer * renderer)
         hakurei_animation.setPos(60, 230);
 
         bomb.load(renderer);
+        bomb_sfx = Mix_LoadWAV("res/sfx/explosion_3.wav");
 
 
         for(int i = 0 ; i < 6 ; i++)
@@ -92,7 +95,7 @@ void Stage::Load(SDL_Renderer * renderer)
     {
         explosion_img.Load(renderer, "res/gui/animation/explosion.png");
 
-        for(int i = 0 ; i < 2 ; i++)
+        for(int i = 0 ; i < 4 ; i++)
         {
             string path = "res/img/enemy/enemy_";
             string tmp = to_string(i);
@@ -133,44 +136,261 @@ void Stage::createEnemy()
     enemy.clear();
     shot.clear();
 
+    /* ################            1ST ENEMY WAY           ####################*/
+    Enemy FstWaveR[6];
+    Enemy FstWaveL[6];
+    for (int i = 0; i < 6; i++) {
+        int nameR = (i % 2) ? 2 : 0;
+        int nameL = (i % 2) ? 2 : 0;
+
+        FstWaveR[i].SetPos(1100 - 232 * (i % 2), -60);
+        FstWaveR[i].Set(4, 10);
+        FstWaveR[i].SetName(nameR);
+        FstWaveR[i].Load(enemy_img[nameR]);
+
+        FstWaveL[i].SetPos(440 + 200 * (i % 2) , -60);
+        FstWaveL[i].Set(4, 10);
+        FstWaveL[i].SetName(nameL);
+        FstWaveL[i].Load(enemy_img[nameL]);
+    }
+    for (int i = 0; i < 6; i++) {
+        FstWaveR[i].SetOrbit(2+i,0,{2,2},0,90);
+        FstWaveL[i].SetOrbit(2+i,0,{2,2},0,90);
+    }
+
+    if (level >= HARD) 
+    {
+        for (int i = 1; i < 6; i++) {
+            FstWaveR[i].InitBullet(2+i,3+i,19-i,11);
+            FstWaveL[i].InitBullet(2+i,3+i,8+i,11);
+        }
+    }
+    for (int i = 0; i < 6; i++) {
+        enemy.push_back(FstWaveR[i]);
+        enemy.push_back(FstWaveL[i]);
+    }
+
+/* ################            2ND ENEMY WAY           ####################*/
+    Enemy SecondWaveR[6];
+    Enemy SecondWaveL[6];
+    for (int i = 0; i < 6; i++) 
+    {
+        SecondWaveR[i].SetPos(1320, 160);
+        SecondWaveR[i].Set(4, 10, 2);
+        SecondWaveR[i].SetName(1);
+        SecondWaveR[i].Load(enemy_img[1]);
+        SecondWaveR[i].SetFitAttackFrame(11.0, 0.0);
+        SecondWaveL[i].SetPos(270, 80);
+        SecondWaveL[i].Set(4, 10, 2);
+        SecondWaveL[i].SetName(1);
+        SecondWaveL[i].Load(enemy_img[1]);
+        SecondWaveL[i].SetFitAttackFrame(11.0, 0.0);
+    }    
+    for (int i = 0; i < 6; i++) 
+    {
+        SecondWaveR[i].SetOrbit(10+i,0,{4,4},0,180);
+        SecondWaveL[i].SetOrbit(10+i,0,{4,4},0,0);
+    }
+    for (int i = 0; i < 6; i += 3) 
+    {
+        SecondWaveR[i].InitBullet(10+i,13+i,7,11);
+        SecondWaveL[i].InitBullet(10+i,13+i,7,11);
+    }
+    if (level == LEGENDARY) 
+    {
+        SecondWaveR[2].InitBullet(12,13,8,11);
+        SecondWaveL[4].InitBullet(14,15,8,11);
+    }
+    for (int i = 0; i < 6; i++) 
+    {
+        enemy.push_back(SecondWaveR[i]);
+        enemy.push_back(SecondWaveL[i]);
+    }
+    
+/* ################            3RD ENEMY WAY           ####################*/
+    Enemy ThirdWaveR[8];
+    Enemy ThirdWaveL[8];
+    for (int i = 0; i < 4; i++) 
+    {
+        ThirdWaveR[i].SetPos(280, 0);
+        ThirdWaveR[i].Set(4, 10, 2);
+        ThirdWaveR[i].SetName(1);
+        ThirdWaveR[i].Load(enemy_img[1]);
+        ThirdWaveR[i].SetFitAttackFrame(11.0, 0.0);
+        ThirdWaveL[i].SetPos(1320,0);
+        ThirdWaveL[i].Set(4, 10, 2);
+        ThirdWaveL[i].SetName(1);
+        ThirdWaveL[i].Load(enemy_img[1]);
+        ThirdWaveL[i].SetFitAttackFrame(11.0, 0.0);
+    }
+    for (int i = 4; i < 8; i++) 
+    {
+        ThirdWaveR[i].SetPos(280, 100);
+        ThirdWaveR[i].Set(4, 10, 2);
+        ThirdWaveR[i].SetName(1);
+        ThirdWaveR[i].Load(enemy_img[1]);
+        ThirdWaveR[i].SetFitAttackFrame(11.0, 0.0);
+        ThirdWaveL[i].SetPos(1320,100);
+        ThirdWaveL[i].Set(4, 10, 2);
+        ThirdWaveL[i].SetName(1);
+        ThirdWaveL[i].Load(enemy_img[1]);
+        ThirdWaveL[i].SetFitAttackFrame(11.0, 0.0);
+    }
+    for (int i = 0; i < 4; i++) 
+    {
+        ThirdWaveR[i].SetOrbit(19+i,0,{2,2},0,30);
+        ThirdWaveR[i].InitBullet(20+i,22+i,5,11);
+        ThirdWaveL[i].SetOrbit(19+i,0,{2,2},0,150);
+        ThirdWaveL[i].InitBullet(20+i,22+i,5,11);
+    }
+    for (int i = 4; i < 8; i++) 
+    {
+        ThirdWaveR[i].SetOrbit(15+i,30,{2,2},0,30);
+        ThirdWaveR[i].InitBullet(16+i,18+i,5,11);
+        ThirdWaveL[i].SetOrbit(15+i,30,{2,2},0,150);
+        ThirdWaveL[i].InitBullet(16+i,18+i,5,11);
+    }
+    for (int i = 0; i < 8; i++) 
+    {
+        enemy.push_back(ThirdWaveR[i]);
+        enemy.push_back(ThirdWaveL[i]);
+    }
+
+/* ################            4TH ENEMY WAY           ####################*/
+    Enemy FourthWave[10];
+    FourthWave[0].SetPos(380,-140);
+    FourthWave[1].SetPos(470,-100);
+    FourthWave[2].SetPos(560,-120);
+    FourthWave[3].SetPos(650,-180);
+    FourthWave[4].SetPos(740,-200); 
+    FourthWave[5].SetPos(830,-220);
+    FourthWave[6].SetPos(920,-170);
+    FourthWave[7].SetPos(1010,-140);
+    FourthWave[8].SetPos(1100,-130);
+    FourthWave[9].SetPos(1190,-210);
+    for (int i = 0; i < 10; i++) {
+        FourthWave[i].Set(4, 10, 2);
+        FourthWave[i].SetName(1);
+        FourthWave[i].Load(enemy_img[1]);
+        FourthWave[i].SetFitAttackFrame(11.0, 0.0);
+        FourthWave[i].InitBullet(25,34,6,11);
+    }
+    FourthWave[0].SetOrbit(23,0,{3,3},-0.01,90);
+    FourthWave[3].SetOrbit(23,30,{3,3},-0.01,90);
+    FourthWave[8].SetOrbit(24,0,{3,3},-0.01,90);
+    FourthWave[5].SetOrbit(24,30,{3,3},-0.01,90);
+    FourthWave[9].SetOrbit(25,0,{3,3},-0.01,90);
+    FourthWave[1].SetOrbit(25,30,{3,3},-0.01,90);
+    FourthWave[6].SetOrbit(26,0,{3,3},-0.01,90);
+    FourthWave[7].SetOrbit(26,30,{3,3},-0.01,90);
+    FourthWave[4].SetOrbit(27,0,{3,3},-0.01,90);
+    FourthWave[2].SetOrbit(27,30,{3,3},-0.01,90);
+    FourthWave[0].SetOrbit(37,0,{0,0},0.01,270);
+    FourthWave[3].SetOrbit(37,30,{0,0},0.01,270);
+    FourthWave[8].SetOrbit(38,0,{0,0},0.01,270);
+    FourthWave[5].SetOrbit(38,30,{0,0},0.01,270);
+    FourthWave[9].SetOrbit(39,0,{0,0},0.01,270);
+    FourthWave[1].SetOrbit(39,30,{0,0},0.01,270);
+    FourthWave[6].SetOrbit(40,0,{0,0},0.01,270);
+    FourthWave[7].SetOrbit(40,30,{0,0},0.01,270);
+    FourthWave[4].SetOrbit(41,0,{0,0},0.01,270);
+    FourthWave[2].SetOrbit(41,30,{0,0},0.01,270);
+    for (int i = 0; i < 10; i++) {
+        enemy.push_back(FourthWave[i]);
+    }
+   
+
+/* ################            5TH ENEMY WAY           ####################*/    Enemy FifthWave[12];
+    for (int i = 0; i < 12; i++) {
+        FifthWave[i].SetPos(370+ i*80, -60);
+        FifthWave[i].Set(4, 10, 2);
+        FifthWave[i].SetName(1);
+        FifthWave[i].Load(enemy_img[1]);
+        FifthWave[i].SetFitAttackFrame(11.0, 0.0);
+    }
+    FifthWave[0].SetOrbit(32,0,{4,4},0,90);
+    FifthWave[1].SetOrbit(32,15,{4,4},0,90);
+    FifthWave[2].SetOrbit(32,30,{4,4},0,90);
+    FifthWave[3].SetOrbit(32,45,{4,4},0,90);
+    FifthWave[4].SetOrbit(33,0,{4,4},0,90);
+    FifthWave[5].SetOrbit(33,15,{4,4},0,90);
+    FifthWave[6].SetOrbit(33,30,{4,4},0,90);
+    FifthWave[7].SetOrbit(33,45,{4,4},0,90);
+    FifthWave[8].SetOrbit(34,0,{4,4},0,90);
+    FifthWave[9].SetOrbit(34,15,{4,4},0,90);
+    FifthWave[10].SetOrbit(34,30,{4,4},0,90);
+    FifthWave[11].SetOrbit(34,45,{4,4},0,90);
+    for (int i = 0; i < 12; i++) enemy.push_back(FifthWave[i]);
+    
+        /*After boss*/
+
+        // Real //
+
+        /* BOSS */
+        /*
+        {
+            boss.SetPos(840 - 20 , 200);
+            boss.Set(4, 8, 7);
+            boss.SetName(1);
+            boss.Load(boss_img[1]);
+            boss.SetFitAttackFrame(0.0, 25.0);
+            boss.InitBullet(0 , 2, 0, 11);   
+            // boss.SetOrbit(2,0,{2,2},-0.01, 90);
+            // boss.SetOrbit(5, 0,{2,2}, 0, -90);
+            // boss.SetOrbit(7, 0,{0,0}, 0, 90);
+            // // Hinh elip //
+            // int tmp = 8, tmp2 = 0;
+            // for(int j = -90 ; j < 270 ; j+=5)
+            // {
+            //     boss.SetOrbit(tmp, tmp2, {2.5,1}, 0,  j );
+            //     tmp2 += 5;
+            //     if(tmp2 >= 60){
+            //         tmp++;
+            //         tmp2 = 0;
+            //     }
+            // }
+            // boss.SetOrbit(tmp, tmp2, {0,0}, 0, 180);
+            enemy.push_back(boss);
+        }*/
+
 //    Enemy Test2;
 
-    int truth = 1;
+// int truth = 1;
 
-    for(int i = 700 ; i <= 900 ; i += 200)
-    {
-        truth -= 1;
-        Enemy Test;
+// for(int i = 700 ; i <= 900 ; i += 200)
+// {
+//     truth -= 1;
+//     Enemy Test;
 
-        Test.SetPos(i , 200);
-        Test.Set(4, 10, 2);
-        Test.SetName(1);
-        Test.Load(enemy_img[1]);
-        Test.SetFitAttackFrame(11.0, 0.0);
-        Test.InitBullet(0 , 2, 0, 11);  
+//     Test.SetPos(i , 200);
+//     Test.Set(4, 10);
+//     Test.SetName(3);
+//     Test.Load(enemy_img[1]);
+//     //Test.SetFitAttackFrame(11.0, 0.0);
+//     Test.InitBullet(0 , 2, 0, 11);  
 
-        /*
-        Test.SetOrbit(2,0,{2,2},-0.01, 90);
+//     /*
+//     Test.SetOrbit(2,0,{2,2},-0.01, 90);
 
-        Test.SetOrbit(5, 0,{2,2}, 0, -90);
-        Test.SetOrbit(7, 0,{0,0}, 0, 90);
+//     Test.SetOrbit(5, 0,{2,2}, 0, -90);
+//     Test.SetOrbit(7, 0,{0,0}, 0, 90);
 
-        // Hinh elip //
-        int tmp = 8, tmp2 = 0;
-        for(int j = -90 ; j < 270 ; j+=5)
-        {
-            Test.SetOrbit(tmp, tmp2, {2.5,1}, 0,  j + 180 * truth);
-            tmp2 += 5;
-            if(tmp2 >= 60){
-                tmp++;
-                tmp2 = 0;
-            }
-        }
-        Test.SetOrbit(tmp, tmp2, {0,0}, 0, 180);
-        */
+//     // Hinh elip //
+//     int tmp = 8, tmp2 = 0;
+//     for(int j = -90 ; j < 270 ; j+=5)
+//     {
+//         Test.SetOrbit(tmp, tmp2, {2.5,1}, 0,  j + 180 * truth);
+//         tmp2 += 5;
+//         if(tmp2 >= 60){
+//             tmp++;
+//             tmp2 = 0;
+//         }
+//     }
+//     Test.SetOrbit(tmp, tmp2, {0,0}, 0, 180);
+//     */
 
-        enemy.push_back(Test);
-    }
+//     enemy.push_back(Test);
+// }
 
     // Real //
     Enemy boss = Enemy(true);
@@ -203,6 +423,32 @@ void Stage::createEnemy()
     enemy.push_back(boss);
     
 }
+
+void Stage::createEnemyViaTime()
+{
+    //1st Wave
+    Enemy FirstWaveAB;
+    Enemy FirstWaveAB2;
+    FirstWaveAB.SetPos(600, 200);
+    FirstWaveAB.Set(4, 10, 2);
+    FirstWaveAB.SetName(1);
+    FirstWaveAB.Load(enemy_img[1]);
+    FirstWaveAB.SetFitAttackFrame(11.0, 0.0);
+    FirstWaveAB.InitBullet(3,63,19,11);
+    FirstWaveAB2.SetPos(970, 200);
+    FirstWaveAB2.Set(4, 10, 2);
+    FirstWaveAB2.SetName(1);
+    FirstWaveAB2.Load(enemy_img[1]);
+    FirstWaveAB2.SetFitAttackFrame(11.0, 0.0);
+    FirstWaveAB2.InitBullet(3,63,19,11);
+
+    if (stage_time.GetSeconds() == 3 and stage_time.CheckSeconds(60)) 
+    {
+        enemy.push_back(FirstWaveAB); 
+        enemy.push_back(FirstWaveAB2);
+    }
+}
+
 void Stage::Show(SDL_Renderer * renderer)
 {
     if(scene == LEVEL_CHOICE){
@@ -230,10 +476,8 @@ void Stage::Show(SDL_Renderer * renderer)
             Mix_PlayMusic(bgm, -1);
         }
         GameBg.Render(renderer);
-        // SDL_SetRenderDrawColor(renderer, 0, 0, 0 , 100);
-        // SDL_RenderFillRect(renderer, &MainBoard);
-        bomb.show(renderer);
 
+        bomb.show(renderer);
         Hakurei.Show(renderer);
 
         if(current_display == INTRO)
@@ -260,7 +504,7 @@ void Stage::Show(SDL_Renderer * renderer)
             if(stage_content_alpha == -1)
             {
                 current_display = PROCESS;
-                isBgm = false;
+                
             }
             else
             {
@@ -273,10 +517,12 @@ void Stage::Show(SDL_Renderer * renderer)
 
         if(current_display == PROCESS)
         {
-            Hakurei.HandleBullet(enemy, &score);
+            stage_time.Update();
 
+            Hakurei.HandleBullet(enemy, &score);
             /* Display Enemy */
-        
+
+            createEnemyViaTime();
             HandleEnemy(renderer);
             HandleShot(renderer);
         }
@@ -310,7 +556,9 @@ void Stage::Show(SDL_Renderer * renderer)
         }
 
         StageBg.Render(renderer);
+        life_text.setText(renderer, to_string(life));
         life_text.show(renderer);
+        explode_text.setText(renderer, to_string(explode));
         explode_text.show(renderer);
 
         string score_str = to_string(score);
@@ -335,11 +583,15 @@ void Stage::setNotification(bool value)
 void Stage::HandleEnemy(SDL_Renderer * renderer)
 {   
 
-    for(auto &x : enemy)
-    {
-        if(bomb.isAttack())
-        {
+    for(auto &x : enemy){
+        if(bomb.isAttack() and x.checkInBoard())
             x.minusHealhPoint(bomb_power);
+
+        if(RectInRect(x.GetRect(), Hakurei.getRect())){
+            if(!is_loser and !Hakurei.isRessurect()){
+                HandleCharacter(renderer);
+                return;
+            }
         }
     }
     
@@ -417,6 +669,7 @@ void Stage::HandleEnemy(SDL_Renderer * renderer)
 
             continue;
         }  
+        if(x.necessary >= 2) continue;
 
         erased_enemy.push_back(x);
     } 
@@ -425,16 +678,13 @@ void Stage::HandleEnemy(SDL_Renderer * renderer)
     // show enemy
     for(auto &x : enemy)
     {
-        if(x.IsBoss())
-        {
+        if(x.IsBoss())  
             x.Show(renderer, boss_img[x.GetName()][x.GetStatus()]);
-        }
-        else
-        { 
+        else 
             x.Show(renderer, enemy_img[x.GetName()][x.GetStatus()]);
-        }
+        
         x.HandleMove();
-        x.HandleBullet(shot);
+        x.HandleBullet(shot, Hakurei.GetCenter(), level);
 
     }
 
@@ -447,15 +697,10 @@ void Stage::HandleEnemy(SDL_Renderer * renderer)
     }
     shards = erased_shards;
 
-    for(auto &x : shards)
-    {
-        x.show(renderer, &powershard_img[x.getType()], Hakurei.GetCenter());
-    }
+    for(auto &x : shards)  x.show(renderer, &powershard_img[x.getType()], Hakurei.GetCenter());
 
-    if(shards.empty() and enemy.empty())
-    {
-        is_winner = true;
-    }
+    if(shards.empty() and enemy.empty())  is_winner = true;
+    
 
     // show explosion
     vector<Animation> erased_explosion;
@@ -466,12 +711,26 @@ void Stage::HandleEnemy(SDL_Renderer * renderer)
     }
     explosion = erased_explosion;
 
-    for(auto &x : explosion)
-    {
-        x.show(renderer, &explosion_img);
+    for(auto &x : explosion)  x.show(renderer, &explosion_img);
+    
+}
+
+void Stage::HandleCharacter(SDL_Renderer * renderer)
+{
+    Hakurei.Die(true);
+            
+    Mix_PlayChannel(-1, dead_sfx, 0);
+
+    life --;
+    life_text.setText(renderer, to_string(life));
+
+    if(life > 0)
+        Hakurei.setRessurect(true);
+    else{
+        is_loser = true;
+        for(auto &x : enemy) x.pause();
+        for(auto &x : shot) x.pause();
     }
-    
-    
 }
 
 void Stage::HandleShot(SDL_Renderer * renderer)
@@ -501,26 +760,7 @@ void Stage::HandleShot(SDL_Renderer * renderer)
             s->HandleCollision(Hakurei.GetCenter(), Hakurei.GetRadius(), shot_img[s->GetName()].GetRect());
         }
 
-        if(s->IsDelete())
-        {
-
-
-            Hakurei.Die(true);
-            
-            Mix_PlayChannel(-1, dead_sfx, 0);
-
-            life --;
-            life_text.setText(renderer, to_string(life));
-            if(life)
-            {
-                Hakurei.setRessurect(true);
-            }
-            else
-            {
-                is_loser = true;
-            }
-
-        }
+        if(s->IsDelete()) HandleCharacter(renderer);
 
         int w = shot_img[s->GetName()].GetRect().w;
         int h = shot_img[s->GetName()].GetRect().h;
@@ -582,6 +822,7 @@ void Stage::HandleInput(SDL_Event e,int * SCENE)
     {
         if(e.type == SDL_KEYDOWN)
         {
+            if(is_loser or is_winner) return;
             switch (e.key.keysym.sym)
             {
                 case SDLK_RIGHT:
@@ -624,7 +865,7 @@ void Stage::HandleInput(SDL_Event e,int * SCENE)
                         bomb.reset();
                         bomb.use();
                         explode --;
-                        
+                        Mix_PlayChannel(-1, bomb_sfx, 0);
                     }
                     break;
 
@@ -665,8 +906,9 @@ void Stage::HandleInput(SDL_Event e,int * SCENE)
                 case SDLK_p:
                     if(current_display == PROCESS)
                     {
+                        if(is_loser or is_winner) return;
                         is_paused = !is_paused;
-                        if(is_paused == true)
+                        if(is_paused)
                         {
                             Hakurei.pause();
                             for(auto &x : enemy) x.pause();
@@ -683,18 +925,18 @@ void Stage::HandleInput(SDL_Event e,int * SCENE)
                 case SDLK_RETURN:
                     if(current_display == PROCESS)
                     {
-                        if(is_paused == true)
+                        if(is_paused and !is_loser and !is_winner)
                         {
                             is_paused = false;
                             Hakurei.resume();
                             for(auto &x : enemy) x.resume();
                             for(auto &x : shot) x.resume();
                         }
-                        if(is_loser == true)
+                        if(is_loser)
                         {
                             reset();
                         }
-                        if(is_winner == true)
+                        if(is_winner)
                         {
                             Mix_HaltMusic();
 
@@ -731,6 +973,8 @@ void Stage::HandleInput(SDL_Event e,int * SCENE)
 
 void Stage::reset()
 {
+    stage_time.Reset();
+
     enemy.clear();
     shot.clear();
 
@@ -742,13 +986,17 @@ void Stage::reset()
     createEnemy();
     
     life = default_life;
+    explode = default_explode;
+    score = 0;
 
 
-    int stage_content_alpha = 255;
-    bool stage_content_blur = false;
+    stage_content_alpha = 255;
+    stage_content_blur = false;
     stage_name.setPos(250, SCREEN_HEIGHT / 2 - 100);
     stage_content.setPos(620, 720);
+    current_display = INTRO;
 
 
     story.reset();
+    game_end.reset();
 }

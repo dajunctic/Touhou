@@ -246,3 +246,9 @@ bool Dialogue::isFinished()
 {
     return finished;
 }
+void Dialogue::reset()
+{
+    current_text = "";
+    current_alpha = -text_speed;
+    finished = false;
+}

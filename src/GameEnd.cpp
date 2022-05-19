@@ -23,8 +23,9 @@ void End::load(SDL_Renderer * renderer)
     postscript2.setDisplay("center");
     postscript2.setText(renderer, script2);
 
-    back.setSize(20);
-    back.setText(renderer, "[ Space or Enter to back the menu ]");
+    back.setSize(25);
+    back.setFont("fonts/segoeprb.ttf");
+    back.setText(renderer, "Space or Enter to return Home");
     back.setPos((SCREEN_WIDTH - back.getRect().w) / 2, 680);
 
     thanks.Load(renderer, "res/gui/thanks.png");
@@ -120,9 +121,12 @@ void End::handleInput(SDL_Event e, int * SCENE)
 }
 void End::reset()
 {
-    bool isBgm = false;
-    bool isThank = false;
-    bool isBack = false;
+    isBgm = false;
+    isThank = false;
+    isBack = false;
 
-    bool is_mystery = true;
+    is_mystery = true;
+    mystery.reset();
+    postscript1.reset();
+    postscript2.reset();
 }

@@ -65,7 +65,7 @@ void Story::load(SDL_Renderer * renderer)
     am_sad.Load(renderer, "res/img/char/am2.png");
     am_blink.Load(renderer, "res/img/char/am3.png");
 
-    bgm = Mix_LoadMUS("res/bgm/dokidoki.mp3");
+    bgm = Mix_LoadMUS("res/bgm/PlainAsia.mp3");
 }
 
 void Story::show(SDL_Renderer * renderer)

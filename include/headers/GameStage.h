@@ -10,6 +10,7 @@
 #include "GameEnd.h"
 #include "PowerShard.h"
 #include "GameTime.h"
+#include "GamePhysics.h"
 
 enum DIFFICULTY{
     EASY,
@@ -35,8 +36,10 @@ enum MAIN_SCENE{
 
 class Stage{
 private:
+    Time stage_time;
+
     Mix_Music * bgm = NULL;
-    bool isBgm = true;
+    bool isBgm = false;
 
     multiset<int> Key;
 
@@ -47,7 +50,7 @@ private:
     int level = EASY;
 
     Text esc;
-    int scene = LEVEL_CHOICE;
+    int scene = MAIN;
 
     // Story //
     Story story;
@@ -70,6 +73,7 @@ private:
 
 
 
+    int default_explode = 3;
     int explode = 3;
     int default_life = 3;
     int life = default_life;
@@ -100,6 +104,7 @@ private:
 
     Bomb bomb;
     int bomb_power = 200;
+    Mix_Chunk * bomb_sfx;
 
     Image powershard_img[6];
     vector<PowerShard> shards;
@@ -139,7 +144,9 @@ public:
     void setNotification(bool);
     void setScene(int);
     void createEnemy();
+    void createEnemyViaTime();
     void HandleEnemy(SDL_Renderer * renderer);
+    void HandleCharacter(SDL_Renderer * renderer);
     void HandleShot(SDL_Renderer * renderer);
     void HandleInput(SDL_Event e, int * SCENE);
     void reset();
