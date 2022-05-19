@@ -63,22 +63,79 @@ void Enemy::HandleBullet(vector<Bullet> & shot, pair<double,double>charcor, int 
 void Enemy::MakeBullet(vector<Bullet> & shot, int type, int name, int st_time, int en_time, pair<double,double>charcor,int level){
     if(type == 0){
 
-        // * Cứ 0.5 s 1 vòng tròn đạn bắn ra *//
-        if (EnemyTime.CheckSeconds(30)) {
-            int tmp = rand()%( 4 - 0 + 1) + 0;
-            for(int i = tmp ; i < 360 + tmp ; i += 5){
-                Bullet b;
+        // *vòng tròn đạn bắn liên tục *//
+        if (level == 0) {
+            if (EnemyTime.CheckSeconds(60)) {
+                int tmp = rand()%( 4 - 0 + 1) + 0;
+                for(int i = tmp ; i < 360 + tmp ; i += 20){
+                    Bullet b;
 
-                b.SetPos(center_x, center_y);
-                b.SetName(name);
-                b.SetAngle(i);
-                b.SetSpeed(1.5,1.5);
-                b.SetType(b.VECTOR);
+                    b.SetPos(center_x, center_y);
+                    b.SetName(name);
+                    b.SetAngle(i);
+                    b.SetSpeed(1.5,1.5);
+                    b.SetType(b.VECTOR);
 
-                shot.push_back(b);
+                    shot.push_back(b);
+                }
+
+            ResetAttack();
             }
+        }
+        if (level == 1) {
+            if (EnemyTime.CheckSeconds(60)) {
+                int tmp = rand()%( 4 - 0 + 1) + 0;
+                for(int i = tmp ; i < 360 + tmp ; i += 10){
+                    Bullet b;
 
-           ResetAttack();
+                    b.SetPos(center_x, center_y);
+                    b.SetName(name);
+                    b.SetAngle(i);
+                    b.SetSpeed(1.5,1.5);
+                    b.SetType(b.VECTOR);
+
+                    shot.push_back(b);
+                }
+
+            ResetAttack();
+            }
+        }
+        if (level == 2) {
+            if (EnemyTime.CheckSeconds(30)) {
+                int tmp = rand()%( 4 - 0 + 1) + 0;
+                for(int i = tmp ; i < 360 + tmp ; i += 5){
+                    Bullet b;
+
+                    b.SetPos(center_x, center_y);
+                    b.SetName(name);
+                    b.SetAngle(i);
+                    b.SetSpeed(1.5,1.5);
+                    b.SetType(b.VECTOR);
+
+                    shot.push_back(b);
+                }
+
+            ResetAttack();
+            }
+        }
+        
+        if (level == 3) {
+            if (EnemyTime.CheckSeconds(30)) {
+                int tmp = rand()%( 4 - 0 + 1) + 0;
+                for(int i = tmp ; i < 360 + tmp ; i += 5){
+                    Bullet b;
+
+                    b.SetPos(center_x, center_y);
+                    b.SetName(name);
+                    b.SetAngle(i);
+                    b.SetSpeed(1.5,1.5);
+                    b.SetType(b.VECTOR);
+
+                    shot.push_back(b);
+                }
+
+            ResetAttack();
+            }
         }
     }
 
@@ -113,32 +170,100 @@ void Enemy::MakeBullet(vector<Bullet> & shot, int type, int name, int st_time, i
             
             ResetAttack();
         }
-
     }
+    
     if(type == 3){
-        // Cứ 0.5s bắn ra 4 cặp đạn từ góc 70 tới 110 độ 
-        if (EnemyTime.CheckSeconds(30)) {
-            for (int i = 70; i <= 110; i += 10) {
-                Bullet b;
-                b.SetPos(center_x, center_y);
-                //b.SetAngle(18 * (EnemyTime.GetSeconds() - st_time));
-                b.SetAngle(i);
-                b.SetName(name);
-                b.SetSpeed(2,2);
-                b.SetType(b.VECTOR);
-                shot.push_back(b);
-                double base = 15;
-                double angle_radian = i;
-                
-                b.SetPos(center_x + sin(angle_radian) * base, center_y - cos(angle_radian) * base);
-                b.SetAngle(i);
-                b.SetSpeed(2,2);
-                b.SetType(b.VECTOR);
-                shot.push_back(b);
+        //Dan di theo hinh non xuong
+        if (level == 0) {
+            if (EnemyTime.CheckSeconds(60)) {
+                for (int i = 70; i <= 110; i += 10) {
+                    Bullet b;
+                    b.SetPos(center_x, center_y);
+                    //b.SetAngle(18 * (EnemyTime.GetSeconds() - st_time));
+                    b.SetAngle(i);
+                    b.SetName(name);
+                    b.SetSpeed(1,1);
+                    b.SetType(b.VECTOR);
+                    shot.push_back(b);
+                    double base = 15;
+                    double angle_radian = i;
+                    
+                    b.SetPos(center_x + sin(angle_radian) * base, center_y - cos(angle_radian) * base);
+                    b.SetAngle(i);
+                    b.SetSpeed(1,1);
+                    b.SetType(b.VECTOR);
+                    shot.push_back(b);
+                }
             }
-
-            ResetAttack();
         }
+        if (level == 1) {
+            if (EnemyTime.CheckSeconds(30)) {
+                for (int i = 70; i <= 110; i += 10) {
+                    Bullet b;
+                    b.SetPos(center_x, center_y);
+                    //b.SetAngle(18 * (EnemyTime.GetSeconds() - st_time));
+                    b.SetAngle(i);
+                    b.SetName(name);
+                    b.SetSpeed(1,1);
+                    b.SetType(b.VECTOR);
+                    shot.push_back(b);
+                    double base = 15;
+                    double angle_radian = i;
+                    
+                    b.SetPos(center_x + sin(angle_radian) * base, center_y - cos(angle_radian) * base);
+                    b.SetAngle(i);
+                    b.SetSpeed(1,1);
+                    b.SetType(b.VECTOR);
+                    shot.push_back(b);
+                }
+            }
+        }
+        if (level == 2) {
+            if (EnemyTime.CheckSeconds(30)) {
+                for (int i = 70; i <= 110; i += 10) {
+                    Bullet b;
+                    b.SetPos(center_x, center_y);
+                    //b.SetAngle(18 * (EnemyTime.GetSeconds() - st_time));
+                    b.SetAngle(i);
+                    b.SetName(name);
+                    b.SetSpeed(1.5,1.5);
+                    b.SetType(b.VECTOR);
+                    shot.push_back(b);
+                    double base = 15;
+                    double angle_radian = i;
+                    
+                    b.SetPos(center_x + sin(angle_radian) * base, center_y - cos(angle_radian) * base);
+                    b.SetAngle(i);
+                    b.SetSpeed(1.5,1.5);
+                    b.SetType(b.VECTOR);
+                    shot.push_back(b);
+                }
+            }
+        }
+        if (level == 3) {
+            if (EnemyTime.CheckSeconds(30)) {
+                for (int i = 50; i <= 130; i += 10) {
+                    Bullet b;
+                    b.SetPos(center_x, center_y);
+                    //b.SetAngle(18 * (EnemyTime.GetSeconds() - st_time));
+                    b.SetAngle(i);
+                    b.SetName(name);
+                    b.SetSpeed(2,2);
+                    b.SetType(b.VECTOR);
+                    shot.push_back(b);
+                    double base = 15;
+                    double angle_radian = i;
+                    
+                    b.SetPos(center_x + sin(angle_radian) * base, center_y - cos(angle_radian) * base);
+                    b.SetAngle(i);
+                    b.SetSpeed(2,2);
+                    b.SetType(b.VECTOR);
+                    shot.push_back(b);
+                }
+            }
+        }
+        ResetAttack();
+        
     }
     if(type == 4){
         if (EnemyTime.CheckSeconds(30)/* and (EnemyTime.GetSeconds() - st_time)%2 == 0*/) {
@@ -516,24 +641,73 @@ void Enemy::MakeBullet(vector<Bullet> & shot, int type, int name, int st_time, i
         ResetAttack();
     }
     if(type == 20){
+        if (level == 0) {
+            if (EnemyTime.CheckSeconds(300)) {
+                int tmp = rand()%( 4 - 0 + 1) + 0;
+                for(int i = tmp ; i < 360 + tmp ; i += 20){
+                    Bullet b;
 
-        // * Cứ 5s 1 vòng tròn đạn bắn ra *//
-        if (EnemyTime.CheckSeconds(300)) {
-            int tmp = rand()%( 4 - 0 + 1) + 0;
-            for(int i = tmp ; i < 360 + tmp ; i += 5){
-                Bullet b;
+                    b.SetPos(center_x, center_y);
+                    b.SetName(name);
+                    b.SetAngle(i);
+                    b.SetSpeed(1.5,1.5);
+                    b.SetType(b.VECTOR);
 
-                b.SetPos(center_x, center_y);
-                b.SetName(name);
-                b.SetAngle(i);
-                b.SetSpeed(1.5,1.5);
-                b.SetType(b.VECTOR);
-
-                shot.push_back(b);
+                    shot.push_back(b);
+                }
             }
-
-           ResetAttack();
         }
+        if (level == 1) {
+            if (EnemyTime.CheckSeconds(300)) {
+                int tmp = rand()%( 4 - 0 + 1) + 0;
+                for(int i = tmp ; i < 360 + tmp ; i += 15){
+                    Bullet b;
+
+                    b.SetPos(center_x, center_y);
+                    b.SetName(name);
+                    b.SetAngle(i);
+                    b.SetSpeed(1.5,1.5);
+                    b.SetType(b.VECTOR);
+
+                    shot.push_back(b);
+                }
+            }
+        }
+        if (level == 2) {
+            if (EnemyTime.CheckSeconds(300)) {
+                int tmp = rand()%( 4 - 0 + 1) + 0;
+                for(int i = tmp ; i < 360 + tmp ; i += 10){
+                    Bullet b;
+
+                    b.SetPos(center_x, center_y);
+                    b.SetName(name);
+                    b.SetAngle(i);
+                    b.SetSpeed(1.5,1.5);
+                    b.SetType(b.VECTOR);
+
+                    shot.push_back(b);
+                }
+            }
+        }
+        if (level == 3) {
+            if (EnemyTime.CheckSeconds(300)) {
+                int tmp = rand()%( 4 - 0 + 1) + 0;
+                for(int i = tmp ; i < 360 + tmp ; i += 5){
+                    Bullet b;
+
+                    b.SetPos(center_x, center_y);
+                    b.SetName(name);
+                    b.SetAngle(i);
+                    b.SetSpeed(1.5,1.5);
+                    b.SetType(b.VECTOR);
+
+                    shot.push_back(b);
+                }
+
+            
+            }
+        }
+        ResetAttack();
     }
 }
 
