@@ -315,9 +315,36 @@ void Stage::Load(SDL_Renderer * renderer)
         */
         // Real //
 
-        /* BOSS */
+        /* BOSS trêu */
+
         {
-        for (int i = 0; i <= 400; i += 40) {
+            boss.SetPos((940 / 2 - 16) + 340 , 200);
+            boss.Set(4, 8, 7);
+            boss.SetName(1);
+            boss.Load(boss_img[1]);
+            boss.SetFitAttackFrame(0.0, 25.0);
+
+            for (int i = 0; i < 2000; i += 20) {
+                boss.SetOrbit(2+i,0,{4,4},-0.05,320);
+                boss.SetOrbit(4+i,0,{4,4},-0.03,180);
+                boss.SetOrbit(6+i,0,{4,4},-0.05,40);
+
+                boss.InitBullet(1+i,1+i,2,5);
+                boss.InitBullet(3+i,3+i,2,5);
+                boss.InitBullet(5+i,5+i,2,5);
+
+                boss.SetOrbit(9+i,0,{5,5},0,90);
+                boss.SetOrbit(10+i,0,{1,1},0,270);
+                boss.SetOrbit(15+i,30,{0,0},0,0);
+                
+                boss.InitBullet(10+i,20+i,1,10);
+                boss.InitBullet(15+i,15+i,0,1);
+            }
+            enemy.push_back(boss);
+        /* BOSS */
+        /*
+        {
+        for (int i = 0; i <= 4000; i += 40) {
             boss.SetPos((940 / 2 - 16) + 340 , 200);
             boss.Set(4, 8, 7);
             boss.SetName(1);
@@ -351,6 +378,7 @@ void Stage::Load(SDL_Renderer * renderer)
    
         }
         enemy.push_back(boss);     
+        */
             // boss.SetOrbit(2,0,{2,2},-0.01, 90);
 
             // boss.SetOrbit(5, 0,{2,2}, 0, -90);
