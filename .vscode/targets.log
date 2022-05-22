@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun May 22 21:44:06 2022
+# Make data base, printed on Sun May 22 23:41:46 2022
 
 # Variables
 
@@ -21,7 +21,7 @@ USERPROFILE = C:\Users\Dell
 # environment
 LOCALAPPDATA = C:\Users\Dell\AppData\Local
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-f764a55e-84ab-458a-a764-d9e5a59d2a00-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-7a545af1-4be1-4366-a6b3-64516c96a869-sock
 # environment
 VSCODE_CWD = C:\Users\Dell\AppData\Local\Programs\Microsoft VS Code
 # environment
@@ -35,7 +35,7 @@ MAKE_COMMAND := make.exe
 # automatic
 @D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_648_PKVCEJWGHPBZZCKR
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_4428_GOJOZHVYXEYPNDBF
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # default
@@ -67,7 +67,7 @@ CURDIR := d:/Projects/Touhou
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
 # automatic
 *D = $(patsubst %/,%,$(patsubst %\,%,$(dir $*)))
 # environment
@@ -87,7 +87,7 @@ MAKEFILE_LIST := Makefile
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 648
+VSCODE_PID = 4428
 # automatic
 ?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
 # automatic
@@ -205,9 +205,9 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 142 Stepping 10, GenuineIntel
 
 # Directories
 
-# . (key d:/Projects/Touhou, mtime 1653224771): 29 files, no impossibilities.
+# . (key d:/Projects/Touhou, mtime 1653233599): 30 files, no impossibilities.
 
-# 29 files, no impossibilities in 1 directories.
+# 30 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -265,12 +265,12 @@ run-only:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 35 / storage = 364 B / avg = 10 B
-# current buf: size = 8162 B / used = 364 B / count = 35 / avg = 10 B
+# strcache buffers: 1 (0) / strings = 36 / storage = 374 B / avg = 10 B
+# current buf: size = 8162 B / used = 374 B / count = 36 / avg = 10 B
 
-# strcache performance: lookups = 42 / hit rate = 16%
+# strcache performance: lookups = 43 / hit rate = 16%
 # hash-table stats:
-# Load=35/8192=0%, Rehash=0, Collisions=0/42=0%
-# Finished Make data base on Sun May 22 21:44:06 2022
+# Load=36/8192=0%, Rehash=0, Collisions=0/43=0%
+# Finished Make data base on Sun May 22 23:41:46 2022
 
  
