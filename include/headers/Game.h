@@ -23,7 +23,7 @@ private:
     SDL_Renderer* screen = NULL;
     SDL_Event* event = NULL;
 
-    int SCENE = MENU;
+    int SCENE = TITLE;
 
     /* Title introduction */
     Image dazu;

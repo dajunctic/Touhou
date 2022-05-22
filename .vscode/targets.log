@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Wed May 18 23:12:44 2022
+# Make data base, printed on Sun May 22 21:44:06 2022
 
 # Variables
 
@@ -21,7 +21,7 @@ USERPROFILE = C:\Users\Dell
 # environment
 LOCALAPPDATA = C:\Users\Dell\AppData\Local
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-62edef05-fe6a-424b-85e9-1ff88511995b-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-f764a55e-84ab-458a-a764-d9e5a59d2a00-sock
 # environment
 VSCODE_CWD = C:\Users\Dell\AppData\Local\Programs\Microsoft VS Code
 # environment
@@ -35,7 +35,7 @@ MAKE_COMMAND := make.exe
 # automatic
 @D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_4412_OYFZUWYYEZGFZEDY
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_648_PKVCEJWGHPBZZCKR
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # default
@@ -49,7 +49,7 @@ VSCODE_LOG_STACK = false
 # automatic
 %F = $(notdir $%)
 # environment
-VSCODE_CODE_CACHE_PATH = C:\Users\Dell\AppData\Roaming\Code\CachedData\da15b6fd3ef856477bf6f4fb29ba1b7af717770d
+VSCODE_CODE_CACHE_PATH = C:\Users\Dell\AppData\Roaming\Code\CachedData\c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5
 # environment
 LANG = C
 # default
@@ -87,7 +87,7 @@ MAKEFILE_LIST := Makefile
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 4412
+VSCODE_PID = 648
 # automatic
 ?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
 # automatic
@@ -179,7 +179,7 @@ ELECTRON_RUN_AS_NODE = 1
 # environment
 TEMP = C:\Users\Dell\AppData\Local\Temp
 # environment
-VSCODE_IPC_HOOK = \\.\pipe\47ce9abef4d1fbad6615f4d064b95a8a-1.67.1-main-sock
+VSCODE_IPC_HOOK = \\.\pipe\47ce9abef4d1fbad6615f4d064b95a8a-1.67.2-main-sock
 # default
 .RECIPEPREFIX := 
 # automatic
@@ -205,7 +205,7 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 142 Stepping 10, GenuineIntel
 
 # Directories
 
-# . (key d:/Projects/Touhou, mtime 1652811731): 29 files, no impossibilities.
+# . (key d:/Projects/Touhou, mtime 1653224771): 29 files, no impossibilities.
 
 # 29 files, no impossibilities in 1 directories.
 
@@ -271,6 +271,6 @@ run-only:
 # strcache performance: lookups = 42 / hit rate = 16%
 # hash-table stats:
 # Load=35/8192=0%, Rehash=0, Collisions=0/42=0%
-# Finished Make data base on Wed May 18 23:12:44 2022
+# Finished Make data base on Sun May 22 21:44:06 2022
 
  

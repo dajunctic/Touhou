@@ -46,11 +46,14 @@ private:
     // Level Choice //
     Image level_theme;
     Image level_img; /* Level of difficulty */
+    Image default_level_img;
     Image select;
+    int default_level = LEGENDARY;
     int level = EASY;
+    bool is_default_level = false;
 
     Text esc;
-    int scene = MAIN;
+    int scene = LEVEL_CHOICE;
 
     // Story //
     Story story;
@@ -73,9 +76,9 @@ private:
 
 
 
-    int default_explode = 3;
-    int explode = 3;
-    int default_life = 3;
+    int default_explode = 5;
+    int explode = default_explode;
+    int default_life = 5;
     int life = default_life;
     Text explode_text;
     Text life_text;
@@ -93,10 +96,11 @@ private:
 
     /* Boss */
     Image boss_img[20][10];
+    bool is_subboss = true;
 
     /* Bullet */
     vector<Bullet> shot;
-    Image shot_img[20];
+    Image shot_img[40];
 
     /* Explosion */
     vector<Animation> explosion;

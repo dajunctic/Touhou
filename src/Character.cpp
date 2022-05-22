@@ -391,7 +391,8 @@ void Character::HandleBullet(vector<Enemy>& enemy, int * score)
 	{
 		if(id == 0 or id == 1) pos.se -= 10;
 		if(id == 2 or id == 3){
-			if(enemy.empty() or pos.se > 400)
+		//	if(enemy.empty() or pos.se > 400)
+			if(enemy.empty())
 			{
 				double _angle = rand()% (80 - 40 + 1) + 40;
 
@@ -449,4 +450,8 @@ void Character::pause()
 void Character::resume()
 {
 	is_paused = false;
+}
+void Character::reset()
+{
+	weapon.clear();
 }

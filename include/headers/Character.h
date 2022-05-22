@@ -49,6 +49,7 @@ public:
 
 	void pause();
 	void resume();
+	void reset();
 	
 private:
 	int current_frame;
@@ -85,7 +86,7 @@ private:
 	vector<pair<pair<int,int>, int> > weapon;
 	Image char_bullet[10];
 	bool is_shoot = false;
-	int bullet_power[3] = {3, 1, 2};
+	int bullet_power[5] = {3, 1, 2, 2, 2};
 
 
 	/* Press Shift */

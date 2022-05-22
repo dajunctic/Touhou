@@ -186,32 +186,6 @@ void Menu::HandleInput(SDL_Event e, bool * quit, SDL_Window * window, int * SCEN
                 current_choice %= total_choice;
                 break;
             
-            case SDLK_RETURN:
-                /* Options */
-                if(current_choice == OPTIONS)
-                {
-                    current_page = OPTIONS;
-                    return;
-                }
-                if(current_choice == MAIN)
-                {
-                    *SCENE = 2;
-                }
-                if(current_choice == MUSIC)
-                {
-                    current_page = MUSIC;
-                    return;
-                }
-                if(current_choice == EPISODES)
-                {
-                    current_page = EPISODES;
-                    return;
-                }
-                /* Quit */
-                if(current_choice == QUIT) 
-                    *quit = true;
-                break;
-            
             default:
                 break;
             }
@@ -247,15 +221,6 @@ void Menu::HandleInput(SDL_Event e, bool * quit, SDL_Window * window, int * SCEN
                 {
                     current_setting += 3;
                     current_setting %= 4;
-                }
-                break;
-
-            case SDLK_RETURN:
-
-                if(current_option_page == BACK)
-                {
-                    current_option_page = SETTING;
-                    current_page = MAIN;
                 }
                 break;
 
@@ -308,12 +273,6 @@ void Menu::HandleInput(SDL_Event e, bool * quit, SDL_Window * window, int * SCEN
                     }
                 }
                 break;
-            case SDLK_ESCAPE:
-                if(current_option_page == SETTING)
-                {
-                    current_setting = -1;
-                }
-            
             default:
                 break;
             }
@@ -384,6 +343,60 @@ void Menu::HandleInput(SDL_Event e, bool * quit, SDL_Window * window, int * SCEN
                 break;
 
                 
+            default:
+                break;
+            }
+        }
+    }
+    if(e.type == SDL_KEYUP){
+        if(current_page == MAIN){
+
+            switch (e.key.keysym.sym){
+            case SDLK_RETURN:
+                /* Options */
+                if(current_choice == OPTIONS)
+                {
+                    current_page = OPTIONS;
+                    return;
+                }
+                if(current_choice == MAIN)
+                {
+                    *SCENE = 2;
+                    return;
+                }
+                if(current_choice == MUSIC)
+                {
+                    current_page = MUSIC;
+                    return;
+                }
+                if(current_choice == EPISODES)
+                {
+                    current_page = EPISODES;
+                    return;
+                }
+                /* Quit */
+                if(current_choice == QUIT) 
+                    *quit = true;
+                break;
+            
+            default:
+                break;
+            }
+        }
+        if(current_page == OPTIONS){
+            switch (e.key.keysym.sym){
+            case SDLK_RETURN:
+                if(current_option_page == BACK){
+                    current_option_page = SETTING;
+                    current_page = MAIN;
+                }
+                break;
+   
+            case SDLK_ESCAPE:
+                if(current_option_page == SETTING){
+                    current_setting = -1;
+                }
+            
             default:
                 break;
             }

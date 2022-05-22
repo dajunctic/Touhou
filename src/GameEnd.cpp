@@ -99,6 +99,7 @@ void End::handleInput(SDL_Event e, int * SCENE)
             {
                 *SCENE = 1; // MENU
                 isBack = false;
+                return;
             }
             break;
         case SDLK_SPACE:

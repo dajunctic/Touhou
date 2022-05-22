@@ -82,7 +82,8 @@ private:
     int HP = 100; // Health Point
     int default_HP = 100;
     bool is_die = false;
-
+    bool is_delete = false; // not die but need delete //
+    int dlt_time = 10000, dlt_step = 0;
 
     /* BOSS */
     bool is_boss;
@@ -103,8 +104,6 @@ public:
         ENEMY_ATTACK_LEFT,
         ENEMY_ATTACK_RIGHT
     };
-
-    int necessary = 0;
 
     Enemy(bool is_boss_ = false);
     ~Enemy();
@@ -252,6 +251,7 @@ public:
 
     void ResetAttack()
     {
+        if(current_status == ENEMY_ATTACK_LEFT or current_status == ENEMY_ATTACK_RIGHT) return;
 
         time_attack = 0;
         current_status = current_direct + 2;
@@ -288,10 +288,13 @@ public:
         HP += health_point_add;
     }
     bool isDie() const { return is_die; }
+    bool isDelete() const { return is_delete; };
+    void setDeleteTime(int, int delt = 0); 
     void pause();
     void resume();
 
     bool checkInBoard();
+    void resetOrbit();
 
 };
 

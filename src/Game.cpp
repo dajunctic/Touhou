@@ -85,6 +85,7 @@ void Game::HandleInput(SDL_Event e)
             menu.setReturn(true);
             stage.setScene(0);
             stage.reset();
+            return;
         }
     }
     if(SCENE == MENU){
