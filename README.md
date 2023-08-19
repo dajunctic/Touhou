@@ -1,16 +1,16 @@
-@COPYRIGHT 2022 - DAJU STUDIO
+# @COPYRIGHT 2022 - DAJU STUDIO
 
-####Thành viên:
+**Thành viên:**
 - Vũ Quý Đạt
 - Phạm Lê Minh
 
 Game được lấy ý tưởng từ game gốc cũng tên là Touhou.
 
-**Video tham khảo:** 
+#### **Video tham khảo:** 
 
-[![1](https://img.youtube.com/vi/-s3e2loaRUY/default.jpg)](https://www.youtube.com/watch?v=-s3e2loaRUY&t=53s)
+ [![1](https://img.youtube.com/vi/-s3e2loaRUY/default.jpg)](https://www.youtube.com/watch?v=-s3e2loaRUY&t=53s)
 
-**Video sản phẩm:** 
+#### **Video sản phẩm:** 
 
 [![2](https://img.youtube.com/vi/FLT3CSHpV1E/default.jpg)](https://youtu.be/FLT3CSHpV1E)
 
